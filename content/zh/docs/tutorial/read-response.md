@@ -1,5 +1,5 @@
 ---
-title: "Read Response"
+title: "读取响应"
 description: "This article will introduce how to read response."
 draft: false
 images: []

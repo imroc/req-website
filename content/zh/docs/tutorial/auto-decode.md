@@ -1,5 +1,5 @@
 ---
-title: "Auto Decode"
+title: "自动解码"
 description: "This article will introduce how to auto decode."
 draft: false
 images: []

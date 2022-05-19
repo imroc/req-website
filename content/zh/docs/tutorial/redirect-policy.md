@@ -1,5 +1,5 @@
 ---
-title: "Redirect Policy"
+title: "重定向策略"
 description: "This article will introduce how to use redirect policy."
 draft: false
 images: []

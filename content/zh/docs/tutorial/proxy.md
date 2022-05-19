@@ -1,5 +1,5 @@
 ---
-title: "Proxy"
+title: "代理"
 description: "This article will introduce how to set proxy."
 draft: false
 images: []

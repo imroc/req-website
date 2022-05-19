@@ -1,5 +1,5 @@
 ---
-title: "Set Basic Auth"
+title: "设置 Basic Auth"
 description: "This article will introduce how to set basic auth."
 draft: false
 images: []

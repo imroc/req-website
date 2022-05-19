@@ -1,5 +1,5 @@
 ---
-title: "Set Request Body"
+title: "设置请求体"
 description: "This article will introduce how to set body and marshal automatically, read body and unmarshal automatically."
 draft: false
 images: []

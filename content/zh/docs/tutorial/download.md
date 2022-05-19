@@ -1,5 +1,5 @@
 ---
-title: "Download"
+title: "下载"
 description: "This article will introduce how to download."
 draft: false
 images: []

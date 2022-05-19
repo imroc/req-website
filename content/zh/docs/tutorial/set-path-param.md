@@ -1,5 +1,5 @@
 ---
-title: "Set URL Path Parameter"
+title: "设置 URL 路径参数"
 description: "Use url path parameter can replace the variable in the url path."
 draft: false
 images: []

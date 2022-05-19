@@ -1,5 +1,5 @@
 ---
-title: "Set Certificates"
+title: "设置证书"
 description: "This article will introduce how to set certificates."
 draft: false
 images: []

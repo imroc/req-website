@@ -1,7 +1,7 @@
 ---
-title: "Upload"
+title: "上传"
 description: "This article will introduce how to upload."
-lead: "This article will introduce how to upload."
+lead: ""
 draft: false
 images: []
 weight: 320

@@ -1,5 +1,5 @@
 ---
-title: "Quick HTTP Test"
+title: "HTTP 快速测试"
 description: "Test API with minimal code."
 draft: false
 images: []

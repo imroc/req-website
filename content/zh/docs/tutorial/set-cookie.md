@@ -1,5 +1,5 @@
 ---
-title: "Set Cookie"
+title: "设置 Cookie"
 description: "This article will introduce how to set cookie."
 draft: false
 images: []

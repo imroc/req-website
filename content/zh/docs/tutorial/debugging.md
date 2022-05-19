@@ -1,5 +1,5 @@
 ---
-title: "Debugging - Dump/Log/Trace"
+title: "调试 - Dump/Log/Trace"
 description: "Req provides powerful and convenient debug utilities, including debug logs, performance traces, and even dump the complete request and response content."
 lead: "Req provides powerful and convenient debug utilities, including debug logs, performance traces, and even dump the complete request and response content."
 draft: false
@@ -134,9 +134,9 @@ client.SetLogger(nil)
 client.SetLogger(logger)
 ```
 
-## Enable Trace to Analyze Performance
+## 启用 Trace 来分析性能瓶颈
 
-You can enable trace at request-level or client-level to analyze performance:
+你可以在请求级别或客户端级别启用 Trace 来分析性能瓶颈，下面是在请求级别启用的示例:
 
 ```go
 // Enable trace at request level
@@ -163,6 +163,8 @@ ResponseTime      : 1.712375ms
 IsConnReused:     : false
 RemoteAddr        : 98.126.155.187:443
 ```
+
+类似地，下面是在客户端级别启用 Trace 的示例:
 
 ```go
 // Enable trace at client level

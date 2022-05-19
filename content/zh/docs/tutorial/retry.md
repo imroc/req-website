@@ -1,5 +1,5 @@
 ---
-title: "Retry"
+title: "自动重试"
 description: "This article will introduce how to set retry."
 draft: false
 images: []

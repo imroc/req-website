@@ -24,7 +24,7 @@ go get -u github.com/imroc/req/v3
 import "github.com/imroc/req/v3"
 ```
 
-## Basic Usage
+## Get Started
 
 ```bash
 # assume the following codes in main.go file
@@ -91,7 +91,37 @@ Access-Control-Allow-Credentials: true
 
 The sample code above is good for quick testing purposes, which use `DevMode()` to see request details, and send requests using global wrapper methods that use the default client behind the scenes to initiate the request.
 
-In production, we recommend creating a client explicitly and then using the same client to send all requests, here is a complete example of the general usage:
+In production, it is recommended to explicitly create a client, and then use the same client to send all requests, please see other examples below.
+
+## Simple GET
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/imroc/req/v3"
+	"log"
+)
+
+func main() {
+	client := req.C() // Use C() to create a client.
+	resp, err := client.R(). // Use R() to create a request.
+		Get("https://httpbin.org/uuid")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(resp)
+}
+```
+
+```txt
+{
+  "uuid": "a4d4430d-0e5f-412f-88f5-722d84bc2a62"
+}
+```
+
+## Advanced GET
 
 ```go
 package main
@@ -113,15 +143,15 @@ type UserInfo struct {
 }
 
 func main() {
-  client := req.C(). // Use C() to create a client.
+  client := req.C().
     SetUserAgent("my-custom-client"). // Chainable client settings.
     SetTimeout(5 * time.Second)
 
   var userInfo UserInfo
   var errMsg ErrorMessage
-  resp, err := client.R(). // Use R() to create a request.
-    SetHeader("Accept", "application/vnd.github.v3+json"). // Chainable request settings
-    SetPathParam("username", "imroc").
+  resp, err := client.R().
+    SetHeader("Accept", "application/vnd.github.v3+json"). // Chainable request settings.
+    SetPathParam("username", "imroc"). // Replace path variable in url.
     SetResult(&userInfo). // Unmarshal response body into userInfo automatically if status code is between 200 and 299.
     SetError(&errMsg). // Unmarshal response body into errMsg automatically if status code >= 400.
     EnableDump(). // Enable dump at request level, only print dump content if there is an error or some unknown situation occurs to help troubleshoot.
@@ -151,7 +181,106 @@ func main() {
 }
 ```
 
+Normally it will output:
+
+```txt
+roc (https://imroc.cc)
+```
+
+## Sample POST
+
+```go
+package main
+
+import (
+  "fmt"
+  "github.com/imroc/req/v3"
+  "log"
+)
+
+type Repo struct {
+  Name string `json:"name"`
+  Url  string `json:"url"`
+}
+
+type Result struct {
+  Data string `json:"data"`
+}
+
+func main() {
+  client := req.C().DevMode()
+  var result Result
+
+  resp, err := client.R().
+    SetBody(&Repo{Name: "req", Url: "https://github.com/imroc/req"}).
+    SetResult(&result).
+    Post("https://httpbin.org/post")
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  if !resp.IsSuccess() {
+    fmt.Println("bad response status:", resp.Status)
+    return
+  }
+  fmt.Println("++++++++++++++++++++++++++++++++++++++++++++++++")
+  fmt.Println("data:", result.Data)
+  fmt.Println("++++++++++++++++++++++++++++++++++++++++++++++++")
+}
+```
+
+```txt
+2022/05/19 20:11:00.151171 DEBUG [req] HTTP/2 POST https://httpbin.org/post
+:authority: httpbin.org
+:method: POST
+:path: /post
+:scheme: https
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+content-type: application/json; charset=utf-8
+content-length: 55
+accept-encoding: gzip
+
+{"name":"req","website":"https://github.com/imroc/req"}
+
+:status: 200
+date: Thu, 19 May 2022 12:11:00 GMT
+content-type: application/json
+content-length: 651
+server: gunicorn/19.9.0
+access-control-allow-origin: *
+access-control-allow-credentials: true
+
+{
+  "args": {},
+  "data": "{\"name\":\"req\",\"website\":\"https://github.com/imroc/req\"}",
+  "files": {},
+  "form": {},
+  "headers": {
+    "Accept-Encoding": "gzip",
+    "Content-Length": "55",
+    "Content-Type": "application/json; charset=utf-8",
+    "Host": "httpbin.org",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36",
+    "X-Amzn-Trace-Id": "Root=1-628633d4-7559d633152b4307288ead2e"
+  },
+  "json": {
+    "name": "req",
+    "website": "https://github.com/imroc/req"
+  },
+  "origin": "103.7.29.30",
+  "url": "https://httpbin.org/post"
+}
+
+++++++++++++++++++++++++++++++++++++++++++++++++
+data: {"name":"req","url":"https://github.com/imroc/req"}
+++++++++++++++++++++++++++++++++++++++++++++++++
+```
+
 ## Videos
 
 * [Get Started With Req](https://www.youtube.com/watch?v=k47i0CKBVrA) (English, Youtube)
 * [快速上手 req](https://www.bilibili.com/video/BV1Xq4y1b7UR) (Chinese, BiliBili)
+
+## Learn More
+
+Similarly, you can use `req` to easily send `GET`, `POST`, `PATCH`, `PUT`, `HEAD`, `DELETE` and `OPTIONS` requests, please refer to **Tutorial* * in the series of articles to learn more usage.

@@ -1,5 +1,5 @@
 ---
-title: "Set Query Parameter"
+title: "设置查询参数"
 description: "This article will introduce how to set query parameters."
 draft: false
 images: []

@@ -1,5 +1,5 @@
 ---
-title : "教程"
+title : "使用教程"
 lead: ""
 draft: false
 images: []

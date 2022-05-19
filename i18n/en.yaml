@@ -56,3 +56,5 @@ Middlewares:
   other: 'Request and Response Middleware'
 See:
   other: 'See'
+And:
+  other: 'and'

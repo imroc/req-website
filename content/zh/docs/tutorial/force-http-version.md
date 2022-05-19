@@ -1,5 +1,5 @@
 ---
-title: "Force HTTP version"
+title: "指定 HTTP 版本"
 description: "Force to set the HTTP version."
 draft: false
 images: []

@@ -1,5 +1,5 @@
 ---
-title: "Set Bearer Auth Token"
+title: "设置 Bearer Auth Token"
 description: "This article will introduce how to set bearer token."
 draft: false
 images: []
