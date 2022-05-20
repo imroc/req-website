@@ -1,6 +1,6 @@
 ---
 title: "下载"
-description: "This article will introduce how to download."
+description: "介绍如何进行下载"
 draft: false
 images: []
 weight: 320
@@ -10,9 +10,9 @@ menu:
 toc: true
 ---
 
-## Download to File
+## 下载到文件
 
-Use `Request.SetOutputFile` to download response body to specific file:
+使用 `Request.SetOutputFile` 将响应体内容下载到指定文件:
 
 ```go
 client := req.C()
@@ -21,7 +21,7 @@ client := req.C()
 client.R().SetOutputFile("/tmp/test.jpg").Get(url)
 ```
 
-Use `Client.SetOutputDirectory` to set the default path that file will be downloaded to:
+使用 `Client.SetOutputDirectory` 设置默认下载目录:
 
 ```go
 client := req.C().SetOutputDirectory("/path/to/download")
@@ -30,9 +30,9 @@ client := req.C().SetOutputDirectory("/path/to/download")
 client.R().SetOutputFile("test.jpg").Get(url)
 ```
 
-## Download to io.Writer
+## 下载到 io.Writer
 
-Use `Request.SetOutput` to download response body to specific `io.Writer`:
+使用 `Request.SetOutput` 可以将响应体内容下载到指定的 `io.Writer`:
 
 ```go
 client := req.C()
@@ -41,9 +41,9 @@ client := req.C()
 client.R().SetOutput(w).Get(url)
 ```
 
-## Use Download Callback
+## 使用 Download Callback
 
-You can set `DownloadCallback` if you want to show download progress:
+如果想要显示下载进度，可以使用 `SetDownloadCallback` 设置回调:
 
 ```go
 client := req.C()
@@ -65,9 +65,9 @@ downloaded 43.70%
 downloaded 100.00%
 ```
 
-> `info.Response.ContentLength` could be 0 when the total size is unknown.
+> 当响应体长度未知时，`info.Response.ContentLength` 可能为 0。
 
-`DownloadCallback` will be invoked at least every 200ms by default, you can customize the minimal invoke interval using `SetDownloadCallbackWithInterval`:
+`DownloadCallback` 默认至少 200ms 执行一次，你也可以使用  `SetDownloadCallbackWithInterval` 来自定义最少执行间隔时长:
 
 ```go
 client.R().
