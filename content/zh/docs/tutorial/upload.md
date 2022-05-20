@@ -1,6 +1,6 @@
 ---
 title: "上传"
-description: "This article will introduce how to upload."
+description: "介绍如何进行上传"
 lead: ""
 draft: false
 images: []
@@ -13,7 +13,7 @@ toc: true
 
 ## Multipart Upload
 
-Use `SetFile` or `SetFiles` to add file into multipart form:
+使用 `SetFile` or `SetFiles` 将文件加到 Multipart 表单进行上传:
 
 ```go
 client := req.C()
@@ -32,7 +32,7 @@ client.R().
     Post("http://127.0.0.1:8888/upload")
 ```
 
-You can also use `SetFileBytes` to add `[]byte` as file content:
+也可以使用 `SetFileBytes` 直接将 `[]byte` 作为文件内容进行上传:
 
 ```go
 client.R().
@@ -40,7 +40,7 @@ client.R().
     Post(url)
 ```
 
-Or use `SetFileReader` to add `io.Reader` as file content to upload:
+或使用 `SetFileReader` 将 `io.Reader` 作为文件内容进行上传:
 
 ```go
 avatarImgFile, _ := os.Open("avatar.png")
@@ -49,9 +49,9 @@ client.R().
     Post(url)
 ```
 
-## Use Upload Callback
+## 使用 Upload Callback
 
-Use `SetUploadCallback` if you want to show upload progress:
+如果想要显示上传进度，可以使用 `SetUploadCallback` 设置回调:
 
 ```go
 client := req.C()
@@ -71,7 +71,7 @@ client.R().
 "test.xlsx" uploaded 100.00%
 ```
 
-`UploadCallback` will be invoked at least every 200ms by default, you can customize the minimal invoke interval using `SetUploadCallbackWithInterval`:
+`UploadCallback` 默认至少 200ms 执行一次, 你也可以使用 `SetUploadCallbackWithInterval` 来自定义最少执行间隔时长:
 
 ```go
 client := req.C()
