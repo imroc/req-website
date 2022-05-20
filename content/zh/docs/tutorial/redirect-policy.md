@@ -1,6 +1,6 @@
 ---
 title: "重定向策略"
-description: "This article will introduce how to use redirect policy."
+description: "介绍如何设置重定向策略"
 draft: false
 images: []
 weight: 340
@@ -10,7 +10,7 @@ menu:
 toc: true
 ---
 
-Use `SetRedirectPolicy` to set predefined `RedirectPolicy` or a customized one for the `Client`:
+可以使用 `SetRedirectPolicy` 为 `Client` 设置预定义的 `RedirectPolicy`，或者自定义的实现:
 
 ```go
 client := req.C().DevMode()
