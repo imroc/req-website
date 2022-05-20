@@ -1,6 +1,6 @@
 ---
 title: "设置证书"
-description: "This article will introduce how to set certificates."
+description: "介绍如何设置证书"
 draft: false
 images: []
 weight: 262
@@ -10,9 +10,9 @@ menu:
 toc: true
 ---
 
-## Set Root Certificates
+## 设置根证书
 
-Use `SetRootCertsFromFile` or `SetRootCertFromString` to set root certificates:
+使用 `SetRootCertsFromFile` 或 `SetRootCertFromString` 来设置根证书:
 
 ```go
 client := req.R()
@@ -24,9 +24,9 @@ client.SetRootCertsFromFile("/path/to/root/certs/pemFile1.pem", "/path/to/root/c
 client.SetRootCertFromString("-----BEGIN CERTIFICATE-----XXXXXX-----END CERTIFICATE-----")
 ```
 
-## Set Client Certificates
+## 设置客户端证书
 
-Use `SetCertFromFile` or `SetCerts` to set client certificates:
+使用 `SetCertFromFile` 或 `SetCerts` 设置客户端证书:
 
 ```go
 client := req.R()
