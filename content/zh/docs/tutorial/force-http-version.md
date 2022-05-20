@@ -1,6 +1,6 @@
 ---
 title: "指定 HTTP 版本"
-description: "Force to set the HTTP version."
+description: "强制指定 HTTP 版本的方法"
 draft: false
 images: []
 weight: 140
@@ -10,19 +10,20 @@ parent: "tutorial"
 toc: true
 ---
 
-## Default behaviour
+## 默认行为
 
-Req works fine both with `HTTP/2` and `HTTP/1.1`, `HTTP/2` is preferred by default if server support, which is negotiated by TLS handshake.
+Req 同时支持 `HTTP/2` 和 `HTTP/1.1`，如果服务端支持，默认情况下首选 `HTTP/2`，这是由 TLS 握手协商的。
 
-## Force HTTP version
+## 强制指定 HTTP 版本
 
-You can force using `HTTP/1.1` if you want.
+如有必要，你可以强制指定使用 `HTTP/1.1`:
 
 ```go
 client := req.C().EnableForceHTTP1().EnableDumpAllWithoutBody()
 client.R().MustGet("https://httpbin.org/get")
 ```
-```go
+
+```txt
 GET /get HTTP/1.1
 Host: httpbin.org
 User-Agent: req/v3 (https://github.com/imroc/req)
@@ -38,13 +39,13 @@ Access-Control-Allow-Origin: *
 Access-Control-Allow-Credentials: true
 ```
 
-And also you can force using `HTTP/2` if you want, will return error if server does not support:
+如果你想要，也可以强制指定使用 `HTTP/2`，但是如果服务端不支持的话，将返回错误：
 
 ```go
 client := req.C().EnableForceHTTP2()
 client.R().MustGet("https://baidu.com")
 ```
 
-```go
+```txt
 panic: Get "https://baidu.com": server does not support http2, you can use http/1.1 which is supported
 ```
