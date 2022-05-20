@@ -1,7 +1,7 @@
 ---
 title: "调试 - Dump/Log/Trace"
-description: "Req provides powerful and convenient debug utilities, including debug logs, performance traces, and even dump the complete request and response content."
-lead: "Req provides powerful and convenient debug utilities, including debug logs, performance traces, and even dump the complete request and response content."
+description: "Req 提供了强大便捷的调试工具，包括调试日志、性能跟踪，甚至可以 dump 完整的请求和响应内容。"
+lead: "Req 提供了强大便捷的调试工具，包括调试日志、性能跟踪，甚至可以 dump 完整的请求和响应内容。"
 draft: false
 images: []
 weight: 100
@@ -11,9 +11,9 @@ menu:
 toc: true
 ---
 
-## Dump the Content
+## Dump 请求和响应内容
 
-Enable dump at client level, which will dump for all requests, including all content of request and response and output to stdout by default:
+在客户端启用 Dump，默认会 dump 所有请求和响应的内容:
 
 ```go
 client := req.C().EnableDumpAll()
@@ -49,7 +49,7 @@ access-control-allow-credentials: true
 }
 ```
 
-More advanced dump settings:
+更高级的 Dump 设置:
 
 ```go
 // Customize dump settings with predefined and convenient settings at client level.
@@ -76,7 +76,7 @@ opt.ResponseBody = false
 client.R().Get("https://httpbin.org/get")
 ```
 
-You can also enable dump at request level, which will not override the client-level dump setting, it will dump to the internal buffer and do not print to stdout by default, you can call `Response.Dump()` to get the dump result and print only if you want to, typically used in production, only record the content of the request when the request is abnormal to help us troubleshoot problems.
+你还可以在请求级别启用 Dump，它不会覆盖客户端级别的 Dump 设置，默认将内容存到内部 buffer 而不打印到标准输出，可以按需调用 `Response.Dump()` 来获取 Dump 内容，通常在生产中使用，仅在请求异常时记录请求的内容，以帮助我们排查问题:
 
 ```go
 resp, err := client.R().EnableDump().SetBody("test body").Post("https://httpbin.org/post")
@@ -107,11 +107,11 @@ resp, err = client.R().
 	Post("https://httpbin.org/post")
 ```
 
-## Enable DebugLog for Deeper Insights
+## 启用 DebugLog 来分析请求过程
 
-Logging is enabled by default, but only output the warning and error message.
+日志默认是启用的，但不包括 Debug 级别日志，仅 Warning 和 Error 类型日志。
 
-Use `EnableDebugLog()` to enable debug level logging:
+使用 `EnableDebugLog()` 可以启用 Debug 级别日志：
 
 ```go
 client := req.C().EnableDebugLog()
@@ -119,12 +119,13 @@ client.R().Get("http://baidu.com/s?wd=req")
 ```
 
 ```txt
-2022/01/26 15:46:29.279368 DEBUG [req] GET http://baidu.com/s?wd=req
-2022/01/26 15:46:29.469653 DEBUG [req] charset iso-8859-1 detected in Content-Type, auto-decode to utf-8
-2022/01/26 15:46:29.469713 DEBUG [req] <redirect> GET http://www.baidu.com/s?wd=req
+2022/05/20 10:26:51.213205 DEBUG [req] HTTP/1.1 GET http://baidu.com/s?wd=req
+2022/05/20 10:26:51.353801 DEBUG [req] charset iso-8859-1 detected in Content-Type, auto-decode to utf-8
+2022/05/20 10:26:51.353866 DEBUG [req] <redirect> GET http://www.baidu.com/s?wd=req
+2022/05/20 10:26:51.367173 DEBUG [req] HTTP/1.1 GET http://www.baidu.com/s?wd=req
 ```
 
-And you can also customize the Logger:
+你也可以对 Logger 进行更高级的自定义:
 
 ```go
 // SetLogger with nil to disable all log, including warning and error logs.
@@ -175,7 +176,7 @@ resp, err = client.R().Get(url)
 
 ## DevMode
 
-If you want to enable all debug features (dump, debug log and tracing), just call `DevMode()`:
+如果你想要启用所有调试的特性(Dump, DebugLog, Trace)，直接调用 `Client` 的 `DevMode` 方法:
 
 ```go
 client := req.C().DevMode()
