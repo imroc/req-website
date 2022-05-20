@@ -1,6 +1,6 @@
 ---
 title: "设置 Basic Auth"
-description: "This article will introduce how to set basic auth."
+description: "介绍如何设置 Basic Auth"
 draft: false
 images: []
 weight: 264
@@ -10,9 +10,9 @@ menu:
 toc: true
 ---
 
-## Request Level
+## 在请求级别设置
 
-Use `SetBasicAuth` at the request level:
+使用 `SetBasicAuth` 在请求级别设置 Basic Auth:
 
 ```go
 client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
@@ -30,9 +30,9 @@ Authorization: Basic aW1yb2M6MTIzNDU2
 Accept-Encoding: gzip
 ```
 
-## Client Level
+## 在客户端级别设置
 
-Use `SetCommonBasicAuth` at the client level:
+使用 `SetCommonBasicAuth` 在客户端级别设置 Basic Auth:
 
 ```go
 client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
