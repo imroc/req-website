@@ -10,7 +10,7 @@ menu:
 toc: true
 ---
 
-> The form data of `GET`, `HEAD`, and `OPTIONS` requests will be ignored by default.
+> Note: the form data of `GET`, `HEAD`, and `OPTIONS` requests will be ignored by default.
 
 ## Request Level
 

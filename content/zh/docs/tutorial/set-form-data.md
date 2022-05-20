@@ -1,6 +1,6 @@
 ---
 title: "设置表单数据"
-description: "This article will introduce how to set form data."
+description: "介绍如何设置表单数据"
 draft: false
 images: []
 weight: 200
@@ -10,11 +10,11 @@ menu:
 toc: true
 ---
 
-> The form data of `GET`, `HEAD`, and `OPTIONS` requests will be ignored by default.
+> 注意: `GET`, `HEAD`, 和 `OPTIONS` 类型的请求默认不允许设置表单数据。
 
-## Request Level
+## 在请求级别设置
 
-Use `SetFormData`:
+使用 `SetFormData`:
 
 ```go
 client := req.C().EnableDumpAllWithoutResponse()
@@ -36,7 +36,7 @@ user-agent: req/v2 (https://github.com/imroc/req)
 blog=https%3A%2F%2Fimroc.cc&username=imroc
 ```
 
-Use `SetFormDataFromValues` if you want to set multi value with the same key:
+如果想给同一个 key 设置多个 value，可以使用 `SetFormDataFromValues`:
 
 ```go
 // Multi value form data
@@ -58,9 +58,9 @@ user-agent: req/v2 (https://github.com/imroc/req)
 multi=a&multi=b&multi=c
 ```
 
-## Client Level
+## 在客户端级别设置
 
-Similarly, You can also use `SetCommonFormData` or `SetCommonFormDataFromValues` to set form data at the client level:
+类似的, 你可以使用 `SetCommonFormData` 或 `SetCommonFormDataFromValues` 在客户端级别设置表单数据，对所有请求生效:
 
 ```go
 client.SetCommonFormData(m)
