@@ -1,6 +1,6 @@
 ---
 title: "自动解码"
-description: "This article will introduce how to auto decode."
+description: "介绍如何进行自动解码"
 draft: false
 images: []
 weight: 340
@@ -10,21 +10,23 @@ menu:
 toc: true
 ---
 
-## About Auto Decode
+## 关于自动解码
 
-`Req` detect the charset of response body and decode it to utf-8 automatically to avoid garbled characters by default.
+默认情况下，`req` 会嗅探 HTTP 响应，如有需要会自动解码为 UTF-8 以避免乱码。
 
-Its principle is to detect `Content-Type` header at first, if it's not the text content type (json, xml, html and so on), `req` will not try to decode. If it is, then `req` will try to find the charset information. And `req` also will try to sniff the body's content to determine the charset if the charset information is not included in the header, if sniffed out and not utf-8, then decode it to utf-8 automatically, and `req` will not try to decode if the charset is not sure, just leave the body untouched.
+其原理是:
+1. 首先检测 `Content-Type` 头，如果是文本内容类型（json、xml、html 等），`req` 会尝试解码，如果不是，则不会解码。
+2. 如果没有 `Content-Type` 头，会提取响应体首部内容进行嗅探，如果嗅探出来明确不是 UTF-8，则自动解码为 UTF-8，如果字符集不确定，则不会尝试解码。
 
-## Customization
+## 自定义
 
-You can disable auto decode if you don't need or care a lot about performance:
+如果你不需要或担心自动解码影响性能，也可以关闭自动解码:
 
 ```go
 client.DisableAutoDecode()
 ```
 
-And also you can make some customization:
+还可以进行更高级的自定义:
 
 ```go
 // Try to auto-detect and decode all content types (some server may return incorrect Content-Type header)
