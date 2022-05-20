@@ -1,6 +1,6 @@
 ---
 title: "设置 Header"
-description: "This article will introduce how to set header."
+description: "介绍如何设置请求的 Header"
 draft: false
 images: []
 weight: 220
@@ -10,9 +10,9 @@ menu:
 toc: true
 ---
 
-## Request Level
+## 在请求级别设置
 
-Use `SetHeader` and `SetHeaders` to set http header at the request level:
+使用 `SetHeader` 和 `SetHeaders` 在请求级别设置 Header:
 
 ```go
 // Let's dump the header to see what's going on.
@@ -38,7 +38,7 @@ User: imroc
 Accept-Encoding: gzip
 ```
 
-Use `SetHeaderNonCanonical` or `SetHeadersNonCanonical` if you want to keep case unchanged when backend server does not follow the `HTTP/1.1` specification "header names are case-insensitive" (see [RFC 2616 - 4.2 Message Headers](https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2)):
+如果你想保持 Header 大小写不变，不进行自动转换，可以使用 `SetHeaderNonCanonical` 或 `SetHeadersNonCanonical` 来设置 Header，通常是后端服务没有遵循 `HTTP/1.1` 的规范，对大小写敏感了 (参考 [RFC 2616 - 4.2 Message Headers](https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2)):
 
 ```go
 // Let's dump the header to see what's going on.
@@ -63,9 +63,9 @@ my-custom-header: test
 Accept-Encoding: gzip
 ```
 
-## Client Level
+## 在客户端级别设置
 
-Similarly, you can also set the common headers for every request at the client level.
+类似的，你可以在客户端级别为每个请求设置公共 Header:
 
 ```go
 client := req.C()
