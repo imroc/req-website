@@ -1,6 +1,6 @@
 ---
 title: "设置 Cookie"
-description: "This article will introduce how to set cookie."
+description: "介绍如何设置 Cookie"
 draft: false
 images: []
 weight: 240
@@ -10,9 +10,9 @@ menu:
 toc: true
 ---
 
-## Request Level
+## 在请求级别设置
 
-Use `SetCookies` to set http cookie for request at the request level:
+使用 `SetCookies` 可以再请求级别设置 Cookie:
 
 ```go
 	// Let's dump the header to see what's going on
@@ -42,7 +42,6 @@ client.R().
     SetCookies(cookie1, cookie2).
     Get("https://httpbin.org/get")
 
-
 ```
 
 ```txt
@@ -56,7 +55,7 @@ accept-encoding: gzip
 user-agent: req/v3 (https://github.com/imroc/req)
 ```
 
-Also try `HTTP/1.1`:
+也试试 `HTTP/1.1`:
 
 ```go
 client.EnableForceHTTP1()
@@ -74,9 +73,9 @@ Cookie: testcookie1="testcookie1 value"; testcookie2="testcookie2 value"
 Accept-Encoding: gzip
 ```
 
-## Client Level
+## 在客户端级别设置
 
-Similarly, you can use `SetCommonCookies` to set the common cookies for every request at the client level:
+类似的，你可以使用 `SetCommonCookies` 在客户端级别为所有请求设置共同 Cookie:
 
 ```go
 client.SetCommonCookies(cookie1, cookie2, cookie3)
@@ -86,7 +85,7 @@ resp1, err := client.R().Get(url1)
 resp2, err := client.R().Get(url2)
 ```
 
-You can also use `SetCookieJar` to customize the CookieJar at client level:
+你也可以使用 `SetCookieJar` 自定义 `CookieJar`:
 
 ```go
 // Set your own http.CookieJar implementation
