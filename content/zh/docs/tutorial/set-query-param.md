@@ -11,7 +11,7 @@ toc: true
 ---
 
 
-## 请求级别
+## 在请求级别设置
 
 使用 `SetQueryParam`, `SetQueryParams`, `SetQueryString` or `AddQueryParam` 在请求级别追加 URL 查询参数:
 
@@ -41,7 +41,7 @@ accept-encoding: gzip
 user-agent: req/v3 (https://github.com/imroc/req)
 ```
 
-## 客户端级别
+## 在客户端级别设置
 
 类似的，使用 `SetCommonQueryParam`、`SetCommonQueryParams`、`SetCommonQueryString` 或 `AddCommonQueryParam` 可以在客户端级别追加 URL 查询参数，对所有请求生效：
 

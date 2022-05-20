@@ -10,12 +10,12 @@ menu:
 toc: true
 ---
 
-## Request Level
+## 在请求级别设置
 
-Use `SetPathParam` or `SetPathParams` to set url path parameter at request-level:
+使用 `SetPathParam` 或 `SetPathParams` 可以在请求级别设置 URL 路径参数以替换路径中的变量:
 
 ```go
-client := req.C().DevMode()
+client := req.C().EnableDebugLog().EnableDumpAllWithoutResponse()
 
 client.R().
     SetPathParam("owner", "imroc"). // Set a path param, which will replace the vairable in url path
@@ -26,13 +26,18 @@ client.R().
 
 ```
 ```txt
-2022/01/23 14:43:59.114592 DEBUG [req] GET https://api.github.com/repos/imroc/req/contents/README.md
-...
+2022/05/20 10:59:22.916445 DEBUG [req] HTTP/2 GET https://api.github.com/repos/imroc/req/contents/README.md
+:authority: api.github.com
+:method: GET
+:path: /repos/imroc/req/contents/README.md
+:scheme: https
+accept-encoding: gzip
+user-agent: req/v3 (https://github.com/imroc/req)
 ```
 
-## Client Level
+## 在客户端级别设置
 
-Similarly, you can use `SetCommonPathParam` or `SetCommonPathParams` to set the common url path parameter for every request on client:
+类似的, 你可以使用 `SetCommonPathParam` 或 `SetCommonPathParams` 在客户端级别设置 URL 路径参数，对所有请求生效:
 
 ```go
 client := req.C().DevMode().
