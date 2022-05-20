@@ -1,6 +1,6 @@
 ---
 title: "设置 Bearer Auth Token"
-description: "This article will introduce how to set bearer token."
+description: "介绍如何设置 Bearer Auth Token"
 draft: false
 images: []
 weight: 266
@@ -10,9 +10,9 @@ menu:
 toc: true
 ---
 
-## Request Level
+## 在请求级别设置
 
-Use `SetBearerAuthToken` at the request level:
+使用 `SetBearerAuthToken` 可以在请求级别设置 Bearer Auth Token:
 
 ```go
 client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
@@ -30,9 +30,9 @@ Authorization: Bearer NGU1ZWYwZDJhNmZhZmJhODhmMjQ3ZDc4
 Accept-Encoding: gzip
 ```
 
-## Client Level
+## 在客户端级别设置
 
-Use `SetCommonBearerAuthToken` at the client level:
+使用 `SetCommonBearerAuthToken` 可以在请求级别设置 Bearer Auth Token:
 
 ```go
 client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
