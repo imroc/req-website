@@ -1,6 +1,6 @@
 ---
 title: "Unix Socket"
-description: "This article will introduce how to set unit socket."
+description: "介绍如何设置 Unix Socket"
 draft: false
 images: []
 weight: 380
@@ -10,7 +10,7 @@ menu:
 toc: true
 ---
 
-If you want to access via a specific unix socket instead of TCP, use `Client.SetUnixSocket`:
+如果你想指定 Unix Socket 而不用 TCP/IP，可以使用 `Client.SetUnixSocket` 进行设置:
 
 ```go
 client := req.C()
