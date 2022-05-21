@@ -29,7 +29,7 @@ client.R().
         "name":  "imroc",
         "email": "roc@imroc.cc",
     }).
-    Post("http://127.0.0.1:8888/upload")
+    Post("https://httpbin.org/post")
 ```
 
 You can also use `SetFileBytes` to add `[]byte` as file content:
@@ -59,7 +59,7 @@ client.R().
 	SetFile("excel", "test.xlsx").
 	SetUploadCallback(func(info req.UploadInfo) {
         fmt.Printf("%q uploaded %.2f%%\n", info.FileName, float64(info.UploadedSize)/float64(info.FileSize)*100.0)
-    }).Post("https://exmaple.com/upload")
+    }).Post("https://httpbin.org/post")
 ```
 
 ```txt
@@ -80,5 +80,5 @@ client.R().
     SetUploadCallbackWithInterval(func(info req.UploadInfo) {
         fmt.Printf("%q uploaded %.2f%%\n", info.FileName, float64(info.UploadedSize)/float64(info.FileSize)*100.0)
     }, 10 * time.Millisecond).
-    Post("https://exmaple.com/upload")
+    Post("https://httpbin.org/post")
 ```
