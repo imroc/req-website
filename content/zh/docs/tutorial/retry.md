@@ -1,6 +1,6 @@
 ---
 title: "自动重试"
-description: "This article will introduce how to set retry."
+description: "介绍如何设置自动重试"
 draft: false
 images: []
 weight: 400
@@ -10,7 +10,7 @@ menu:
 toc: true
 ---
 
-## Request Level
+## 在请求级别设置
 
 ```go
 client := req.C()
@@ -53,9 +53,9 @@ client.R().
     SetRetryCondition(conditionFunc1)
 ```
 
-## Client Level
+## 在客户端级别设置
 
-Similarly, you can set retry at the client level, which could be overridden at the request level:
+类似的，你也可以在客户端级别设置(可以被请求级别设置覆盖):
 
 ```go
 client.
