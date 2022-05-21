@@ -1,6 +1,6 @@
 ---
 title: "请求和响应中间件"
-description: "This article will introduce how to use request and response middleware."
+description: "介绍如何使用请求和响应的中间件"
 draft: false
 images: []
 weight: 600
@@ -10,9 +10,9 @@ menu:
 toc: true
 ---
 
-## Request Middleware
+## 请求中间件
 
-Use `Client.OnBeforeRequest` to set request middleware, you can access Client and current Request object to do something what you need before the Request is sent:
+使用 `Client.OnBeforeRequest` 可以注册请求中间件，你可以让在请求发出前执行一些回调，回调函数里可以访问到 `Client` 和 `Request` 对象:
 
 ```go
 client := req.C()
@@ -20,16 +20,15 @@ client := req.C()
 // Registering Request Middleware
 client.OnBeforeRequest(func(c *req.Client, r *req.Request) error {
 	// You can access Client and current Request object to do something
-	// as you need
+	// as you need, e.g. Record the metrics.
 
     return nil  // return nil if it is success
   })
 ```
 
+## 响应中间件
 
-## Response Middleware
-
-Use `Client.OnAfterResponse` to set response middleware, you can access Client and current Request object to do something what you need before the Response is returned:
+使用`Client.OnAfterResponse` 可以注册响应中间件，你可以在响应返回前执行一些回调，回调函数里可以访问到 `Client` 和 `Response` 对象:
 
 ```go
 client := req.C()
