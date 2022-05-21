@@ -21,6 +21,7 @@ client := req.C().EnableDumpAllWithoutResponse()
 // Send POST request with body.
 client.R().SetBody("test").Post("https://httpbin.org/post")
 ```
+
 ```txt
 :authority: httpbin.org
 :method: POST

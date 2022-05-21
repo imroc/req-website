@@ -25,6 +25,7 @@ client.R().
     }).Get("https://api.github.com/repos/{owner}/{repo}/contents/{path}") // path parameter will replace path variable in the url
 
 ```
+
 ```txt
 2022/05/20 10:59:22.916445 DEBUG [req] HTTP/2 GET https://api.github.com/repos/imroc/req/contents/README.md
 :authority: api.github.com
@@ -41,8 +42,8 @@ user-agent: req/v3 (https://github.com/imroc/req)
 
 ```go
 client := req.C().DevMode().
-	SetCommonPathParam(k1, v1).
-	SetCommonPathParams(pathParams)
+    SetCommonPathParam(k1, v1).
+    SetCommonPathParams(pathParams)
 
 resp1, err := client.Get(url1)
 ...
