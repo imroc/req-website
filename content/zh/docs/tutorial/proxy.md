@@ -1,6 +1,6 @@
 ---
 title: "代理"
-description: "This article will introduce how to set proxy."
+description: "介绍如何设置代理"
 draft: false
 images: []
 weight: 360
@@ -10,13 +10,13 @@ menu:
 toc: true
 ---
 
-## Default Behaviour
+## 默认行为
 
-`Req` use proxy `http.ProxyFromEnvironment` by default, which will read the `HTTP_PROXY/HTTPS_PROXY/http_proxy/https_proxy` environment variable, and setup proxy if environment variable is been set.
+`Req` 默认使用 `http.ProxyFromEnvironment` 这个作为代理, 即会读取 `HTTP_PROXY/HTTPS_PROXY/http_proxy/https_proxy` 这些环境变量，如果有设置，就会将对应地址设置为代理地址。
 
-## Set Proxy
+## 设置代理
 
-You can set proxy explicitly if you need:
+你也可以这样显式的设置代理:
 
 ```go
 // Set proxy from proxy url
