@@ -161,7 +161,7 @@ func main() {
 				reqClient.EnableDumpAll()
 				reqClient.EnableDebugLog()
 				fmt.Println("Debug is enabled")
-			case "false": // Turn off debug with `curl 127.0.0.1:80/debug?enable=true`
+			case "false": // Turn off debug with `curl 127.0.0.1:80/debug?enable=false`
 				reqClient.DisableDumpAll()
 				reqClient.DisableDebugLog()
 				fmt.Println("Debug is disabled")
