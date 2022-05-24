@@ -15,7 +15,7 @@ toc: true
 
 Use `cobra` to create a golang command line tool, enable debug mode with global `--debug` flag:
 
-```txt
+```go
 package main
 
 import (
