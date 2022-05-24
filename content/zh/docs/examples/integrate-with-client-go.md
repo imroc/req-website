@@ -7,7 +7,7 @@ images: []
 weight: 10
 menu:
   docs:
-    parent: "prologue"
+    parent: "examples"
 toc: true
 ---
 
@@ -102,7 +102,7 @@ Dump is enabled
 GET /api/v1/namespaces/kube-system/services HTTP/1.1
 Host: 172.16.128.1:443
 User-Agent: clientgo/v0.0.0 (linux/amd64) kubernetes/$Format
-Accept: application/json, */*
+Accept: application/json
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InFOWi02X25nOVFvR3JVc01OdDB4NGhXdlFZV3hKNGF2RDl3ajhtQWwyb28ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJ0ZXN0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImNsaWVudGdvLXRva2VuLThzdDQ1Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImNsaWVudGdvIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiM2U5ZTA3Y2UtOWNkNC00ZGM1LTlkMzAtM2E3ZWZjODA2YTdkIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OnRlc3Q6Y2xpZW50Z28ifQ.GQ1zqo-TbAoJQEpC17DGYFHJU-5Lk7lSIQx2HqoWfqjSN3-8P6zyWY2KOh4bFwe8kNOJ7ZmWqgfirhFueCP57tbKIZCSH5bqOWxhYG5y2haM5P5wC8mkkohaiFFKjkjOaKwJRFlE0WpdjLZBCm21sBM20yp5vf6qx3GW-2yyIcK4zfbF9A-kta1nxpSag6uABDDDfT8PD265LdLNnX4IRmLv2eT5qpZlPVYnGGOTqxVrFW0KAz7SG61MwrUkTGgQcXbKDc_BJ-VXOBJC3Aq2PWKGNa-NUlILKsFtfvxQPFfkZAHtbT3NqqHcHzlFe7dWStTP63uPT_vQmBpZZi510Q
 Accept-Encoding: gzip
 
