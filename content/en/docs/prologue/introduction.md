@@ -4,7 +4,7 @@ description: "Req is a Simple Go HTTP client with Black Magic, write less code w
 lead: "Req is a Simple Go HTTP client with Black Magic, write less code with more efficiency."
 draft: false
 images: []
-weight: 100
+weight: 10
 menu:
   docs:
     parent: "prologue"

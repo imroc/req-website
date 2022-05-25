@@ -4,7 +4,7 @@ description: "This article will introduce how to integrate req with kubernetes c
 lead: ""
 draft: false
 images: []
-weight: 10
+weight: 1010
 menu:
   docs:
     parent: "examples"

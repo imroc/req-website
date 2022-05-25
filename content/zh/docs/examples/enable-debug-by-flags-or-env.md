@@ -4,7 +4,7 @@ description: "介绍如何通过命令行标志或环境变量开启 Debug"
 lead: ""
 draft: false
 images: []
-weight: 20
+weight: 1000
 menu:
   docs:
     parent: "examples"

@@ -3,7 +3,7 @@ title: "Client Settings"
 description: "API for Client Settings"
 draft: false
 images: []
-weight: 10
+weight: 10000
 menu:
   docs:
     parent: "tutorial"

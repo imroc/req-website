@@ -4,7 +4,7 @@ description: "Req 是一个简单易用还带黑魔法的 Go HTTP 客户端，�
 lead: "Req 是一个简单易用还带黑魔法的 Go HTTP 客户端，写更少的代码，获得更高的效率."
 draft: false
 images: []
-weight: 100
+weight: 10
 menu:
   docs:
     parent: "prologue"

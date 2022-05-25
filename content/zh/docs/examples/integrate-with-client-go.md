@@ -4,7 +4,7 @@ description: "介绍如何将 req 的调试能力集成到 cient-go 中"
 lead: ""
 draft: false
 images: []
-weight: 10
+weight: 1010
 menu:
   docs:
     parent: "examples"

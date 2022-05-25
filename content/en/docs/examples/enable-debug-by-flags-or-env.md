@@ -4,7 +4,7 @@ description: "This article will introduce how to enable debug with flags or envi
 lead: ""
 draft: false
 images: []
-weight: 20
+weight: 1000
 menu:
   docs:
     parent: "examples"

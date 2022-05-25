@@ -3,7 +3,7 @@ title: "Client 设置"
 description: "Client 设置的 API 汇总"
 draft: false
 images: []
-weight: 10
+weight: 10000
 menu:
   docs:
     parent: "tutorial"
