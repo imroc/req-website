@@ -1,6 +1,6 @@
 ---
-title: "Enable Debug by Flags"
-description: "Enable Debug by Flags"
+title: "Enable Debug with Flags or Environment"
+description: "Enable Debug with Flags or Environment"
 lead: ""
 draft: false
 images: []
@@ -13,7 +13,7 @@ toc: true
 
 ## Cobra Example
 
-Use `cobra` to create a golang command line tool, enable debug mode with global `--debug` flag:
+Use `cobra` to create a golang command line tool, enabling debug mode with global `--debug=true` flag or `DEBUG=true` environment variable:
 
 ```go
 package main
@@ -23,15 +23,12 @@ import (
 	"github.com/imroc/req/v3"
 	"github.com/spf13/cobra"
 	"log"
+	"os"
 )
 
-type GlobalArgs struct {
-	Debug bool
-}
+var globalClient = req.C()
 
-var globalArgs *GlobalArgs
-
-var client = req.C()
+var enableDebug bool
 
 type UUID struct {
 	Uuid string `json:"uuid"`
@@ -40,15 +37,15 @@ type UUID struct {
 var rootCmd = cobra.Command{
 	Use: "uuid",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		if globalArgs.Debug { // Enable debug mode if `--debug=true`.
-			client.EnableDumpAll()
-			client.EnableDebugLog()
+		if enableDebug { // Enable debug mode if `--enableDebug=true` or `DEBUG=true`.
+			globalClient.EnableDumpAll()  // Dump all requests.
+			globalClient.EnableDebugLog() // Output debug log.
 		}
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var uuid UUID
 
-		resp, err := client.R().
+		resp, err := globalClient.R().
 			SetResult(&uuid). // Read uuid response into struct.
 			Get("https://httpbin.org/uuid")
 
@@ -66,8 +63,7 @@ var rootCmd = cobra.Command{
 }
 
 func init() {
-	globalArgs = &GlobalArgs{}
-	rootCmd.PersistentFlags().BoolVar(&globalArgs.Debug, "debug", false, "Enable debug mode")
+	rootCmd.PersistentFlags().BoolVar(&enableDebug, "debug", os.Getenv("DEBUG") == "true", "Enable debug mode")
 }
 
 func main() {
@@ -75,16 +71,33 @@ func main() {
 		log.Fatalln(err)
 	}
 }
-
 ```
 
-Let's look at the execution output:
+Let's build and take a look at the `--help`:
+
+```bash
+$ go build -o uuid
+$ ./uuid --help
+Usage:
+  uuid [flags]
+
+Flags:
+      --debug   Enable debug mode
+  -h, --help    help for uuid
+```
+
+Run it normally:
 
 ```bash
 $ ./uuid
-715ca300-cb7b-43cb-882e-2221e7079d25
+d576aaa4-56ad-4095-8929-97e2ee7fbb5d
+```
+
+Enable debug mode with flag `--debug=true`:
+
+```bash
 $ ./uuid --debug
-2022/05/24 21:25:19.862225 DEBUG [req] HTTP/2 GET https://httpbin.org/uuid
+2022/05/25 10:00:33.093949 DEBUG [req] HTTP/2 GET https://httpbin.org/uuid
 :authority: httpbin.org
 :method: GET
 :path: /uuid
@@ -93,7 +106,7 @@ accept-encoding: gzip
 user-agent: req/v3 (https://github.com/imroc/req)
 
 :status: 200
-date: Tue, 24 May 2022 13:25:20 GMT
+date: Wed, 25 May 2022 02:00:33 GMT
 content-type: application/json
 content-length: 53
 server: gunicorn/19.9.0
@@ -101,9 +114,35 @@ access-control-allow-origin: *
 access-control-allow-credentials: true
 
 {
-  "uuid": "b4408800-0b94-42ea-9bd3-7ed3b1cdb918"
+  "uuid": "d4ea37b6-455d-4ad4-a3ad-251fa606560a"
 }
 
-b4408800-0b94-42ea-9bd3-7ed3b1cdb918
+d4ea37b6-455d-4ad4-a3ad-251fa606560a
+```
 
+Enable debug mode with environment variable `DEBUG=true`:
+
+```bash
+$ DEBUG=true ./uuid
+2022/05/25 10:13:59.303260 DEBUG [req] HTTP/2 GET https://httpbin.org/uuid
+:authority: httpbin.org
+:method: GET
+:path: /uuid
+:scheme: https
+accept-encoding: gzip
+user-agent: req/v3 (https://github.com/imroc/req)
+
+:status: 200
+date: Wed, 25 May 2022 02:13:59 GMT
+content-type: application/json
+content-length: 53
+server: gunicorn/19.9.0
+access-control-allow-origin: *
+access-control-allow-credentials: true
+
+{
+  "uuid": "52ab1a27-a777-4d77-8eb5-81f7c0d9f694"
+}
+
+52ab1a27-a777-4d77-8eb5-81f7c0d9f694
 ```
