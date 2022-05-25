@@ -44,7 +44,7 @@ func main() {
     r.GET("/debug", func(c *gin.Context) {
       query := c.Query("enable")
       switch query {
-      case "true": // Turn on dump with `curl 127.0.0.1:80/dump?enable=true`
+      case "true": // Turn on dump with `curl 127.0.0.1:80/debug?enable=true`
         transport.EnableDump(&req.DumpOptions{
           Output:         os.Stdout,
           RequestHeader:  true,
@@ -54,7 +54,7 @@ func main() {
         })
         transport.Debugf = logger.Debugf
         fmt.Println("Debug is enabled")
-      case "false": // Turn off dump with `curl 127.0.0.1:80/dump?enable=false`
+      case "false": // Turn off dump with `curl 127.0.0.1:80/debug?enable=false`
         transport.DisableDump()
         transport.Debugf = nil
         fmt.Println("Debug is disabled")
