@@ -1,6 +1,6 @@
 ---
-title: "Enable Debug with Flags or Environment"
-description: "Enable Debug with Flags or Environment"
+title: "Enable Debug with Flags or Env"
+description: "This article will introduce how to enable debug with flags or environment variable"
 lead: ""
 draft: false
 images: []
