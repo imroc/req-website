@@ -30,11 +30,7 @@ var globalClient = req.C()
 
 var enableDebug bool
 
-type UUID struct {
-	Uuid string `json:"uuid"`
-}
-
-var rootCmd = cobra.Command{
+var uuidCmd = cobra.Command{
 	Use: "uuid",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		if enableDebug { // Enable debug mode if `--enableDebug=true` or `DEBUG=true`.
@@ -43,10 +39,12 @@ var rootCmd = cobra.Command{
 		}
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		var uuid UUID
+		var result struct {
+			Uuid string `json:"uuid"`
+		}
 
 		resp, err := globalClient.R().
-			SetResult(&uuid). // Read uuid response into struct.
+			SetResult(&result). // Read uuid response into struct.
 			Get("https://httpbin.org/uuid")
 
 		if err != nil {
@@ -54,7 +52,7 @@ var rootCmd = cobra.Command{
 		}
 
 		if resp.IsSuccess() { // Print uuid returned by the API.
-			fmt.Println(uuid.Uuid)
+			fmt.Println(result.Uuid)
 		} else {
 			fmt.Println("bad response")
 		}
@@ -63,11 +61,11 @@ var rootCmd = cobra.Command{
 }
 
 func init() {
-	rootCmd.PersistentFlags().BoolVar(&enableDebug, "debug", os.Getenv("DEBUG") == "true", "Enable debug mode")
+	uuidCmd.PersistentFlags().BoolVar(&enableDebug, "debug", os.Getenv("DEBUG") == "true", "Enable debug mode")
 }
 
 func main() {
-	if err := rootCmd.Execute(); err != nil {
+	if err := uuidCmd.Execute(); err != nil {
 		log.Fatalln(err)
 	}
 }
