@@ -1,6 +1,6 @@
 ---
-title: "通过 API 或信号动态开启 Debug"
-description: "介绍如何通过 API 或信号动态开启 Debug"
+title: "在生产环境动态开启 Debug"
+description: "介绍在生产环境如何通过 API 或信号动态开启 Debug"
 lead: ""
 draft: false
 images: []
@@ -11,7 +11,7 @@ menu:
 toc: true
 ---
 
-## 使用信号的示例
+## 通过 Signal
 
 ```go
 package main

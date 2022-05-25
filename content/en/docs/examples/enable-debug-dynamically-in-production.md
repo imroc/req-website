@@ -1,6 +1,6 @@
 ---
-title: "Enable Debug Dynamically via API or Signal"
-description: "Enable Debug Dynamically via API or Signal"
+title: "Enable Debug Dynamically in Production"
+description: "This article will introduce how to enable debug dynamically in production via API or signal"
 lead: ""
 draft: false
 images: []
@@ -11,7 +11,7 @@ menu:
 toc: true
 ---
 
-## Signal Example
+## Via Signal
 
 ```go
 package main
