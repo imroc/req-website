@@ -13,7 +13,7 @@ toc: true
 
 ## Overview
 
-The dump capability of `Req` comes from its implementation of `Transport`, and `client-go` provides the ability to customize `Transport`, so we can integrate the `Transport` of `Req` into `client-go`, You can use the switch to dynamically turn on the dump capability on demand and see all the details of the request, so that we can debug the K8S API.
+The dump capability of `Req` comes from its implementation of `Transport`, and the kubernetes sdk [client-go](https://github.com/kubernetes/client-go) provides the ability to customize `Transport`, so we can integrate the `Transport` of `Req` into `client-go`, You can use the switch to dynamically turn on the dump capability on demand and see all the details of the request, so that we can debug the K8S API.
 
 ## Example 1: Manipulate Transport Directly
 

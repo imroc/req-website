@@ -13,7 +13,7 @@ toc: true
 
 ## 概述
 
-`Req` 的 dump 和 debug 日志能力来自其实现的 `Transport` ，而 `client-go` 提供了自定义 `Transport` 的能力，所以我们可以将 `Req` 的 `Transport` 集成进 `client-go` 中，可以使用开关按需动态打开 dump 能力，看到请求所有细节，以实现 K8S API 的调试。
+`Req` 的 dump 和 debug 日志能力来自其实现的 `Transport` ，而 Kubernetes SDK [client-go](https://github.com/kubernetes/client-go) 提供了自定义 `Transport` 的能力，所以我们可以将 `Req` 的 `Transport` 集成进 `client-go` 中，可以使用开关按需动态打开 dump 能力，看到请求所有细节，以实现 K8S API 的调试。
 
 ## 示例1: 直接操作 Transport
 
