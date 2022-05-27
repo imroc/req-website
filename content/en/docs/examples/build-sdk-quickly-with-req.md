@@ -1,6 +1,6 @@
 ---
-title: "使用 req 快速封装 SDK"
-description: "介绍如何使用 req 快速开发出 SDK"
+title: "Build SDK Quickly with Req"
+description: "This article will introduce how to build sdk quickly with req"
 lead: ""
 draft: false
 images: []
@@ -11,21 +11,21 @@ menu:
 toc: true
 ---
 
-## 概述
+## Overview
 
-利用 `req` 强大而又灵活的特性，我们可以针对服务端提供的 API 快速封装出好用的 golang SDK。
+Using the powerful and flexible features of `req`, we can quickly develop a useful golang SDK for the API provided by the server.
 
-大致思路是：
-1. 将 `req` 的 `Client` 嵌入到 SDK 核心的 struct 中，为所有 API 请求设置共同的属性(请求头，认证信息，URL 地址前缀等)。
-2. 处理 response 时，将一些通用处理逻辑提取出来，注册到 response 中间件里进行处理(处理 server 返回非预期的状态码，处理 API 返回错误)。
-3. 在 SDK 中集成 `req` 强大的 API Debug 能力，在使用该 SDK 的程序中可以动态决定是否打开 Debug。
-4. 封装 API 的实现方法里，通常只需要根据 API 设置好需要的参数与要响应的对象然后直接返回即可，一般只需要几行代码。
+The general idea is:
+1. Embed the `Client` of `req` into the struct of the SDK core, and set common properties for all API requests(header, authentication information, base URL, etc).
+2. Extract some general processing logic and register it into the response middleware for handle the response (handle unexpected status codes or API errors).
+3. Integrate the powerful API Debug capability of `req` into the SDK, and you can dynamically decide whether to enable Debug in the program using the SDK.
+4. In the implementation method of the API, you only need to set the required parameters and the object that will be unmarshalled according to the API, and then return directly. Generally, only a few lines of code are required.
 
-本文以 GitHub API 为例，封装一个简单又强大的 SDK。
+This article takes GitHub API as an example to develop a simple and powerful SDK.
 
-## 开发 Github SDK 的代码示例
+## Example for Developing GitHub SDK
 
-为 GitHub 定义一个 Client，使用 `req` 进行封装，`client.go`:
+Define a Client for GitHub, use `req` to encapsulate, `client.go`:
 
 ```go
 import (
@@ -122,7 +122,7 @@ func (c *GithubClient) IsLogged() bool {
 }
 ```
 
-对用户信息相关接口进行封装，`user_profile.go`:
+Encapsulate APIs for user profile, `user_profile.go`:
 
 ```go
 import "time"
@@ -181,12 +181,12 @@ type UserProfile struct {
 }
 ```
 
-好了，一个简单又强大的 GitHub SDK 封装完成，这里只封装了两个接口，但每个接口的实现函数都只需几行代码，可以以此类推快速的封装其它接口。
+Well, a simple and powerful GitHub SDK is developed. Only two APIs is implemented, but the implementation function of each API only needs a few lines of code, and other APIs can be quickly encapsulated in the same way.
 
-接下来我们使用该 SDK 写一个简单的可执行程序:
-1. 当给程序传入了一个 GitHub 的 username，表示查询该用户的信息。
-2. 当设置 `TOKEN` 环境变量表示登录 GitHub，查询当前登录用户的信息。
-3. 当设置 `DEBUG` 环境变量为 `on` 表示开启 Debug，打印请求详情。
+Next we use the SDK to write a simple executable program:
+1. When a GitHub username is passed to the program, it means to query the user's information.
+2. When the `TOKEN` environment variable is set, it means logging in to GitHub and querying the information of the currently logged in user.
+3. When the `DEBUG` environment variable is set to `on`, Debug is enabled and the request details are printed.
 
 `main.go`:
 
@@ -234,7 +234,7 @@ func main() {
 }
 ```
 
-编译并运行:
+Build and run:
 
 ```bash
 $ go build -o test
@@ -243,7 +243,7 @@ $ ./test spf13
 Steve Francia's website: http://spf13.com
 ```
 
-提供错误的 TOKEN 运行:
+Provide the wrong TOKEN to run:
 
 ```bash
 $ export TOKEN=test
@@ -251,7 +251,7 @@ $ ./test
 API error: Bad credentials (see doc https://docs.github.com/rest)
 ```
 
-提供正确的 TOKEN 运行:
+Provide the right TOKEN to run:
 
 ```bash
 $ export TOKEN=ghp_Bi6T*****************************ai3
@@ -260,14 +260,14 @@ $ ./test
 roc's website: https://imroc.cc
 ```
 
-提供不存在的 username 运行:
+Provide a username that does not exist and run:
 
 ```bash
 $ ./test 683d977eb7854a43
 API error: Not Found (see doc https://docs.github.com/rest/reference/users#get-a-user)
 ```
 
-打开 Debug 运行:
+Enable debug and run:
 
 ```bash
 $ export DEBUG=on
