@@ -21,7 +21,7 @@ This article will show you how to write unit tests using httpmock if your projec
 
 httpmock mainly implements request interception by replacing the `Transport` of `http.Client`, so that the originating `Request` does not go through the network but directly returns the corresponding `Response` according to the configuration of httpmock. `client.GetClient()` can get the internal `http.Client`, which we pass to httpmock to replace the default `Transport` of `req` to integrate with httpmock.
 
-> The dump and part of the debug log capabilities of req come from its own implementation of Transport, which will be lost after httpmock replaces Transport.
+> The dump capability and part of the debug log capability of req come from its own implementation of Transport, which will be lost after httpmock replaces Transport.
 
 ## Simple Example
 
