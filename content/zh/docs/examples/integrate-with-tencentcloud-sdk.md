@@ -15,7 +15,7 @@ toc: true
 
 `Req` 的 dump 和 debug 日志能力来自其实现的 `Transport` ，而 [tencentcloud-sdk-go](https://github.com/TencentCloud/tencentcloud-sdk-go) 提供了自定义 `Transport` 的能力，所以我们可以将 `Req` 的 `Transport` 集成进 `tencentcloud-sdk-go` 中，可以使用开关按需打开 debug 能力，看到请求所有细节，以便更方便的调试 API。
 
-## 代码实例
+## 代码示例
 
 ```go
 package main
