@@ -1,6 +1,6 @@
 ---
-title: "使用中间件为所有请求处理异常"
-description: "介绍如何使用中间件为所有请求处理异常"
+title: "使用中间件统一处理异常"
+description: "介绍如何使用中间件为所有请求统一处理异常"
 lead: ""
 draft: false
 images: []
