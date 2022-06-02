@@ -29,7 +29,6 @@ toc: true
 
 ```go
 import (
-	"errors"
 	"fmt"
 	"github.com/imroc/req/v3"
 	"strings"
@@ -41,25 +40,35 @@ type GithubClient struct {
 	isLogged bool
 }
 
-// NewClient create a GitHub client.
+// NewGithubClient create a GitHub client.
 func NewGithubClient() *GithubClient {
 	c := req.C().
 		// All GitHub API requests need this header.
 		SetCommonHeader("Accept", "application/vnd.github.v3+json").
 		// All GitHub API requests use the same base URL.
 		SetBaseURL("https://api.github.com").
-		// Register a middleware to handle response for every request with common logic.
-		OnAfterResponse(func(client *req.Client, resp *req.Response) error {
-			if resp.StatusCode < 200 { // This should not happen.
-				return fmt.Errorf("bad status code: %d", resp.StatusCode)
+		// EnableDump at the request level in request middleware which dump content into
+		// memory (not print to stdout), we can record dump content only when unexpected
+		// exception occurs, it is helpful to troubleshoot problems in production.
+		OnBeforeRequest(func(c *req.Client, r *req.Request) error {
+			if r.RetryAttempt > 0 { // Ignore on retry.
+				return nil
 			}
-			if resp.IsError() { // API returns error message, convert it to go error.
-				var errMsg ErrorMessage
-				err := resp.UnmarshalJson(&errMsg)
-				if err != nil {
-					return err
-				}
-				return errMsg.Error()
+			r.EnableDump()
+			return nil
+		}).
+		// Unmarshal all GitHub error response into struct.
+		SetCommonError(&APIError{}).
+		// Handle common exceptions in response middleware.
+		OnAfterResponse(func(client *req.Client, resp *req.Response) error {
+			if err, ok := resp.Error().(*APIError); ok {
+				// Server returns an error message, convert it to human-readable go error.
+				return err
+			}
+			// Corner case: neither an error response nor a success response,
+			// dump content to help troubleshoot.
+			if !resp.IsSuccess() {
+				return fmt.Errorf("bad response, raw dump:\n%s", resp.Dump())
 			}
 			return nil
 		})
@@ -69,9 +78,9 @@ func NewGithubClient() *GithubClient {
 	}
 }
 
-// ErrorMessage represents the error message that GitHub API returns.
+// APIError represents the error message that GitHub API returns.
 // GitHub API doc: https://docs.github.com/en/rest/overview/resources-in-the-rest-api#client-errors
-type ErrorMessage struct {
+type APIError struct {
 	Message          string `json:"message"`
 	DocumentationUrl string `json:"documentation_url,omitempty"`
 	Errors           []struct {
@@ -81,31 +90,20 @@ type ErrorMessage struct {
 	} `json:"errors,omitempty"`
 }
 
-// Error convert ErrorMessage to a human readable error and return.
-func (em *ErrorMessage) Error() error {
-	msg := fmt.Sprintf("API error: %s", em.Message)
-	if em.DocumentationUrl != "" {
-		return fmt.Errorf("%s (see doc %s)", msg, em.DocumentationUrl)
+// Error convert APIError to a human readable error and return.
+func (e *APIError) Error() string {
+	msg := fmt.Sprintf("API error: %s", e.Message)
+	if e.DocumentationUrl != "" {
+		return fmt.Sprintf("%s (see doc %s)", msg, e.DocumentationUrl)
 	}
-	if len(em.Errors) == 0 {
-		return errors.New(msg)
+	if len(e.Errors) == 0 {
+		return msg
 	}
 	errs := []string{}
-	for _, err := range em.Errors {
+	for _, err := range e.Errors {
 		errs = append(errs, fmt.Sprintf("resource:%s field:%s code:%s", err.Resource, err.Field, err.Code))
 	}
-	return fmt.Errorf("%s (%s)", msg, strings.Join(errs, " | "))
-}
-
-
-func (c *GithubClient) SetDebug(enable string) *GithubClient {
-	if enable {
-		c.EnableDebugLog()
-    c.EnableDumpAll()
-  }else{
-    c.DisableDebugLog()
-    c.DisableDumpAll()
-  }
+	return fmt.Sprintf("%s (%s)", msg, strings.Join(errs, " | "))
 }
 
 // LoginWithToken login with GitHub personal access token.
@@ -119,6 +117,18 @@ func (c *GithubClient) LoginWithToken(token string) *GithubClient {
 // IsLogged return true is user is logged in, otherwise false.
 func (c *GithubClient) IsLogged() bool {
 	return c.isLogged
+}
+
+// SetDebug enable debug if set to true, disable debug if set to false.
+func (c *GithubClient) SetDebug(enable bool) *GithubClient {
+	if enable {
+		c.EnableDebugLog()
+		c.EnableDumpAll()
+	} else {
+		c.DisableDebugLog()
+		c.DisableDumpAll()
+	}
+	return c
 }
 ```
 

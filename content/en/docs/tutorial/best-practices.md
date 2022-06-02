@@ -10,6 +10,8 @@ menu:
 toc: true
 ---
 
+This article will introduce some best practices for using req.
+
 ## Reuse Client
 
 Do not create `Client` for each `Request`, which will cause unnecessary overhead. Usually, we can reuse the same Client to send all requests.
