@@ -93,7 +93,7 @@ func main() {
 		os.Exit(1)
 	}
 	username := os.Args[1]
-	c := NewC()
+	c := NewClient()
 
 	var user struct {
 		Name string `json:"name"`
