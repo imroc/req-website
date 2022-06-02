@@ -31,7 +31,7 @@ You can integrate the powerful debugging capabilities of `req` into your program
 * If the program is a command line tool, run it once and exit, you can [Enable Debug via Flag or Env](../../examples/enable-debug-via-flag-or-env/).
 * If the program is a server-like long-running application, you can [Enable Debug Dynamically in Production](../../examples/enable-debug-dynamically-in-production/).
 
-## Handle Exceptions with Middleware for All Requests
+## Unified Exception Handling Using Middleware
 
 We can handle exceptions for all requests using req's middleware to reduce duplicate code:
 * The error response message format of all APIs on the same server is usually the same. We can define a struct representing the error response and implement the error interface to uniformly convert the API error response into a go error and return.

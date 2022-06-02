@@ -31,7 +31,7 @@ func main() {
 * 如果程序是命令行工具，运行一次就结束，可以 [通过命令行标志或环境变量开启 Debug](../../examples/enable-debug-via-flag-or-env/)。
 * 如果程序是类似服务端的应用，需要长时间运行，可以 [在生产环境动态开启 Debug](../../examples/enable-debug-dynamically-in-production/)。
 
-## 使用中间件为所有请求处理异常
+## 使用中间件统一处理异常
 
 我们可以利用 `req` 的中间件能力来统一处理所有请求的异常，减少重复代码:
 * 同一个服务端的所有 API 的错误响应消息格式通常都是一致的，我们可以定义一个代表错误响应的 struct 并实现 error 接口，将 API 错误响应统一转换为 error 返回。
