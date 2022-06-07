@@ -153,7 +153,7 @@ fmt.Println(trace) // Print details
 ```
 
 ```txt
-the request total time is 2.562416041s, and costs 1.289082208s from connection ready to server respond frist byte
+the request total time is 2.562416041s, and costs 1.289082208s from connection ready to server respond first byte
 --------
 TotalTime         : 2.562416041s
 DNSLookupTime     : 445.246375ms
