@@ -4,7 +4,7 @@ description: "介绍在生产环境如何通过 API 或信号动态开启 Debug"
 lead: ""
 draft: false
 images: []
-weight: 1005
+weight: 1003
 menu:
   docs:
     parent: "examples"

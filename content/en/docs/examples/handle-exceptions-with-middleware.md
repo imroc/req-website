@@ -4,7 +4,7 @@ description: "This article will introduce how to handle exceptions with middlewa
 lead: ""
 draft: false
 images: []
-weight: 1006
+weight: 1004
 menu:
   docs:
     parent: "examples"

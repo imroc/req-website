@@ -4,7 +4,7 @@ description: "介绍如何使用中间件为所有请求统一处理异常"
 lead: ""
 draft: false
 images: []
-weight: 1006
+weight: 1004
 menu:
   docs:
     parent: "examples"

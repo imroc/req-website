@@ -4,7 +4,7 @@ description: "This article will introduce how to enable debug dynamically in pro
 lead: ""
 draft: false
 images: []
-weight: 1005
+weight: 1003
 menu:
   docs:
     parent: "examples"
