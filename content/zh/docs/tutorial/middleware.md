@@ -41,3 +41,8 @@ client.OnAfterResponse(func(c *req.Client, r *req.Response) error {
     return nil  // return nil if it is success
   })
 ```
+
+## 示例
+
+* [使用中间件统一处理异常](../../examples/handle-exceptions-with-middleware/)
+* [使用中间件统一记录 Prometheus 指标](../../examples/record-prometheus-metrics-using-middleware/)
