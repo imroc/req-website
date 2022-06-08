@@ -23,79 +23,80 @@ Code:
 package main
 
 import (
-	"fmt"
-	"github.com/imroc/req/v3"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"net/http"
-	"strconv"
-	"time"
+  "fmt"
+  "github.com/imroc/req/v3"
+  "github.com/prometheus/client_golang/prometheus"
+  "github.com/prometheus/client_golang/prometheus/promhttp"
+  "net/http"
+  "strconv"
+  "time"
 )
 
 var (
-	SendHTTPRequests = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Name: "send_http_requests_total",
-			Help: "Number of the http requests sent since the server started",
-		},
-		[]string{"method", "host", "path", "retry"},
-	)
-	SendHTTPRequestsDuration = prometheus.NewHistogramVec(
-		prometheus.HistogramOpts{
-			Name:    "send_http_requests_duration_seconds",
-			Help:    "Duration in seconds to send http requests",
-			Buckets: prometheus.DefBuckets,
-		},
-		[]string{"method", "host", "path", "code"},
-	)
+  SendHTTPRequests = prometheus.NewCounterVec(
+    prometheus.CounterOpts{
+      Name: "send_http_requests_total",
+      Help: "Number of the http requests sent since the server started",
+    },
+    []string{"method", "host", "path", "retry"},
+  )
+  SendHTTPRequestsDuration = prometheus.NewHistogramVec(
+    prometheus.HistogramOpts{
+      Name:    "send_http_requests_duration_seconds",
+      Help:    "Duration in seconds to send http requests",
+      Buckets: prometheus.DefBuckets,
+    },
+    []string{"method", "host", "path", "code"},
+  )
 )
 
 var client = req.C().
-	// Record request count metrics in request middleware
-	OnBeforeRequest(func(c *req.Client, r *req.Request) error {
-		retry := "no"
-		if r.RetryAttempt > 0 {
-			retry = "yes"
-		}
-		SendHTTPRequests.WithLabelValues(
-			r.Method, r.URL.Host, r.URL.Path, retry,
-		).Inc()
-		return nil
-	}).
-	// Record request time metrics in response middleware
-	OnAfterResponse(func(c *req.Client, resp *req.Response) error {
-		req := resp.Request
-		SendHTTPRequestsDuration.WithLabelValues(
-			req.Method, req.URL.Host, req.URL.Path, strconv.Itoa(resp.StatusCode),
-		).Observe(float64(resp.TotalTime()))
-		return nil
-	})
+  // Record request count metrics in request middleware
+  OnBeforeRequest(func(c *req.Client, r *req.Request) error {
+    retry := "no"
+    if r.RetryAttempt > 0 {
+      retry = "yes"
+    }
+    SendHTTPRequests.WithLabelValues(
+      r.Method, r.URL.Host, r.URL.Path, retry,
+    ).Inc()
+    return nil
+  }).
+  // Record request time metrics in response middleware
+  OnAfterResponse(func(c *req.Client, resp *req.Response) error {
+    req := resp.Request
+    duration := float64(resp.TotalTime()) / float64(time.Second)
+    SendHTTPRequestsDuration.WithLabelValues(
+      req.Method, req.URL.Host, req.URL.Path, strconv.Itoa(resp.StatusCode),
+    ).Observe(duration)
+    return nil
+  })
 
 func init() {
-	prometheus.MustRegister(SendHTTPRequests, SendHTTPRequestsDuration)
-	// client.EnableDebugLog() // Enable debug log if you want some output.
+  prometheus.MustRegister(SendHTTPRequests, SendHTTPRequestsDuration)
+  // client.EnableDebugLog() // Enable debug log if you want some output.
 }
 
 func main() {
-	go func() {
-		http.Handle("/metrics", promhttp.Handler())
-		http.ListenAndServe(":2112", nil)
-	}()
-	urls := []string{
-		"https://httpbin.org/get",
-		"https://api.github.com/users/imroc",
-	}
-	for {
-		for _, url := range urls {
-			_, err := client.R().
-				Get(url)
-			if err != nil {
-				fmt.Println("ERROR:", err.Error())
-				continue
-			}
-		}
-		time.Sleep(1 * time.Second)
-	}
+  go func() {
+    http.Handle("/metrics", promhttp.Handler())
+    http.ListenAndServe(":2112", nil)
+  }()
+  urls := []string{
+    "https://httpbin.org/get",
+    "https://api.github.com/users/imroc",
+  }
+  for {
+    for _, url := range urls {
+      _, err := client.R().
+        Get(url)
+      if err != nil {
+        fmt.Println("ERROR:", err.Error())
+        continue
+      }
+    }
+    time.Sleep(1 * time.Second)
+  }
 }
 ```
 
@@ -111,32 +112,32 @@ send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method=
 send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="0.05"} 0
 send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="0.1"} 0
 send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="0.25"} 0
-send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="0.5"} 0
-send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="1"} 0
-send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="2.5"} 0
-send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="5"} 0
-send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="10"} 0
-send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="+Inf"} 66
-send_http_requests_duration_seconds_sum{code="200",host="httpbin.org",method="GET",path="/get"} 2.5845438124e+10
-send_http_requests_duration_seconds_count{code="200",host="httpbin.org",method="GET",path="/get"} 66
+send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="0.5"} 105
+send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="1"} 111
+send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="2.5"} 112
+send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="5"} 112
+send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="10"} 112
+send_http_requests_duration_seconds_bucket{code="200",host="httpbin.org",method="GET",path="/get",le="+Inf"} 112
+send_http_requests_duration_seconds_sum{code="200",host="httpbin.org",method="GET",path="/get"} 38.093914788999996
+send_http_requests_duration_seconds_count{code="200",host="httpbin.org",method="GET",path="/get"} 112
 send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="0.005"} 0
 send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="0.01"} 0
 send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="0.025"} 0
 send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="0.05"} 0
-send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="0.1"} 0
-send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="0.25"} 0
-send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="0.5"} 0
-send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="1"} 0
-send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="2.5"} 0
-send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="5"} 0
-send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="10"} 0
-send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="+Inf"} 65
-send_http_requests_duration_seconds_sum{code="403",host="api.github.com",method="GET",path="/users/imroc"} 7.978128748e+09
-send_http_requests_duration_seconds_count{code="403",host="api.github.com",method="GET",path="/users/imroc"} 65
+send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="0.1"} 99
+send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="0.25"} 109
+send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="0.5"} 110
+send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="1"} 111
+send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="2.5"} 111
+send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="5"} 111
+send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="10"} 111
+send_http_requests_duration_seconds_bucket{code="403",host="api.github.com",method="GET",path="/users/imroc",le="+Inf"} 111
+send_http_requests_duration_seconds_sum{code="403",host="api.github.com",method="GET",path="/users/imroc"} 10.233208129000001
+send_http_requests_duration_seconds_count{code="403",host="api.github.com",method="GET",path="/users/imroc"} 111
 # HELP send_http_requests_total Number of the http requests sent since the server started
 # TYPE send_http_requests_total counter
-send_http_requests_total{host="api.github.com",method="GET",path="/users/imroc",retry="no"} 66
-send_http_requests_total{host="httpbin.org",method="GET",path="/get",retry="no"} 66
+send_http_requests_total{host="api.github.com",method="GET",path="/users/imroc",retry="no"} 112
+send_http_requests_total{host="httpbin.org",method="GET",path="/get",retry="no"} 112
 ```
 
 If metrics data is collected, statistics the number of requests with PromQL:
