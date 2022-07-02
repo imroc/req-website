@@ -13,7 +13,7 @@ contributors: ["roc"]
 
 ## Breaking News
 
-Req is about to introduce HTTP3 support. In order to support HTTP3, the internal code of req has been refactored, so the code is currently submitted on a separate http3 branch. After it is stable enough, it will be merged into the main branch and then release version `v3.14.0`.
+Req is about to introduce HTTP3 support. In order to support HTTP3, the internal code of req has been refactored, and the code is currently submitted on a separate http3 branch. After it is stable enough, it will be merged into the master branch and then release version `v3.14.0`.
 
 It will take some time before the official release, but now you can try it out in advance, this article will introduce how to use HTTP3 in req.
 
