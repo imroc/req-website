@@ -13,7 +13,7 @@ toc: true
 
 ## Overview
 
-[httpmock](https://github.com/jarcoal/httpmock) is often used for HTTP-related unit tests: when you write a function that involves remote HTTP API calls, and want to make it covered by unit tests, but if you make remote HTTP calls in unit tests, it will fail if the network is unreachable or the remote server API is unavailable. Therefore, we generally use httpmock to intercept our requests and directly return the data we expect to return, this makes it possible to complete HTTP-related unit tests directly without going through the network transport.
+[httpmock](https://github.com/jarcoal/httpmock) is often used for HTTP-related unit tests: when you write a function that involves remote HTTP API calls, and want to make it covered by unit tests, but if you make remote HTTP calls in unit tests, it will fail if the network is unreachable or the remote server API is unavailable. Therefore, we generally use httpmock to intercept our requests and directly return the data we expect to return, this makes it possible to complete HTTP-related unit tests directly without going through the network transportWrapper.
 
 This article will show you how to write unit tests using httpmock if your project uses `req` as the http client.
 

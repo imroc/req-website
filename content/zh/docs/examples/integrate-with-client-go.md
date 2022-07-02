@@ -35,7 +35,7 @@ import (
 )
 
 // Use req's Transport implementation.
-var transport = &req.Transport{}
+var transportWrapper = &req.Transport{}
 var logger = req.NewLogger(os.Stdout, "", log.Ldate|log.Lmicroseconds)
 
 func main() {
@@ -45,18 +45,18 @@ func main() {
       query := c.Query("enable")
       switch query {
       case "true": // Turn on dump with `curl 127.0.0.1:80/debug?enable=true`
-        transport.EnableDump(&req.DumpOptions{
+        transportWrapper.EnableDump(&req.DumpOptions{
           Output:         os.Stdout,
           RequestHeader:  true,
           RequestBody:    true,
           ResponseHeader: true,
           ResponseBody:   true,
         })
-        transport.Debugf = logger.Debugf
+        transportWrapper.Debugf = logger.Debugf
         fmt.Println("Debug is enabled")
       case "false": // Turn off dump with `curl 127.0.0.1:80/debug?enable=false`
-        transport.DisableDump()
-        transport.Debugf = nil
+        transportWrapper.DisableDump()
+        transportWrapper.Debugf = nil
         fmt.Println("Debug is disabled")
       }
     })
@@ -75,9 +75,9 @@ func main() {
     panic(err.Error())
   }
   // Set TLSClientConfig to req's Transport.
-  transport.TLSClientConfig = tlsConfig
+  transportWrapper.TLSClientConfig = tlsConfig
   // Override with req's Transport.
-  config.Transport = transport
+  config.Transport = transportWrapper
   // rest.Config.TLSClientConfig should be empty if
   // custom Transport been set.
   config.TLSClientConfig = rest.TLSClientConfig{}

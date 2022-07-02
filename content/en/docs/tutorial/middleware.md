@@ -26,7 +26,6 @@ client.OnBeforeRequest(func(c *req.Client, r *req.Request) error {
   })
 ```
 
-
 ## Response Middleware
 
 Use `Client.OnAfterResponse` to set response middleware, you can access Client and current Request object to do something what you need before the Response is returned:

@@ -2,6 +2,9 @@ main:
 - name: 文档
   url: /docs/prologue/introduction/
   weight: 10
+- name: 博客
+  url: /blog/
+  weight: 20
 
 social:
 - name: GitHub
