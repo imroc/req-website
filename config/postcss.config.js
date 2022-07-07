@@ -27,6 +27,7 @@ module.exports = {
         ...whitelister([
           './node_modules/katex/dist/katex.css',
           './node_modules/highlight.js/scss/monokai-sublime.scss',
+          './node_modules/font-awesome/scss/font-awesome.scss',
           './assets/scss/components/_comments.scss',
           './assets/scss/components/_buttons.scss',
           './assets/scss/components/_details.scss',

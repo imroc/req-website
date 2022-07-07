@@ -251,3 +251,150 @@ pre {
 .dropdown-menu-main .dropdown-item.active:hover {
   background-color: transparent;
 }
+.btn {
+  display:inline-block;
+  font-weight:400;
+  color:#222;
+  text-align:center;
+  vertical-align:middle;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  background-color:transparent;
+  border:1px solid transparent;
+  padding:.375rem .75rem;
+  font-size:1rem;
+  line-height:1.5;
+  border-radius:.25rem;
+  transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
+}
+@media(prefers-reduced-motion:reduce) {
+  .btn {
+    transition:none
+  }
+}
+.btn:hover {
+  color:#222;
+  text-decoration:none
+}
+.btn:focus,
+.btn.focus {
+  outline:0;
+  box-shadow:0 0 0 .2rem rgba(49,118,217,.25)
+}
+.btn.disabled,
+.btn:disabled {
+  opacity:.65;
+  box-shadow:none
+}
+.btn:not(:disabled):not(.disabled) {
+  cursor:pointer
+}
+.btn:not(:disabled):not(.disabled):active,
+.btn.active:not(:disabled):not(.disabled) {
+  box-shadow:inset 0 3px 5px rgba(0,0,0,.125)
+}
+.btn:not(:disabled):not(.disabled):active:focus,
+.btn.active:not(:disabled):not(.disabled):focus {
+  box-shadow:0 0 0 .2rem rgba(49,118,217,.25),inset 0 3px 5px rgba(0,0,0,.125)
+}
+a.btn.disabled,
+fieldset:disabled a.btn {
+  pointer-events:none
+}
+.btn-primary {
+  color:#fff;
+  background:#3176d9 linear-gradient(180deg,#508bdf,#3176d9)repeat-x;
+  border-color:#3176d9;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075)
+}
+.btn-primary:hover {
+  color:#fff;
+  background:#2364c0 linear-gradient(180deg,#447bca,#2364c0)repeat-x;
+  border-color:#215eb6
+}
+.btn-primary:focus,
+.btn-primary.focus {
+  color:#fff;
+  background:#2364c0 linear-gradient(180deg,#447bca,#2364c0)repeat-x;
+  border-color:#215eb6;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075),0 0 0 .2rem rgba(80,139,223,.5)
+}
+.btn-primary.disabled,
+.btn-primary:disabled {
+  color:#fff;
+  background-color:#3176d9;
+  border-color:#3176d9;
+  background-image:none
+}
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary.active:not(:disabled):not(.disabled),
+.show>.btn-primary.dropdown-toggle {
+  color:#fff;
+  background-color:#215eb6;
+  background-image:none;
+  border-color:#1f59ab
+}
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.btn-primary.active:not(:disabled):not(.disabled):focus,
+.show>.btn-primary.dropdown-toggle:focus {
+  box-shadow:inset 0 3px 5px rgba(0,0,0,.125),0 0 0 .2rem rgba(80,139,223,.5)
+}
+.btn-secondary {
+  color:#fff;
+  background:#ffa630 linear-gradient(180deg,#ffb34f,#FFA630)repeat-x;
+  border-color:#ffa630;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075)
+}
+.btn-secondary:hover {
+  color:#fff;
+  background:#ff960a linear-gradient(180deg,#ffa52f,#ff960a)repeat-x;
+  border-color:#fc9000
+}
+.btn-secondary:focus,
+.btn-secondary.focus {
+  color:#fff;
+  background:#ff960a linear-gradient(180deg,#ffa52f,#ff960a)repeat-x;
+  border-color:#fc9000;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075),0 0 0 .2rem rgba(255,179,79,.5)
+}
+.btn-secondary.disabled,
+.btn-secondary:disabled {
+  color:#fff;
+  background-color:#ffa630;
+  border-color:#ffa630;
+  background-image:none
+}
+.btn-secondary:not(:disabled):not(.disabled):active,
+.btn-secondary.active:not(:disabled):not(.disabled),
+.show>.btn-secondary.dropdown-toggle {
+  color:#fff;
+  background-color:#fc9000;
+  background-image:none;
+  border-color:#ef8800
+}
+.btn-secondary:not(:disabled):not(.disabled):active:focus,
+.btn-secondary.active:not(:disabled):not(.disabled):focus,
+.show>.btn-secondary.dropdown-toggle:focus {
+  box-shadow:inset 0 3px 5px rgba(0,0,0,.125),0 0 0 .2rem rgba(255,179,79,.5)
+}
+.btn-lg,
+.btn-group-lg>.btn {
+  padding:.5rem 1rem;
+  font-size:1.25rem;
+  line-height:1.5;
+  border-radius:2rem
+}
+
+.jump svg {
+  margin-left:.5rem!important;
+  vertical-align: middle;
+  display:inline-block;
+  height: 1.25rem;
+  margin-bottom: .3rem;
+}
+
+.slogan {
+  font-weight: 500;
+}
