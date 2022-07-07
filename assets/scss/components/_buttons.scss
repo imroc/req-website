@@ -251,7 +251,8 @@ pre {
 .dropdown-menu-main .dropdown-item.active:hover {
   background-color: transparent;
 }
-.btn {
+
+.btn-main {
   display:inline-block;
   font-weight:400;
   color:#222;
@@ -270,39 +271,36 @@ pre {
   transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
 }
 @media(prefers-reduced-motion:reduce) {
-  .btn {
+  .btn-main {
     transition:none
   }
 }
-.btn:hover {
+.btn-main:hover {
   color:#222;
   text-decoration:none
 }
-.btn:focus,
-.btn.focus {
+.btn-main:focus,
+.btn-main.focus {
   outline:0;
   box-shadow:0 0 0 .2rem rgba(49,118,217,.25)
 }
-.btn.disabled,
-.btn:disabled {
+.btn-main.disabled,
+.btn-main:disabled {
   opacity:.65;
   box-shadow:none
 }
-.btn:not(:disabled):not(.disabled) {
+.btn-main:not(:disabled):not(.disabled) {
   cursor:pointer
 }
-.btn:not(:disabled):not(.disabled):active,
-.btn.active:not(:disabled):not(.disabled) {
+.btn-main:not(:disabled):not(.disabled):active,
+.btn-main.active:not(:disabled):not(.disabled) {
   box-shadow:inset 0 3px 5px rgba(0,0,0,.125)
 }
-.btn:not(:disabled):not(.disabled):active:focus,
-.btn.active:not(:disabled):not(.disabled):focus {
+.btn-main:not(:disabled):not(.disabled):active:focus,
+.btn-main.active:not(:disabled):not(.disabled):focus {
   box-shadow:0 0 0 .2rem rgba(49,118,217,.25),inset 0 3px 5px rgba(0,0,0,.125)
 }
-a.btn.disabled,
-fieldset:disabled a.btn {
-  pointer-events:none
-}
+
 .btn-primary {
   color:#fff;
   background:#3176d9 linear-gradient(180deg,#508bdf,#3176d9)repeat-x;
