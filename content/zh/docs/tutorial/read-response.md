@@ -55,6 +55,7 @@ io.Copy(dst, resp.Body)
 resp, err := client.R().
     SetResult(&result).
     SetError(&errMsg).
+    Get(url)
 ```
 
 * 如果 `resp.IsSuccess()` 返回 true, 意味着响应状态码在 200~299 ，如果 err 是 nil，也表示响应体一定成功被 Unmarshal 到 `&result` 里了。

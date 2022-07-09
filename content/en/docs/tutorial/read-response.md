@@ -55,6 +55,7 @@ You can use `SetResult` and `SetError` to unmarshal response body into struct or
 resp, err := client.R().
     SetResult(&result).
     SetError(&errMsg).
+    Get(url)
 ```
 
 * If `resp.IsSuccess()` returns true, it means that the response body must have been unmarshalled into `&result`, which condition is status code between 200 and 299.
