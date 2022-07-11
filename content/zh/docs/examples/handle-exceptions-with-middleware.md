@@ -126,7 +126,7 @@ $ DEBUG=on ./test imroc
 :method: GET
 :path: /users/imroc
 :scheme: https
-user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+user-agent: req/v3 (https://github.com/imroc/req/v3)
 accept-encoding: gzip
 
 :status: 200
@@ -173,7 +173,7 @@ $ DEBUG=on ./test 29d99b575ba3
 :method: GET
 :path: /users/29d99b575ba3
 :scheme: https
-user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+user-agent: req/v3 (https://github.com/imroc/req/v3)
 accept-encoding: gzip
 
 :status: 404

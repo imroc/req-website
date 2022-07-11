@@ -54,7 +54,7 @@ $ go run main.go
 :method: GET
 :path: /uuid
 :scheme: https
-user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+user-agent: req/v3 (https://github.com/imroc/req/v3)
 accept-encoding: gzip
 
 :status: 200
@@ -72,7 +72,7 @@ access-control-allow-credentials: true
 2022/05/19 10:05:09.340974 DEBUG [req] HTTP/1.1 GET https://httpbin.org/uuid
 GET /uuid HTTP/1.1
 Host: httpbin.org
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+User-Agent: req/v3 (https://github.com/imroc/req/v3)
 Accept-Encoding: gzip
 
 HTTP/1.1 200 OK
@@ -235,7 +235,7 @@ func main() {
 :method: POST
 :path: /post
 :scheme: https
-user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+user-agent: req/v3 (https://github.com/imroc/req/v3)
 content-type: application/json; charset=utf-8
 content-length: 55
 accept-encoding: gzip
@@ -260,7 +260,7 @@ access-control-allow-credentials: true
     "Content-Length": "55",
     "Content-Type": "application/json; charset=utf-8",
     "Host": "httpbin.org",
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36",
+    "User-Agent": "req/v3 (https://github.com/imroc/req/v3)",
     "X-Amzn-Trace-Id": "Root=1-628633d4-7559d633152b4307288ead2e"
   },
   "json": {

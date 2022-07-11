@@ -25,7 +25,7 @@ client.R().Get("https://httpbin.org/get")
 :method: GET
 :path: /get
 :scheme: https
-user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+user-agent: req/v3 (https://github.com/imroc/req/v3)
 accept-encoding: gzip
 
 :status: 200
@@ -41,7 +41,7 @@ access-control-allow-credentials: true
   "headers": {
     "Accept-Encoding": "gzip",
     "Host": "httpbin.org",
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36",
+    "User-Agent": "req/v3 (https://github.com/imroc/req/v3)",
     "X-Amzn-Trace-Id": "Root=1-61f0ec98-5958c02662de26e458b7672b"
   },
   "origin": "103.7.29.30",
