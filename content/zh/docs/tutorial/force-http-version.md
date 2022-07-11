@@ -49,3 +49,12 @@ client.R().MustGet("https://baidu.com")
 ```txt
 panic: Get "https://baidu.com": server does not support http2, you can use http/1.1 which is supported
 ```
+
+
+类似的, 你可以可以强制指定使用 `HTTP/3`:
+
+```go
+client := req.C().EnableForceHTTP3()
+client.R().MustGet("https://www.cloudflare.com")
+```
+
