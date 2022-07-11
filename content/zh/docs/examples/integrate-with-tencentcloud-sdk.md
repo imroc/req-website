@@ -39,7 +39,7 @@ func main() {
 	}
 	if os.Getenv("DEBUG") == "true" { // Enable API debug when DEBUG=true.
 		// Replace with Transport of req.
-		dnspodClient.WithHttpTransport(req.DevMode().GetClient().Transport)
+		dnspodClient.WithHttpTransport(req.DevMode().GetTransport())
 	}
 
 	// Create list domain request and send.
