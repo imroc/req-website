@@ -12,7 +12,7 @@ toc: true
 
 ## Default behaviour
 
-Req works fine both with `HTTP/2` and `HTTP/1.1`, `HTTP/2` is preferred by default if server support, which is negotiated by TLS handshake.
+Req works fine with `HTTP/1.1`, `HTTP/2` and `HTTP/3`. If supported by the server, `HTTP/2` is preferred by default, otherwise use `HTTP/1.1`, which is negotiated by the TLS handshake. If HTTP3 is enabled (EnableHTTP3), will use `HTTP/3` if it is detected that the server supports HTTP3.
 
 ## Force HTTP version
 

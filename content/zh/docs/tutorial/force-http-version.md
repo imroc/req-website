@@ -12,7 +12,7 @@ toc: true
 
 ## 默认行为
 
-Req 同时支持 `HTTP/2` 和 `HTTP/1.1`，如果服务端支持，默认情况下首选 `HTTP/2`，这是由 TLS 握手协商的。
+Req 同时支持 `HTTP/1.1`，`HTTP/2` 和 `HTTP/3`，如果服务端支持，默认情况下首选 `HTTP/2`，其次 `HTTP/1.1`，这是由 TLS 握手协商的。如果启用了 HTTP3 (EnableHTTP3)，当探测到服务端支持 HTTP3，会使用 HTTP3 协议进行请求。
 
 ## 强制指定 HTTP 版本
 
@@ -50,11 +50,9 @@ client.R().MustGet("https://baidu.com")
 panic: Get "https://baidu.com": server does not support http2, you can use http/1.1 which is supported
 ```
 
-
 类似的, 你可以可以强制指定使用 `HTTP/3`:
 
 ```go
 client := req.C().EnableForceHTTP3()
 client.R().MustGet("https://www.cloudflare.com")
 ```
-
