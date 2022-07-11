@@ -104,4 +104,4 @@ req 作为一款 "聪明" 且支持多 HTTP 协议的 Go HTTP 客户端，可以
 
 ## 下一步计划
 
-当前 req 的 trace 能力暂时还未支持 HTTP3，后续将会进行支持。
+当前 req 的 trace 能力暂时还未支持 HTTP3，后续将会进行支持。你可以在 [这里](https://github.com/users/imroc/projects/1/views/2) 看到更多其它计划。

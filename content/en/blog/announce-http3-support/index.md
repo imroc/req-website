@@ -104,4 +104,4 @@ For `HTTP/2` and `HTTP/1.1`, the network transport layer uses the TCP protocol, 
 
 ## Next Step
 
-Trace is not supported yet in HTTP3, but will be supported in the future.
+Trace is not supported yet in HTTP3, but will be supported in the future. You can see more other TODOs [here](https://github.com/users/imroc/projects/1/views/2).
