@@ -19,9 +19,9 @@ CardDesc4:
 CardDesc44:
   other: ', marshal request body and unmarshal response body automatically according to the Content-Type'
 CardTitle5:
-  other: 'Works fine with HTTP2'
+  other: 'Support Multiple HTTP Versions'
 CardDesc5:
-  other: 'Support both with HTTP/2 and HTTP/1.1, and HTTP/2 is preferred by default if server support, you can also force the protocol if you want'
+  other: 'Req support HTTP/1.1, HTTP/2, and HTTP/3, and can automatically detect the server side and select the optimal HTTP version for requests, you can also force the protocol if you want'
 CardTitle6:
   other: 'Support Retry'
 CardDesc6:

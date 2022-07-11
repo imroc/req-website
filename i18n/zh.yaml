@@ -19,9 +19,9 @@ CardDesc4:
 CardDesc44:
   other: '，根据 Content-Type 自动 Marshal 请求体和 Unmarshal 响应体'
 CardTitle5:
-  other: '支持 HTTP2'
+  other: '支持多种 HTTP 版本'
 CardDesc5:
-  other: '同时支持 HTTP/2 和 HTTP/1.1, 如果服务端支持默认会使用 HTTP/2，当然如果需要也可以强制指定协议版本'
+  other: '同时支持 HTTP/1.1, HTTP/2 和 HTTP/3, 可以自动检测服务端并选择最优 HTTP 协议版本进行请求，当然如果需要也可以强制指定协议版本'
 CardTitle6:
   other: '支持自动重试'
 CardDesc6:
