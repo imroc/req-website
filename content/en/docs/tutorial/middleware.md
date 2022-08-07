@@ -18,7 +18,7 @@ Use `Client.OnBeforeRequest` to set request middleware, you can access Client an
 client := req.C()
 
 // Registering Request Middleware
-client.OnBeforeRequest(func(c *req.Client, r *req.Request) error {
+client.OnBeforeRequest(func(client *req.Client, req *req.Request) error {
 	// You can access Client and current Request object to do something
 	// as you need
 
@@ -34,7 +34,7 @@ Use `Client.OnAfterResponse` to set response middleware, you can access Client a
 client := req.C()
 
 // Registering Response Middleware
-client.OnAfterResponse(func(c *req.Client, r *req.Response) error {
+client.OnAfterResponse(func(client *req.Client, resp *req.Response) error {
     if resp.Err != nil { // you can skip if error occurs.
         return nil
     }
