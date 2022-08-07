@@ -1,9 +1,9 @@
 ---
-title: "读取响应内容"
+title: "读取和 Unmarshal 响应内容"
 description: "介绍如何读取响应内容"
 draft: false
 images: []
-weight: 280
+weight: 151
 menu:
   docs:
     parent: "tutorial"
@@ -31,20 +31,6 @@ if err != nil {
     log.Fatal(err)
 }
 fmt.Println("body:", body)
-```
-
-## 自动读取响应体
-
-默认情况下，如果不是下载的请求，响应体会被自动读入内存，如有需要也可以选择禁用自动读取（通常不需要这样做）:
-
-```go
-client.DisableAutoReadResponse()
-
-resp, err := client.R().Get(url)
-if err != nil {
-	log.Fatal(err)
-}
-io.Copy(dst, resp.Body)
 ```
 
 ## Unmarshal 响应体
@@ -81,17 +67,26 @@ if resp.IsSuccess() {
 }
 ```
 
-你也可以使用 `resp.Unmarshal` 来显式的进行 Unmarshal:
+你也可以使用 `resp.Unmarshal` 或 `resp.Into` 来显式的进行 Unmarshal:
 
 ```go
 if resp.IsSuccess() {
-    err = resp.Unmarshal(user)
+    err = resp.Into(&user)
     if err != nil {
         log.Fatal(err)
     }
     fmt.Printf("%s's blog is %s\n", user.Name, user.Blog)
 } else {
     fmt.Println("bad response:", resp)
+}
+```
+
+不管是 `Request.SetResult`，`Request.SetError` 还是 `Response.Into`，都允许传入空指针的指针，当函数需要根据响应体来返回对应 struct 的指针时，可以直接将函数定义的返回值列表中的指针变量的地址传入(无需创建 struct，内部会自动使用反射来创建)，在封装 SDK 时尤为实用:
+
+```go
+func (c *GithubClient) GetMyProfile() (user *UserProfile, err error) {
+	_, err = c.R().SetResult(&user).Get("/user")
+	return
 }
 ```
 
@@ -113,4 +108,18 @@ fmt.Println("content-length:", resp.ContentLength)
 status 200 OK
 server: gunicorn/19.9.0
 content-length: 289
+```
+
+## 自动读取响应体
+
+默认情况下，如果不是下载的请求，响应体会被自动读入内存，如有需要也可以选择禁用自动读取（通常不需要这样做）:
+
+```go
+client.DisableAutoReadResponse()
+
+resp, err := client.R().Get(url)
+if err != nil {
+	log.Fatal(err)
+}
+io.Copy(dst, resp.Body)
 ```

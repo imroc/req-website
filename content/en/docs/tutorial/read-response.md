@@ -1,5 +1,5 @@
 ---
-title: "Read Response"
+title: "Read and Unmarshal Response"
 description: "This article will introduce how to read response."
 draft: false
 images: []
@@ -31,20 +31,6 @@ if err != nil {
     log.Fatal(err)
 }
 fmt.Println("body:", body)
-```
-
-## Auto-Read Response Body
-
-Response body will be read into memory if it's not a download request by default, you can disable it if you want (normally you don't need to do this).
-
-```go
-client.DisableAutoReadResponse()
-
-resp, err := client.R().Get(url)
-if err != nil {
-	log.Fatal(err)
-}
-io.Copy(dst, resp.Body)
 ```
 
 ## Unmarshal Response Body
@@ -81,17 +67,26 @@ if resp.IsSuccess() {
 }
 ```
 
-You can also use `resp.Unmarshal` to unmarshal explicitly if you want:
+You can also use `resp.Unmarshal` or `resp.Into` to unmarshal explicitly if you want:
 
 ```go
 if resp.IsSuccess() {
-    err = resp.Unmarshal(user)
+    err = resp.Into(&user)
     if err != nil {
         log.Fatal(err)
     }
     fmt.Printf("%s's blog is %s\n", user.Name, user.Blog)
 } else {
     fmt.Println("bad response:", resp)
+}
+```
+
+`SetResult`, `Request.SetError`, `Response.Unmarshal` and `Response.Into`, all accepts the pointer to nil pointer, so that when the function needs to return a pointer of the struct according to the response body, it can directly pass in the address of the pointer variable defined by the function's return list (no need to create struct explicitly, which is automatically created internally using reflection), it is especially useful when building the SDK:
+
+```go
+func (c *GithubClient) GetMyProfile() (user *UserProfile, err error) {
+	_, err = c.R().SetResult(&user).Get("/user")
+	return
 }
 ```
 
@@ -113,4 +108,18 @@ fmt.Println("content-length:", resp.ContentLength)
 status 200 OK
 server: gunicorn/19.9.0
 content-length: 289
+```
+
+## Auto-Read Response Body
+
+Response body will be read into memory if it's not a download request by default, you can disable it if you want (normally you don't need to do this).
+
+```go
+client.DisableAutoReadResponse()
+
+resp, err := client.R().Get(url)
+if err != nil {
+	log.Fatal(err)
+}
+io.Copy(dst, resp.Body)
 ```
