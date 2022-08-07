@@ -35,6 +35,10 @@ client := req.C()
 
 // Registering Response Middleware
 client.OnAfterResponse(func(c *req.Client, r *req.Response) error {
+    if resp.Err != nil { // you can skip if error occurs.
+        return nil
+    }
+
     // You can access Client and current Response object to do something
     // as you need
 
