@@ -276,6 +276,45 @@ data: {"name":"req","url":"https://github.com/imroc/req"}
 ++++++++++++++++++++++++++++++++++++++++++++++++
 ```
 
+## Do API Style
+
+If you like, you can also use a Do API style like the following to make requests:
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/imroc/req/v3"
+)
+
+type APIResponse struct {
+	Origin string `json:"origin"`
+	Url    string `json:"url"`
+}
+
+func main() {
+	var resp APIResponse
+	c := req.C().SetBaseURL("https://httpbin.org/post")
+	err := c.Post().
+		SetBody("hello").
+		Do().
+		Into(&resp)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("My IP is", resp.Origin)
+}
+```
+
+```txt
+My IP is 182.138.155.113
+```
+
+* The order of chain calls is more intuitive: first call Client to create a request with a specified Method, then use chain calls to set the request, then use `Do()` to fire the request, return Response, and finally call `Response.Into` to unmarshal response body into specified object.
+* `Response.Into` will return an error if an error occurs during sending the request or during unmarshalling.
+* The url of some APIs is fixed, and different types of requests are implemented by passing different bodies. In this scenario, `Client.SetBaseURL` can be used to set a unified url, and there is no need to set the url for each request when initiating a request. Of course, you can also call `Request.SetURL` to set it if you need it.
+
 ## Videos
 
 * [Get Started With Req](https://www.youtube.com/watch?v=k47i0CKBVrA) (English, Youtube)

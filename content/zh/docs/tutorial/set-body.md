@@ -1,9 +1,9 @@
 ---
-title: "Set Request Body"
-description: "This article will introduce how to set body and marshal automatically, read body and unmarshal automatically."
+title: "设置请求体"
+description: "介绍如何设置请求体。"
 draft: false
 images: []
-weight: 260
+weight: 150
 menu:
   docs:
     parent: "tutorial"
@@ -12,15 +12,16 @@ toc: true
 
 ## SetBody
 
-Use `SetBody` to set request body, which accepts string, []byte, io.Reader, req.GetContentFunc, it uses type assertion to determine the data type of body automatically.
+使用 `SetBody` 来设置请求体，可以使用 `string`, `[]byte`, `int`, `uint`, `float`, `bool` 等基础数据类型，也可以使用 `io.Reader`, `req.GetContentFunc` 这些类型的参数，会自动进行类型断言来获取数据内容:
 
 ```go
 // Create a client that dump request.
 client := req.C().EnableDumpAllWithoutResponse()
 
 // Send POST request with body.
-client.R().SetBody("test").Post("https://httpbin.org/post")
+client.R().SetBody(13.14).Post("https://httpbin.org/post")
 ```
+
 ```txt
 :authority: httpbin.org
 :method: POST
@@ -31,10 +32,10 @@ content-length: 4
 accept-encoding: gzip
 user-agent: req/v3 (https://github.com/imroc/req)
 
-test
+13.14
 ```
 
-If it cannot determine, like map and struct, then it will wait and marshal to JSON or XML automatically according to the `Content-Type` header that have been set before or after, default to json if not set:
+如果参数不是上述类型，比如 `map`，`struct` 以及指针，会等待并根据最后设置的 `Content-Type` 来自动将其 Marshal 成 JSON 或 XML 作为请求体内容，如果没设置，默认是 JSON:
 
 ```go
 type User struct {
@@ -59,7 +60,7 @@ user-agent: req/v2 (https://github.com/imroc/req)
 
 ## SetBodyXXX
 
-You can also use more specific methods such as `SetBodyJsonString`, `SetBodyJsonBytes`, `SetBodyXmlString` and `SetBodyXmlBytes` to avoid type assertions and improve performance,  and also set the `Content-Type` automatically without any guesswork:
+你可以使用更具体方法设置请求体，比如 `SetBodyJsonString`, `SetBodyJsonBytes`, `SetBodyXmlString` 和 `SetBodyXmlBytes`，这样可以避免类型断言，提高性能，同时也会自动设置 `Content-Type` 请求头:
 
 ```go
 client.R().SetBodyJsonString(`{"username": "imroc"}`).Post("https://httpbin.org/post")
@@ -77,7 +78,7 @@ user-agent: req/v2 (https://github.com/imroc/req)
 {"username": "imroc"}
 ```
 
-Similarly, Use `SetBodyJsonMarshal` or `SetBodyXmlMarshal` methods can marshal body and set `Content-Type` automatically:
+类似的, 使用 `SetBodyJsonMarshal` 或 `SetBodyXmlMarshal` 可以将请求体显式的 Marshal 成 JSON 或 XML，同样也会自动 `Content-Type` 请求头:
 
 ```go
 cient.R().SetBodyXmlMarshal(user).Post("https://httpbin.org/post")
@@ -95,9 +96,9 @@ user-agent: req/v2 (https://github.com/imroc/req)
 <User><Name>imroc</Name><Email>roc@imroc.cc</Email></User>
 ```
 
-## Customize Marshal Function
+## 自定义 Marshal 实现
 
-`Req` uses `json.Marshal` of go standard library to marshal request body if needed, you can customize with `client.SetJsonMarshal` or `client.SetXmlMarshal`:
+如果需要，`Req` 默认使用标准库的 `json.Marshal` 来将请求体 Marshal 成指定编码格式，你可以使用 `client.SetJsonMarshal` or `client.SetXmlMarshal` 来自定义 Marshal 的实现:
 
 ```go
 // Example of registering json-iterator

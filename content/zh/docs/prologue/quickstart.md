@@ -276,6 +276,45 @@ data: {"name":"req","url":"https://github.com/imroc/req"}
 ++++++++++++++++++++++++++++++++++++++++++++++++
 ```
 
+## Do API 风格
+
+如果你喜欢，你也可以使用类似下面的 Do API 风格来发起请求:
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/imroc/req/v3"
+)
+
+type APIResponse struct {
+	Origin string `json:"origin"`
+	Url    string `json:"url"`
+}
+
+func main() {
+	var resp APIResponse
+	c := req.C().SetBaseURL("https://httpbin.org/post")
+	err := c.Post().
+		SetBody("hello").
+		Do().
+		Into(&resp)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("My IP is", resp.Origin)
+}
+```
+
+```txt
+My IP is 182.138.155.113
+```
+
+* 链式调用的顺序更直观：先调用 Client 创建一个指定 Method 的请求，然后对请求使用链式调用进行设置，再使用 `Do()` 发起请求，返回 Response，最后再调用 `Response.Into` 进行 Unmarshal。
+* 如果在请求期间发生 error 或 Unmarshal 时发生 error，最终 `Response.Into` 都会返回 error。
+* 有些 API 的 url 是固定的，通过传不同 body 来实现不同类型的请求，这种场景可实现使用 `Client.SetBaseURL` 设置统一的 url，在发起请求时就无需为每个请求都设置 url，当然，如果你需要也可以调用 `Request.SetURL` 来设置。
+
 ## 视频
 
 * [Get Started With Req](https://www.youtube.com/watch?v=k47i0CKBVrA) (English, Youtube)
