@@ -35,12 +35,18 @@ client := req.C()
 
 // Registering Response Middleware
 client.OnAfterResponse(func(c *req.Client, r *req.Response) error {
+    if resp.Err != nil { // you can skip if error occurs.
+        return nil
+    }
+
     // You can access Client and current Response object to do something
     // as you need
 
     return nil  // return nil if it is success
   })
 ```
+
+如果发生了 error，`resp.Err` 将不为 nil，你可以在中间件函数内部判断是否发生 error 来决定是否跳过执行后续逻辑。像记录监控指标或者链路追踪信息等场景，不管是否有 error 都希望要执行，就可以不用判断。
 
 ## 示例
 

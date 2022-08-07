@@ -42,6 +42,8 @@ client.OnAfterResponse(func(c *req.Client, r *req.Response) error {
   })
 ```
 
+If an error occurs, `resp.Err` will not be nil, you can judge whether an error occurs inside the middleware function to decide whether to skip the execution of subsequent logic. For scenarios such as recording metrics or tracing information, you want to execute it regardless of whether there is an error, you don't need to judge.
+
 ## Examples
 
 * [Handle Exceptions with Middleware](../../examples/handle-exceptions-with-middleware/)
