@@ -136,7 +136,7 @@ func NewClient() *Client {
 * GitHub API 响应的错误格式是统一的，使用 `SetCommonError` 告知 req 如果响应了错误(状态码大于等于400），则自动将响应体 Unmarshal 到 `APIError` 结构体的对象中。
 * `APIError` 结构体实现了 go 的 error 接口，将 API 层面的错误信息转换成可读的字符串。
 * 在 `OnAfterResponse` 中设置 `ResponseMiddleware`，检测到 API 响应错误时，将其写入到 `resp.Err`，自动会将其作为 go error 抛给上层的调用方。
-* 在 `OnBeforeRequest` 中设置 `RequestMiddleware`，为所有请求开启请求级别的 dump (暂存到内存，不打印出来)，若遇到底层错误(如超时、dns 解析失败、Unmarshal 失败)，或者收到未知的状态码(小于200)，尽可能将有助于定位问题的信息(dump 内容)记录到 error，写入 `resp.Err` 以便抛给上层的调用方。
+* 在 `OnBeforeRequest` 中设置 `RequestMiddleware`，为所有请求开启请求级别的 dump (暂存到内存，不打印出来)，若遇到底层错误(如超时、dns 解析失败、Unmarshal 失败)，或者收到未知的状态码(小于200)，在 `ResponseMiddleware` 中尽可能将有助于定位问题的信息(dump 内容)记录到 error，写入 `resp.Err` 以便抛给上层的调用方。
 
 下面为 `Client` 增加 Tracing 的能力:
 
