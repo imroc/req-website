@@ -4,7 +4,7 @@ description: "This article will introduce how to integrate req with tencentcloud
 lead: ""
 draft: false
 images: []
-weight: 1020
+weight: 1400
 menu:
   docs:
     parent: "examples"

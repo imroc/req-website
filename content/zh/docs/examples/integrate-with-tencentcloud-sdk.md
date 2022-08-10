@@ -4,7 +4,7 @@ description: "介绍如何将 req 的调试能力集成到 tencentcloud-sdk-go �
 lead: ""
 draft: false
 images: []
-weight: 1020
+weight: 1400
 menu:
   docs:
     parent: "examples"
