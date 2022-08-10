@@ -13,17 +13,17 @@ toc: true
 
 ## 概述
 
-为了增强 Golang 程序的可观测性，方便定位问题，我们往往会在代码中集成链路跟踪 (tracing) 的能力，[Jaeger](https://www.jaegertracing.io/) 是当今比较主流的选择，而 tracing 相关的 API 如今都抽象到了 [OpenTelemetry](https://opentelemetry.io/docs/instrumentation/go/getting-started/) 项目中，涵盖各种实现，也包括 Jaeger 在内。
+为了增强 Golang 程序的可观测性，方便定位问题，我们往往会在代码中集成链路追踪 (tracing) 的能力，[Jaeger](https://www.jaegertracing.io/) 是当今比较主流的选择，而 tracing 相关的 API 如今都抽象到了 [OpenTelemetry](https://opentelemetry.io/docs/instrumentation/go/getting-started/) 项目中，涵盖各种实现，也包括 Jaeger 在内。
 
-利用 req 强大的中间件能力，可以轻松集成链路追踪的能力，且能以最少的代码量进行扩展。
+利用 req 强大的中间件能力，可以轻松为我们涉及 HTTP 调用的代码统一集成链路追踪的能力，且能以最少的代码量进行扩展。
 
-本文将给出一个可运行的程序示例：输入一个 GitHub 用户名，展示用户的简短介绍，包含名字、网站地址以及该用户下的最火开源项目与 star 数量，期间涉及的函数与 API 调用链路跟踪信息均上报至 Jaeger，进行可视化展示。
+本文将给出一个可运行的程序示例：输入一个 GitHub 用户名，展示用户的简短介绍，包含名字、网站地址以及该用户下的最火开源项目与 star 数量，期间涉及的函数与 API 调用链路追踪信息均上报至 Jaeger，进行可视化展示。
 
 主要包含以下特点：
 
 * 内置一个基于 req 封装的 GitHub SDK。
 * SDK 中利用 req 的 `RequestMiddleware` 与 `ResponseMiddleware`，统一处理 API 异常，对接 API 的实现函数无需关心错误处理。
-* SDK 支持传入 OpenTelemetry 的 Tracer 来开启链路跟踪，利用 req 的 Client 中间件能力，在请求前创建 trace span，并记录请求与响应的详细信息到 span 中(URL、Method、请求头、请求体、响应状态码、响应头、响应体等)，在响应结束后自动终止 span。
+* SDK 支持传入 OpenTelemetry 的 Tracer 来开启链路追踪，利用 req 的 Client 中间件能力，在请求前创建 trace span，并记录请求与响应的详细信息到 span 中(URL、Method、请求头、请求体、响应状态码、响应头、响应体等)，在响应结束后自动终止 span。
 * 在调用 SDK 的上层函数也使用 trace，层层传递，在 Jaeger UI 上可查看完整且非常详细的调用链路详情。
 
 ## 初始化项目
@@ -216,7 +216,7 @@ func (c *Client) GetUserProfile(ctx context.Context, username string) (user *Use
 }
 ```
 
-* 链路跟踪的 span 都是通过 context 传递，每个方法的第一个参数都用 context。
+* 链路追踪的 span 都是通过 context 传递，每个方法的第一个参数都用 context。
 * 利用链式调用构造 Request，`Get` 表示创建一个 `GET` 请求，并传入 API 路径(之前 `Client.SetCommonBaseURL` 已设置所有请求的 URL 前缀，这里就可以省略前缀只写路径)， 路径中还有 `username` 路径参数 (REST 风格 API)，使用 `SetPathParam` 传入。
 * 响应体格式是 `UserProfile` 结构体，直接将返回参数中的空指针变量的地址传入 `SetResult`，表示如果没有异常，自动创建一个该结构体类型的对象，并让指针变量指向该结构体，这样都不需要自己事先初始化结构体，减少代码量。
 * 利用公共函数 `withAPIName` 将 API 名称放入 context，然后调用 `Do` 发起请求时，将 context 传进去，以便让 Client 中间件能够获取到 API 名称并自动将其作为 span 名称。
@@ -254,7 +254,7 @@ func (c *Client) ListUserRepo(ctx context.Context, username string, page int) (r
 * page 是整数类型，需要将其入查询参数，使用 `SetQueryParamsAnyType` 传入所有查询参数，无需提前转成字符串。
 * 其余与上一个 API 实现类似。
 
-可以看到，后续我们每次对接新的 API 都变得非常轻松，因为利用了 req 的中间件能力，对异常与链路跟踪都进行了统一处理，对接 API 时，只需传入 API 必要的参数与响应体结构类型即可，没有一点多余的代码，非常直观和简洁。
+可以看到，后续我们每次对接新的 API 都变得非常轻松，因为利用了 req 的中间件能力，对异常与链路追踪都进行了统一处理，对接 API 时，只需传入 API 必要的参数与响应体结构类型即可，没有一点多余的代码，非常直观和简洁。
 
 好了，作为示例我们就只对接这两个 API 就够了，我们还可以再为 Client 增加一些实用的小功能:
 
@@ -316,7 +316,7 @@ var githubClient *github.Client
 * 定义 `serviceName` 作为本服务的标识 (通常每个程序都是一个服务，上报 tracing 数据时，需标识服务名)，这里就定义为 `github-query`。
 * 本示例程序需要调用 GitHub API 进行查询，使用前面我们封装的 GitHub SDK 作为 client，这里定义一个全局 `githubClient` 变量，内部函数直接使用该 client 进行调用。
 
-使用 OpenTelemetry 进行链路跟踪，需要创建一个 `TracerProvider`，这里我们定义 `traceProvider` 函数来创建包含 Jaeger 实现的 `TracerProvider`:
+使用 OpenTelemetry 进行链路追踪，需要创建一个 `TracerProvider`，这里我们定义 `traceProvider` 函数来创建包含 Jaeger 实现的 `TracerProvider`:
 
 ```go
 func traceProvider() (*trace.TracerProvider, error) {
@@ -426,7 +426,7 @@ func findMostPopularRepo(ctx context.Context, username string) (repo *github.Rep
 ```
 
 * `QueryUser` 需传入一个 username，以便查询指定 GitHub 用户的信息。
-* 在函数开头创建一个名为 `QueryUser` 的 root span，作为链路跟踪的初始 span。
+* 在函数开头创建一个名为 `QueryUser` 的 root span，作为链路追踪的初始 span。
 * 在 span 中记录查询相关信息，包含查询的 username 以及查询到的昵称、blog 地址(使用 GetUserProfile 接口)，也包含该用户最火的开源项目及其 star 数量(使用 ListUserRepo 接口并进行计算对比得出)。
 * 在函数末尾打印最终查询到的信息到控制台。
 * 其中计算用户最火开源项目及其 star 数量由单独的 `findMostPopularRepo` 函数来实现，该函数也有对应的 span。
