@@ -576,6 +576,10 @@ Get "https://api.github.com/users/spf13": dial tcp 20.205.243.168:443: connect: 
 
 <img src="/images/jaeger-ui-getuserprofile-6.png">
 
+## 完整代码
+
+本文涉及的完整代码已放入 req 官方 examples 下的 [opentelemetry-jaeger-tracing](https://github.com/imroc/req/tree/master/examples/opentelemetry-jaeger-tracing) 目录。
+
 ## 总结
 
 如果业务程序中需要调用其它服务的 API，我们可以利用 req 强大的中间件能力，统一处理所有请求的异常，统一记录所有请求详细信息到 Tracing 系统，写出健壮、可观测性强且极易扩展的 SDK 与业务代码。
