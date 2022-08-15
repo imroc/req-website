@@ -31,9 +31,9 @@ CardTitle7:
 CardDesc7:
   other: '用很简单的设置就可以轻松进行上传和下载，甚至还支持设置回调来显示进度'
 CardTitle8:
-  other: '可导出'
+  other: '易与已有项目集成'
 CardDesc8:
-  other: "req 的 Transport 是可导出的, 它支持 dump 请求内容，可以很容易与已有的 http.Client 集成，能以最少的代码改动获得 API 调试能力"
+  other: "req.Transport 是可导出的，相比 http.Transport 它还支持 HTTP3、dump 请求内容、中间件等，可直接替换已有项目中 http.Client 的 Transport，用最少的改动获得更强大的功能"
 CardTitle9:
   other: '可扩展'
 CardDesc9:

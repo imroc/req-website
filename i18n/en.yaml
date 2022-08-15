@@ -33,7 +33,7 @@ CardDesc7:
 CardTitle8:
   other: 'Exportable'
 CardDesc8:
-  other: "Transport is exportable, which support dump requests, it's easy to integrate with existing http.Client, so you can debug APIs with minimal code change"
+  other: "req.Transport is exportable. Compared with http.Transport, it also supports HTTP3, dump content, middleware, etc. It can directly replace the Transport of http.Client in existing projects, and obtain more powerful functions with minimal code change"
 CardTitle9:
   other: 'Extensible'
 CardDesc9:
