@@ -11,7 +11,7 @@ CardDesc2:
 CardTitle3:
   other: 'Easy API Testing'
 CardDesc3:
-  other: 'API testing can be done with minimal code, no need to explicitly create any Requests and Clients, or even to handle errors'
+  other: 'API testing can be done with minimal code, no need to explicitly create any Request or Client, or even to handle errors'
 CardTitle4:
   other: 'Smart by Default'
 CardDesc4:
