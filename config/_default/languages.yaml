@@ -3,13 +3,13 @@ en:
   contentDir: content/en
   weight: 10
   params:
-    languageISO: EN
+    languageISO: English
 zh:
   languageName: 中文
   contentDir: content/zh
   weight: 15
   params:
-    languageISO: ZH
+    languageISO: 中文
 # nl:
 #   languageName: Nederlands
 #   contentDir: content/nl
