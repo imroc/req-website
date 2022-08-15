@@ -252,7 +252,7 @@ func (c *Client) ListUserRepo(ctx context.Context, username string, page int) (r
 ```
 
 * 该 API 支持分页，需要传入 username 和  page。
-* page 是整数类型，需要将其入查询参数，使用 `SetQueryParamsAnyType` 传入所有查询参数，无需提前转成字符串。
+* page 是整数类型，需要将其传入查询参数，使用 `SetQueryParamsAnyType` 传入所有查询参数，无需提前转成字符串。
 * 其余与上一个 API 实现类似。
 
 可以看到，后续我们每次对接新的 API 都变得非常轻松，因为利用了 req 的中间件能力，对异常与链路追踪都进行了统一处理，对接 API 时，只需传入 API 必要的参数与响应体结构类型即可，没有一点多余的代码，非常直观和简洁。

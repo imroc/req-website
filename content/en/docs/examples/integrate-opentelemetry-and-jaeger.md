@@ -186,14 +186,14 @@ func (c *Client) SetTracer(tracer trace.Tracer) {
 
 TODO: translation
 
-* 在 `Client.SetTracer` 中传入 OpenTelemetry 的 Tracer 来开启 Tracing 能力。
-* 调用 `Client` 中内置的 `*req.Client` 的 `WrapRoundTripFunc` 添加 Client 中间件，确保将 `rt.RoundTrip(req)` 返回的 resp 和 err 最终返回给上层。该行代码之前是发起请求前，可记录请求信息，之后是收到响应后，可记录响应信息。
-* 在中间件实现函数里，为每个请求创建一个 trace span，从 context 中获取 API 名称作为 span 名称，如果 context 中有 parant span，当前 span 也会自动成为其 child span。
-* 使用 `defer span.End()` 确保在响应结束后再结束 span，以便 tracing 能够正确统计耗时。
-* 将请求与响应的详细信息全都记录到 span 中，如 URL、Method、请求头、请求体、响应状态码、响应头、响应体等。
-* 如果检测到 error，也记录到 span 中并设置 span 的 error 状态。
+* Pass OpenTelemetry's Tracer in `Client.SetTracer` to enable Tracing.
+* Call `Client.WrapRoundTripFunc` to add Client middleware to ensure that the `resp` and `err` returned by `rt.RoundTrip(req)` are finally returned to the upper caller. Before `rt.RoundTrip(req)`, the request information can be recorded before the request is sent, and after `rt.RoundTrip(req)`, the response information can be recorded.
+* In the middleware implementation function, a trace span is created for each request, and the API name is obtained from the context as the span name. If there is a parent span in the context, the current span will also automatically become its child span.
+* Use `defer span.End()` to ensure that the span is ended after the response is end, so that tracing can count the time-consuming correctly.
+* Record all the details of the request and response into the span, such as URL, Method, request header, request body, response status code, response header, response body, etc.
+* If an error is detected, also log to the span and set the span's error state.
 
-下面开始对接 GitHub API，第一个实现的是获取 GitHub 用户信息的 API，方法命名为 `GetUserProfile`:
+Let’s start implementing an API call. The first implementation is the API for getting GitHub user profile, the method is named `GetUserProfile`:
 
 ```go
 func withAPIName(ctx context.Context, name string) context.Context {
@@ -219,14 +219,13 @@ func (c *Client) GetUserProfile(ctx context.Context, username string) (user *Use
 }
 ```
 
-* 链路追踪的 span 都是通过 context 传递，每个方法的第一个参数都用 context。
-* 利用链式调用构造 Request，`Get` 表示创建一个 `GET` 请求，并传入 API 路径(之前 `Client.SetCommonBaseURL` 已设置所有请求的 URL 前缀，这里就可以省略前缀只写路径)， 路径中还有 `username` 路径参数 (REST 风格 API)，使用 `SetPathParam` 传入。
-* 响应体格式是 `UserProfile` 结构体，直接将返回参数中的空指针变量的地址传入 `SetResult`，表示如果没有异常，自动创建一个该结构体类型的对象，并让指针变量指向该结构体，这样都不需要自己事先初始化结构体，减少代码量。
-* 利用公共函数 `withAPIName` 将 API 名称放入 context，然后调用 `Do` 发起请求时，将 context 传进去，以便让 Client 中间件能够获取到 API 名称并自动将其作为 span 名称。
-* `Do` 会返回 `*req.Response`，任何情况它都不为 nil，如果请求过程中返回了 error，会记录到其 `Err` 字段，将其赋值给返回参数的 `err` 以便 error 能够层层传递上去。
+* Tracing spans are passed through context, and the first parameter of each method uses context.
+* Use chained methods to construct Request, `Get` means to create a `GET` request, and pass in the API path (previously `Client.SetCommonBaseURL` has set the URL prefix of all requests, here you can omit the prefix and write the path only), in the path There is also the `username` path parameter (REST style API), which is populated using the `SetPathParam` incoming variable.
+* The format of the response body is the `UserProfile` struct, just pass the address of the nil pointer variable user in the return parameter into `SetResult`, indicating that if the request is success, an object of the `UserProfile` will be automatically created, and modify the pointer to point to that object , so that you don't even need to initialize the struct in advance, making the code more concise.
+* Use the function `withAPIName` to put the API name into the context, and then call `Do` to send the request, pass the context in, so that the client middleware can get the API name and automatically use it as the span name.
+* `Do` will return `*req.Response`, which is not nil in any case. If an error is returned during the request, it will be recorded in its `Err` field, we assign it to the `err` of the return parameter to throw error to the upper caller.
 
-
-下面再来增加一个获取指定用户代码仓库列表的 API `ListUserRepo`:
+Next, add an API `ListUserRepo` to get the user's public repositories:
 
 ```go
 type Repo struct {
@@ -253,13 +252,13 @@ func (c *Client) ListUserRepo(ctx context.Context, username string, page int) (r
 
 ```
 
-* 该 API 支持分页，需要传入 username 和  page。
-* page 是整数类型，需要将其入查询参数，使用 `SetQueryParamsAnyType` 传入所有查询参数，无需提前转成字符串。
-* 其余与上一个 API 实现类似。
+* The API supports pagination and requires username and page to be passed in.
+* Page is an integer type and needs to be passed in query parameters. Use `SetQueryParamsAnyType` to pass in all query parameters without converting them into strings in advance.
+* The rest is similar to the previous API implementation.
 
-可以看到，后续我们每次对接新的 API 都变得非常轻松，因为利用了 req 的中间件能力，对异常与链路追踪都进行了统一处理，对接 API 时，只需传入 API 必要的参数与响应体结构类型即可，没有一点多余的代码，非常直观和简洁。
+It can be seen that it becomes very easy for us to implement new API calls every time, because the middleware capabilities of req are used to uniformly handle exceptions and tracing. When implementing a new API call, we only need to pass in the necessary parameter and expected response body struct, there is no extra code, it is very intuitive and concise.
 
-好了，作为示例我们就只对接这两个 API 就够了，我们还可以再为 Client 增加一些实用的小功能:
+Well, as an example, we only need to implement two API calls. We can also add some useful methods to the Client:
 
 ```go
 // LoginWithToken login with GitHub personal access token.
@@ -282,10 +281,10 @@ func (c *Client) SetDebug(enable bool) *Client {
 }
 ```
 
-* 如果是匿名用户调用 GitHub API，会有限频，可以使用 token 来避免被限频，增加 `LoginWithToken` 以支持为所有请求带上认证的 [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)。
-* 增加 `SetDebug` 以支持 debug 能力，开启 debug 时，将打印 req 的 debug 日志以及原始的请求与响应内容。
+* There is a rate limit if it's an anonymous user to invoke GitHub API. You can use a token to avoid that. Add `LoginWithToken` to support [personal access token] (https://docs.github.com/ en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+* Added `SetDebug` to support debug capabilities. When debug is enabled, the debug log of req and the original request and response content will be printed.
 
-至此，我们的 GitHub SDK 封装完成。
+At this point, our GitHub SDK is complete.
 
 ## Main Function
 
