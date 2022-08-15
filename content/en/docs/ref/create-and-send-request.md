@@ -1,14 +1,31 @@
 ---
-title: "Sending Request"
-description: "API for Sending Request"
+title: "Create and Send Request"
+description: "API for Creating and Sending Request"
 draft: false
 images: []
 weight: 10020
 menu:
   docs:
-    parent: "tutorial"
+    parent: "ref"
 toc: true
 ---
+
+## Create Request
+
+These methods of `Client` will create a new `Request`:
+
+* [R()](https://pkg.go.dev/github.com/imroc/req/v3#Client.R)
+* [NewRequest()](https://pkg.go.dev/github.com/imroc/req/v3#Client.NewRequest) - Alias of R.
+* [Get(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Get) - Create request with GET method, URL is optional.
+* [Post(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Post)
+* [Head(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Head)
+* [Delete(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Delete)
+* [Put(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Put)
+* [Patch(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Patch)
+* [Options(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Options)
+
+
+## Send Request
 
 These methods of `Request` will fire the http request and return the response, `MustXXX` will not return any error, panic if error occurs.
 
@@ -27,3 +44,4 @@ These methods of `Request` will fire the http request and return the response, `
 * [MustOptions(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustOptions)
 * [MustPut(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustPut)
 * [Send(method, url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Put) - Send request with given method name and url.
+* [Do(ctx ...context.Context)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Do) - Send request with an optional context.

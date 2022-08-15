@@ -6,9 +6,25 @@ images: []
 weight: 10020
 menu:
   docs:
-    parent: "tutorial"
+    parent: "ref"
 toc: true
 ---
+
+## 创建请求
+
+`Client` 的以下这些方法会创建 HTTP 请求。
+
+* [R()](https://pkg.go.dev/github.com/imroc/req/v3#Client.R)
+* [NewRequest()](https://pkg.go.dev/github.com/imroc/req/v3#Client.NewRequest) - R 的别名.
+* [Get(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Get) - 创建 GET 请求，URL 是可选的。
+* [Post(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Post)
+* [Head(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Head)
+* [Delete(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Delete)
+* [Put(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Put)
+* [Patch(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Patch)
+* [Options(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Options)
+
+## 发送请求
 
 `Request` 的以下这些方法会发起 HTTP 请求并返回响应。
 
@@ -29,3 +45,4 @@ toc: true
 * [MustOptions(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustOptions)
 * [MustPut(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustPut)
 * [Send(method, url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Put) - 使用指定的 Method 和 URL 发送请求。
+* [Do(ctx ...context.Context)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Do) - 传入可选的 context 并发送请求。
