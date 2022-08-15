@@ -53,7 +53,9 @@ Download:
 Upload:
   other: '上传'
 Middlewares:
-  other: '请求和响应中间件'
+  other: 'Request 与 Response 中间件'
+ClientTransportMiddleware:
+  other: 'Client 与 Transport 中间件'
 See:
   other: '参考'
 And:

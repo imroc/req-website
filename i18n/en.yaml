@@ -54,6 +54,8 @@ Upload:
   other: 'Upload'
 Middlewares:
   other: 'Request and Response Middleware'
+ClientTransportMiddleware:
+  other: 'Client and Transport Middleware'
 See:
   other: 'See'
 And:

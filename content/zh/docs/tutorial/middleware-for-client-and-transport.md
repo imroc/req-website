@@ -1,5 +1,5 @@
 ---
-title: "Client 中间件与 Transport 中间件"
+title: "Client 与 Transport 中间件"
 description: "介绍如何使用 Client 中间件与 Transport 中间件"
 draft: false
 images: []
