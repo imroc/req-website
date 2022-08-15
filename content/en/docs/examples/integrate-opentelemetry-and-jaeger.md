@@ -288,9 +288,9 @@ At this point, our GitHub SDK is complete.
 
 ## Main Function
 
-下面，正式开始写可运行的示例程序。
+Next, let's start writing a runnable sample program.
 
-在项目根目录下创建 `main.go`:
+Create `main.go` in the project root directory:
 
 ```go
 package main
@@ -315,10 +315,10 @@ const serviceName = "github-query"
 var githubClient *github.Client
 ```
 
-* 定义 `serviceName` 作为本服务的标识 (通常每个程序都是一个服务，上报 tracing 数据时，需标识服务名)，这里就定义为 `github-query`。
-* 本示例程序需要调用 GitHub API 进行查询，使用前面我们封装的 GitHub SDK 作为 client，这里定义一个全局 `githubClient` 变量，内部函数直接使用该 client 进行调用。
+* Define `serviceName` as the identifier of this service (usually each program is a service, when reporting tracing data, you need to identify the service name), here it is defined as `github-query`.
+* This sample program needs to call the GitHub API for querying, and use the GitHub SDK we encapsulated earlier as the client. Here, a global `githubClient` variable is defined, and the internal functions are called directly using the client.
 
-使用 OpenTelemetry 进行链路追踪，需要创建一个 `TracerProvider`，这里我们定义 `traceProvider` 函数来创建包含 Jaeger 实现的 `TracerProvider`:
+To use OpenTelemetry for tracing, we need to create a `TracerProvider`, here we define the `traceProvider` function to create a `TracerProvider` which includes the Jaeger implementation:
 
 ```go
 func traceProvider() (*trace.TracerProvider, error) {
@@ -355,10 +355,10 @@ func traceProvider() (*trace.TracerProvider, error) {
 }
 ```
 
-* 使用 `JAEGER_ENDPOINT` 自定义 Jaeger 地址，默认使用本地测试的地址。
-* 传入 `serviceName` 以便在 tracing 数据对本服务进行标识。
+* Use `JAEGER_ENDPOINT` to customize the Jaeger address, the default is to use the address of the local test instance.
+* Pass in `serviceName` to identify this service in tracing data.
 
-下面来写查询用户信息的主要函数 `QueryUser`:
+Let's write the function `QueryUser` for querying user information:
 
 ```go
 // QueryUser queries information for specified GitHub user, and display a
@@ -428,13 +428,13 @@ func findMostPopularRepo(ctx context.Context, username string) (repo *github.Rep
 }
 ```
 
-* `QueryUser` 需传入一个 username，以便查询指定 GitHub 用户的信息。
-* 在函数开头创建一个名为 `QueryUser` 的 root span，作为链路追踪的初始 span。
-* 在 span 中记录查询相关信息，包含查询的 username 以及查询到的昵称、blog 地址(使用 GetUserProfile 接口)，也包含该用户最火的开源项目及其 star 数量(使用 ListUserRepo 接口并进行计算对比得出)。
-* 在函数末尾打印最终查询到的信息到控制台。
-* 其中计算用户最火开源项目及其 star 数量由单独的 `findMostPopularRepo` 函数来实现，该函数也有对应的 span。
+* `QueryUser` requires a username to query the profile of the specified GitHub user.
+* Create a root span named `QueryUser` at the beginning of the function for tracing.
+* Record the query-related information in the span, including the queried username, nickname, and the blog address (using the `GetUserProfile` API), as well as the user's most popular open source project and the number of stars (using the `ListUserRepo` API to query and compare them).
+* Print the final result to the console at the end of the function.
+* Among them, the calculation of the most popular open source projects of users and the number of stars is implemented by a separate `findMostPopularRepo` function, which also has a corresponding span.
 
-主要的实现函数准备就绪，现在我们来写 main 函数:
+The main implementation function is ready, now let's write the main function:
 
 ```go
 func main() {
@@ -479,20 +479,20 @@ func main() {
 }
 ```
 
-* 调用 `traceProvider()` 创建一个 `TraceProvider`，并使用 `otel.SetTracerProvider(tp)` 设置到全局共享，以便前面其它函数调用 `otel.Tracer(xx)` 能够使用此 provider 来创建与获取 tracer。
-* 调用 `github.NewClient()` 为全局的 `githubClient` 进行初始化。
-* 判断环境变量，如果 `DEBUG=on` 则开启 Debug，如果提供 `GITHUB_TOKEN` 则将其设置给所有请求。
-* 使用 `githubClient.SetTracer(otel.Tracer("github"))` 来为 GitHub 的 Client 启用 Tracing 能力，用名为 `gihtub` 的 tracer 标识 SDK 中产生的 tracing 信息。
-* 处理 `SIGTERM` 和 `SIGTNT` 信号以实现优雅终止，在程序退出前关闭 `TraceProvider`，确保 trace 数据上报完再退出 (如果程序不是常驻运行，可以在 main 函数中用 defer 语句关闭 `TraceProvider`)。
-* 主体是一个 for 死循环: 获取用户输入的 username，然后调用 `QueryUser` 查询并展示用户信息。
+* Call `traceProvider()` to create a `TraceProvider`, and use `otel.SetTracerProvider(tp)` to set it to global, so that other functions calling `otel.Tracer(xx)` can use this provider to create and get tracer .
+* Call `github.NewClient()` to initialize the global `githubClient`.
+* Determine the environment variable, enable Debug if `DEBUG=on`, and set it to all requests if `GITHUB_TOKEN` is provided.
+* Use `githubClient.SetTracer(otel.Tracer("github"))` to enable Tracing for GitHub Client, and use a tracer named `gihtub` to identify the tracing information generated in the SDK.
+* Handle `SIGTERM` and `SIGTNT` signals to achieve graceful termination, close `TraceProvider` before the program exits, and ensure that the trace data is reported before exiting (if the program is not running permanently, you can use the defer statement in the main function to close the `TraceProvider` `).
+* The main logic is an infinite loop: get the username entered by the user, then call `QueryUser` to query and display the user information.
 
-大功告成，下面我们来运行一下看看效果。
+You're all done, let's run it and see the result.
 
 ## Run and Result
 
-首先按照 Jaeger 官方文档 [Getting Started](https://www.jaegertracing.io/docs/getting-started/) 在本地启动一个 Jaeger。
+First start a Jaeger locally according to the official Jaeger documentation [Getting Started](https://www.jaegertracing.io/docs/getting-started/).
 
-然后在项目根目录运行 `go run .` 运行程序，输入一个 GitHub 用户名（如 `spf13`），不出意外的话，会自动展示该用户的简短介绍:
+Then run `go run .` in the project root directory to run the program, enter a GitHub username (such as `spf13`), if success, it will display a short introduction of the user:
 
 ```bash
 $ go run .
@@ -500,11 +500,11 @@ Please give a github username: spf13
 The most popular repo of Steve Francia (http://spf13.com) is cobra, with 28044 stars
 ```
 
-然后使用浏览器进入 Jaeger UI 界面（http://127.0.0.1:16686/）来查看 Tracing 详情:
+Then use the browser to enter the Jaeger UI (http://127.0.0.1:16686/) to view the tracing details:
 
 <img src="/images/jaeger-ui-success-overview.png">
 
-可以清晰的看到函数调用链路与耗时信息:
+You can clearly see the function call chain and time-consuming information:
 
 ```bash
 QueryUser (3.27s)
@@ -516,19 +516,19 @@ QueryUser (3.27s)
                   |----> ListUserRepo (453.24ms)
 ```
 
-> `ListUserRepo` 调用两次是因为分页查询用户 repo 时一页没查询完，分成了两次查询。
+> `ListUserRepo` is called twice because one page is not finished when querying the user repo by paging, and it is divided into two queries.
 
-点进 `QueryUser` 的 span 详情，可以看到我们在函数内记录的查询与结果信息:
+Click on the span details of `QueryUser` to see the query and result we recorded in the function:
 
 <img src="/images/jaeger-ui-queryuser-detail.png">
 
-再点进 `GetUserProfile` 这个 SDK 产生的 span 详情，可以看到我们在中间件统一记录的 URL、Method、请求头、响应状态码、响应头、响应体等信息全都在这里，非常详细:
+Then click on the details of the span generated by the SDK of `GetUserProfile`, and you can see that the URL, Method, request header, response status code, response header, response body and other information that we uniformly record in the middleware are all here, very detailed:
 
 <img src="/images/jaeger-ui-getuserprofile-1.png">
 
 <img src="/images/jaeger-ui-getuserprofile-2.png">
 
-不断输入其它 username 测试，经过多次后可能会因 GitHub 的 API 限频导致异常:
+Constantly entering other username tests may cause an exception due to GitHub's API rate limit after many times:
 
 ```bash
 $ go run .
@@ -536,17 +536,17 @@ Please give a github username: spf13
 API error: API rate limit exceeded for 43.132.98.44. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.) (see doc https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting)
 ```
 
-检查下 Jaeger UI，可以看到很详细很显眼的错误信息：
+Checking the Jaeger UI, you can see a very detailed and conspicuous error message:
 
 <img src="/images/jaeger-ui-getuserprofile-3.png">
 
-此时，你可以将你的 GitHub 账号 [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) 写到环境变量来避免被限频:
+At this point, you can add your GitHub account [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access- token) to an environment variable to avoid being throttled:
 
 ```bash
 export GITHUB_TOKEN=*******
 ```
 
-尝试输入一个不存在的用户:
+Try entering a username that does not exist:
 
 ```bash
 $ go run .
@@ -554,11 +554,11 @@ Please give a github username: kjtlejkdglfjsadhfajfsa
 API error: Not Found (see doc https://docs.github.com/rest/reference/users#get-a-user)
 ```
 
-检查下 Jaeger UI，同样的也可以看到详细的错误信息:
+Check the Jaeger UI, and you can also see detailed error messages:
 
 <img src="/images/jaeger-ui-getuserprofile-4.png">
 
-如果断开公网测试，可能会报 dns 解析失败的错:
+If the test is disconnected from internet, the error of dns resolution failure may be reported:
 
 ```go
 $ go run .
@@ -568,7 +568,7 @@ Get "https://api.github.com/users/imroc": dial tcp: lookup api.github.com: no su
 
 <img src="/images/jaeger-ui-getuserprofile-5.png">
 
-或者连接超时的错:
+Or connection timeout error:
 
 ```go
 $ go run .
@@ -580,8 +580,8 @@ Get "https://api.github.com/users/spf13": dial tcp 20.205.243.168:443: connect: 
 
 ## Complete Code
 
-本文涉及的完整代码已放入 req 官方 examples 下的 [opentelemetry-jaeger-tracing](https://github.com/imroc/req/tree/master/examples/opentelemetry-jaeger-tracing) 目录。
+The complete code involved in this article has been placed in the [opentelemetry-jaeger-tracing](https://github.com/imroc/req/tree/master/examples/opentelemetry-jaeger-tracing) directory under the req official examples.
 
 ## Summary
 
-如果业务程序中需要调用其它服务的 API，我们可以利用 req 强大的中间件能力，统一处理所有请求的异常，统一记录所有请求详细信息到 Tracing 系统，写出健壮、可观测性强且极易扩展的 SDK 与业务代码。
+If the program needs to call the API of other services, we can use the powerful middleware capabilities of req to uniformly handle all request exceptions, record all request details to the tracing system, and write SDK or business logic with robust, observable, and easily extensible code.
