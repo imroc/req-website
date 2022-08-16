@@ -1,6 +1,6 @@
 ---
-title: "Client Settings"
-description: "API for Client Settings"
+title: "Client"
+description: "API for Client"
 draft: false
 images: []
 weight: 10000
@@ -10,11 +10,27 @@ menu:
 toc: true
 ---
 
+## Create Request
+
+These methods of `Client` will create a new `Request`:
+
+* [R()](https://pkg.go.dev/github.com/imroc/req/v3#Client.R)
+* [NewRequest()](https://pkg.go.dev/github.com/imroc/req/v3#Client.NewRequest) - Alias of R.
+* [Get(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Get) - Create request with GET method, URL is optional.
+* [Post(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Post)
+* [Head(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Head)
+* [Delete(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Delete)
+* [Put(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Put)
+* [Patch(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Patch)
+* [Options(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Options)
+
+## Client Settings
+
 The following are the chainable settings of Client, all of which have corresponding global wrappers (Just treat the package name `req` as a Client to test, set up the Client without create any Client explicitly).
 
 Basically, you can know the meaning of most settings directly from the method name.
 
-## Debug Features
+### Debug Features
 
 * [DevMode()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DevMode) - Enable all debug features (Dump, DebugLog and Trace).
 * [EnableDebugLog()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDebugLog) - Enable debug level log (disabled by default).
@@ -35,7 +51,7 @@ Basically, you can know the meaning of most settings directly from the method na
 * [EnableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableTraceAll) - Enable trace for all requests (disabled by default).
 * [DisableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableTraceAll)
 
-## Common Settings for constructing HTTP Requests
+### Common Settings for constructing HTTP Requests
 
 * [SetCommonBasicAuth(username, password string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonBasicAuth)
 * [SetCommonBearerAuthToken(token string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonBearerAuthToken)
@@ -53,7 +69,7 @@ Basically, you can know the meaning of most settings directly from the method na
 * [AddCommonQueryParam(key, value string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.AddCommonQueryParam)
 * [SetUserAgent(userAgent string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetUserAgent)
 
-## Auto-Decode
+### Auto-Decode
 
 * [EnableAutoDecode()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAutoDecode)
 * [DisableAutoDecode()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableAutoDecode) - Disable auto-detect charset and decode to utf-8 (enabled by default).
@@ -61,7 +77,7 @@ Basically, you can know the meaning of most settings directly from the method na
 * [SetAutoDecodeAllContentType()](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetAutoDecodeAllContentType)
 * [SetAutoDecodeContentTypeFunc(fn func(contentType string) bool)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetAutoDecodeContentTypeFunc)
 
-## TLS and Certificates
+### TLS and Certificates
 
 * [SetCerts(certs ...tls.Certificate) ](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCerts)
 * [SetCertFromFile(certFile, keyFile string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCertFromFile)
@@ -72,26 +88,26 @@ Basically, you can know the meaning of most settings directly from the method na
 * [SetTLSHandshakeTimeout(timeout time.Duration)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSHandshakeTimeout)
 * [SetTLSClientConfig(conf *tls.Config)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSClientConfig)
 
-## Marshal&Unmarshal
+### Marshal&Unmarshal
 
 * [SetJsonUnmarshal(fn func(data []byte, v interface{}) error)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetJsonUnmarshal)
 * [SetJsonMarshal(fn func(v interface{}) ([]byte, error))](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetJsonMarshal)
 * [SetXmlUnmarshal(fn func(data []byte, v interface{}) error)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetXmlUnmarshal)
 * [SetXmlMarshal(fn func(v interface{}) ([]byte, error))](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetXmlMarshal)
 
-## Middleware
+### Middleware
 
 * [OnBeforeRequest(m RequestMiddleware)](https://pkg.go.dev/github.com/imroc/req/v3#Client.OnBeforeRequest)
 * [OnAfterResponse(m ResponseMiddleware)](https://pkg.go.dev/github.com/imroc/req/v3#Client.OnAfterResponse)
 
-## HTTP Version
+### HTTP Version
 
 * [DisableForceHttpVersion()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableForceHttpVersion)
 * [EnableForceHTTP3()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableForceHTTP3)
 * [EnableForceHTTP2()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableForceHTTP2)
 * [EnableForceHTTP1()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableForceHTTP1)
 
-## Retry
+### Retry
 
 * [SetCommonRetryCount(count int)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonRetryCount)
 * [SetCommonRetryInterval(getRetryIntervalFunc GetRetryIntervalFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonRetryInterval)
@@ -102,14 +118,14 @@ Basically, you can know the meaning of most settings directly from the method na
 * [SetCommonRetryCondition(condition RetryConditionFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonRetryCondition)
 * [AddCommonRetryCondition(condition RetryConditionFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Client.AddCommonRetryCondition)
 
-## Middleware
+### Middleware
 
 * [WrapRoundTripFunc(funcs ...RoundTripWrapperFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Client.WrapRoundTripFunc)
 * [WrapRoundTrip(wrappers ...RoundTripWrapper)](https://pkg.go.dev/github.com/imroc/req/v3#Client.WrapRoundTrip)
 * [OnBeforeRequest(m RequestMiddleware)](https://pkg.go.dev/github.com/imroc/req/v3#Client.OnBeforeRequest)
 * [OnAfterResponse(m ResponseMiddleware)](https://pkg.go.dev/github.com/imroc/req/v3#Client.OnAfterResponse)
 
-## Other Settings
+### Other Settings
 
 * [SetTimeout(d time.Duration)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTimeout)
 * [EnableKeepAlives()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableKeepAlives)

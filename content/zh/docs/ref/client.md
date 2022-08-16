@@ -1,6 +1,6 @@
 ---
-title: "Client 设置"
-description: "Client 设置的 API 汇总"
+title: "Client"
+description: "Client 的 API 汇总"
 draft: false
 images: []
 weight: 10000
@@ -10,9 +10,25 @@ menu:
 toc: true
 ---
 
+## 创建请求
+
+`Client` 的以下这些方法会创建 HTTP 请求。
+
+* [R()](https://pkg.go.dev/github.com/imroc/req/v3#Client.R)
+* [NewRequest()](https://pkg.go.dev/github.com/imroc/req/v3#Client.NewRequest) - R 的别名.
+* [Get(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Get) - 创建 GET 请求，URL 是可选的。
+* [Post(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Post)
+* [Head(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Head)
+* [Delete(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Delete)
+* [Put(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Put)
+* [Patch(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Patch)
+* [Options(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Options)
+
+## Client 设置
+
 以下是 `Client` 设置相关的方法，它们都有对应的全局包装方法(测试时不需要显式创建 `Client`，直接调用全局同名方法)，基本上可以从方法命名就能直接看出设置的含义。
 
-## Debug 能力
+### Debug 能力
 
 * [DevMode()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DevMode) - 启用所有 Debug 特性 (Dump, DebugLog 和 Trace)
 * [EnableDebugLog()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDebugLog) - 启用 Debug 级别日志 (默认是关闭)
@@ -33,7 +49,7 @@ toc: true
 * [EnableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableTraceAll) - 为所有请求开启 Trace (默认是关闭)
 * [DisableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableTraceAll)
 
-## 构造请求的共同设置
+### 构造请求的共同设置
 
 * [SetCommonBasicAuth(username, password string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonBasicAuth)
 * [SetCommonBearerAuthToken(token string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonBearerAuthToken)
@@ -51,7 +67,7 @@ toc: true
 * [AddCommonQueryParam(key, value string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.AddCommonQueryParam)
 * [SetUserAgent(userAgent string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetUserAgent)
 
-## 自动解码
+### 自动解码
 
 * [EnableAutoDecode()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAutoDecode)
 * [DisableAutoDecode()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableAutoDecode) - 关闭自动解码到 utf-8 (默认是启用)
@@ -59,7 +75,7 @@ toc: true
 * [SetAutoDecodeAllContentType()](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetAutoDecodeAllContentType)
 * [SetAutoDecodeContentTypeFunc(fn func(contentType string) bool)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetAutoDecodeContentTypeFunc)
 
-## TLS 和证书
+### TLS 和证书
 
 * [SetCerts(certs ...tls.Certificate) ](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCerts)
 * [SetCertFromFile(certFile, keyFile string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCertFromFile)
@@ -70,26 +86,26 @@ toc: true
 * [SetTLSHandshakeTimeout(timeout time.Duration)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSHandshakeTimeout)
 * [SetTLSClientConfig(conf *tls.Config)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSClientConfig)
 
-## Marshal&Unmarshal
+### Marshal&Unmarshal
 
 * [SetJsonUnmarshal(fn func(data []byte, v interface{}) error)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetJsonUnmarshal)
 * [SetJsonMarshal(fn func(v interface{}) ([]byte, error))](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetJsonMarshal)
 * [SetXmlUnmarshal(fn func(data []byte, v interface{}) error)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetXmlUnmarshal)
 * [SetXmlMarshal(fn func(v interface{}) ([]byte, error))](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetXmlMarshal)
 
-## 中间件
+### 中间件
 
 * [OnBeforeRequest(m RequestMiddleware)](https://pkg.go.dev/github.com/imroc/req/v3#Client.OnBeforeRequest)
 * [OnAfterResponse(m ResponseMiddleware)](https://pkg.go.dev/github.com/imroc/req/v3#Client.OnAfterResponse)
 
-## HTTP 版本
+### HTTP 版本
 
 * [DisableForceHttpVersion()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableForceHttpVersion)
 * [EnableForceHTTP3()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableForceHTTP3)
 * [EnableForceHTTP2()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableForceHTTP2)
 * [EnableForceHTTP1()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableForceHTTP1)
 
-## 自动重试
+### 自动重试
 
 * [SetCommonRetryCount(count int)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonRetryCount)
 * [SetCommonRetryInterval(getRetryIntervalFunc GetRetryIntervalFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonRetryInterval)
@@ -100,14 +116,14 @@ toc: true
 * [SetCommonRetryCondition(condition RetryConditionFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonRetryCondition)
 * [AddCommonRetryCondition(condition RetryConditionFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Client.AddCommonRetryCondition)
 
-## 中间件
+### 中间件
 
 * [WrapRoundTripFunc(funcs ...RoundTripWrapperFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Client.WrapRoundTripFunc)
 * [WrapRoundTrip(wrappers ...RoundTripWrapper)](https://pkg.go.dev/github.com/imroc/req/v3#Client.WrapRoundTrip)
 * [OnBeforeRequest(m RequestMiddleware)](https://pkg.go.dev/github.com/imroc/req/v3#Client.OnBeforeRequest)
 * [OnAfterResponse(m ResponseMiddleware)](https://pkg.go.dev/github.com/imroc/req/v3#Client.OnAfterResponse)
 
-## 其它设置
+### 其它设置
 
 * [SetTimeout(d time.Duration)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTimeout)
 * [EnableKeepAlives()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableKeepAlives)

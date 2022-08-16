@@ -1,5 +1,5 @@
 ---
-title : "API 手册"
+title : "API 速览"
 lead: ""
 draft: false
 images: []

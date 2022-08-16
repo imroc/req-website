@@ -1,6 +1,6 @@
 ---
-title: "Request 设置"
-description: "Request 设置的 API 汇总"
+title: "Request"
+description: "API for Request"
 draft: false
 images: []
 weight: 10010
@@ -10,9 +10,34 @@ menu:
 toc: true
 ---
 
-以下是 `Request` 设置相关的方法，它们都有对应的全局包装方法(测试时不需要显式创建 `Client` 和 `Request`，直接调用全局同名方法)，基本上可以从方法命名就能直接看出设置的含义。
+## Send Request
 
-## URL 查询参数和路径参数
+These methods of `Request` will fire the http request and return the response, `MustXXX` will not return any error, panic if error occurs.
+
+* [Get(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Get)
+* [Head(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Head)
+* [Post(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Post)
+* [Delete(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Delete)
+* [Patch(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Patch)
+* [Options(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Options)
+* [Put(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Put)
+* [MustGet(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustGet)
+* [MustHead(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustHead)
+* [MustPost(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustPost)
+* [MustDelete(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustDelete)
+* [MustPatch(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustPatch)
+* [MustOptions(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustOptions)
+* [MustPut(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustPut)
+* [Send(method, url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Put) - Send request with given method name and url.
+* [Do(ctx ...context.Context)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Do) - Send request with an optional context.
+
+## Request Settings
+
+The following are the chainable settings of Request, all of which have corresponding global wrappers.
+
+Basically, you can know the meaning of most settings directly from the method name.
+
+### URL Query and Path Parameter
 
 * [AddQueryParam(key, value string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.AddQueryParam)
 * [SetQueryParam(key, value string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetQueryParam)
@@ -21,7 +46,7 @@ toc: true
 * [SetPathParam(key, value string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetPathParam)
 * [SetPathParams(params map[string]string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetPathParams)
 
-## Header 和 Cookie
+### Header and Cookie
 
 * [SetHeader(key, value string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetHeader)
 * [SetHeaders(hdrs map[string]string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetHeaders)
@@ -30,7 +55,7 @@ toc: true
 * [SetContentType(contentType string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetContentType)
 * [SetCookies(cookies ...*http.Cookie)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetCookies)
 
-## Body 和 Marshal&Unmarshal
+### Body and Marshal&Unmarshal
 
 * [SetBody(body interface{})](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetBody)
 * [SetBodyBytes(body []byte)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetBodyBytes)
@@ -44,7 +69,7 @@ toc: true
 * [SetResult(result interface{})](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetResult)
 * [SetError(error interface{})](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetError)
 
-## 请求级别的 Debug
+### Request Level Debug
 
 * [EnableTrace()](https://pkg.go.dev/github.com/imroc/req/v3#Request.EnableTrace) - Disabled by default.
 * [DisableTrace()](https://pkg.go.dev/github.com/imroc/req/v3#Request.DisableTrace)
@@ -59,7 +84,7 @@ toc: true
 * [EnableDumpWithoutResponseBody()](https://pkg.go.dev/github.com/imroc/req/v3#Request.EnableDumpWithoutResponseBody)
 * [SetDumpOptions(opt *DumpOptions)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetDumpOptions)
 
-## Multipart & 表单 & 上传
+### Multipart & Form & Upload
 
 * [SetFormData(data map[string]string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetFormData)
 * [SetFormDataFromValues(data url.Values)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetFormDataFromValues)
@@ -71,14 +96,14 @@ toc: true
 * [SetUploadCallback(callback UploadCallback)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetUploadCallback)
 * [SetUploadCallbackWithInterval(callback UploadCallback, minInterval time.Duration)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetUploadCallbackWithInterval)
 
-## 下载
+### Download
 
 * [SetOutput(output io.Writer)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetOutput)
 * [SetOutputFile(file string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetOutputFile)
 * [SetDownloadCallback(callback DownloadCallback)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetDownloadCallback)
 * [SetDownloadCallbackWithInterval(callback DownloadCallback, minInterval time.Duration)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetDownloadCallbackWithInterval)
 
-## 自动重试
+### Retry
 
 * [SetRetryCount(count int)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetRetryCount)
 * [SetRetryInterval(getRetryIntervalFunc GetRetryIntervalFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetRetryInterval)
@@ -89,6 +114,7 @@ toc: true
 * [SetRetryCondition(condition RetryConditionFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetRetryCondition)
 * [AddRetryCondition(condition RetryConditionFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Request.AddRetryCondition)
 
-## 其它设置
+### Other Settings
 
 * [SetContext(ctx context.Context)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetContext)
+

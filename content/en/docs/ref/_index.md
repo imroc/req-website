@@ -1,5 +1,5 @@
 ---
-title : "API Reference"
+title : "Quick API Reference"
 lead: ""
 draft: false
 images: []
