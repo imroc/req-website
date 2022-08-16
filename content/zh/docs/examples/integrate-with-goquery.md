@@ -21,6 +21,7 @@ toc: true
 package main
 
 import (
+  "bytes"
   "errors"
   "fmt"
   "github.com/PuerkitoBio/goquery"
@@ -32,53 +33,39 @@ import (
 var globalClient *req.Client
 
 func init() {
-  globalClient = req.C().WrapRoundTripFunc(func(rt req.RoundTripper) req.RoundTripFunc {
-    return func(req *req.Request) (resp *req.Response, err error) {
-      // EnableDump at the request level in request middleware which dump content into
-      // memory (not print to stdout), we can record dump content only when unexpected
-      // exception occurs, it is helpful to troubleshoot problems in production.
-      if req.RetryAttempt == 0 { // Ignore on retry, no need to repeat EnableDump.
-        req.EnableDump()
-      }
-
-      resp, err = rt.RoundTrip(req)
-      if err != nil {
-        return
-      }
-
+  globalClient = req.C().EnableDumpEachRequest().
+    OnAfterResponse(func(client *req.Client, resp *req.Response) error {
       // Treat non-successful responses as errors, record raw dump content in error message.
       if !resp.IsSuccess() { // Status code is not between 200 and 299.
-        err = fmt.Errorf("bad response, raw content:\n%s", resp.Dump())
+        resp.Err = fmt.Errorf("bad response, raw content:\n%s", resp.Dump())
       }
-      return
-    }
-  })
-
+      return nil
+    })
 }
 
 func crawl(url string, callback func(doc *goquery.Document) error) error {
   // Send request.
   resp, err := globalClient.R().Get(url)
   if err != nil {
-    log.Fatal(err)
+    return err
   }
 
   // Pass resp.Body to goquery.
   doc, err := goquery.NewDocumentFromReader(resp.Body)
   if err != nil { // Append raw dump content to error message if goquery parse failed to help troubleshoot.
-    msg := fmt.Sprintf("failed to parse html: %s", err.Error())
-    if dump := resp.Dump(); dump != "" {
-      msg += fmt.Sprintf(", raw content:\n%s", dump)
-    }
-    return errors.New(msg)
+    return fmt.Errorf("failed to parse html: %s, raw content:\n%s", err.Error(), resp.Dump())
   }
-  return callback(doc)
+  err = callback(doc)
+  if err != nil {
+    err = fmt.Errorf("%s, raw content:\n%s", err.Error(), resp.Dump())
+  }
+  return err
 }
 
 func main() {
   // Crawl the weekly github trending page and print it out.
-  crawl("https://github.com/trending?since=weekly", func(doc *goquery.Document) error {
-    fmt.Println("GitHub Trending:")
+  err := crawl("https://github.com/trending?since=weekly", func(doc *goquery.Document) error {
+    buf := new(bytes.Buffer)
     doc.Find(".Box .Box-row").Each(func(i int, s *goquery.Selection) {
       href, ok := s.Find("h1 a").First().Attr("href")
       if !ok || href == "" {
@@ -91,16 +78,27 @@ func main() {
       starsTotal = strings.TrimSpace(starsTotal)
       starsWeek = strings.TrimSpace(starsWeek)
 
-      fmt.Printf("No.%d %s\t%s stars total\t%s\n", i+1, repo, starsTotal, starsWeek)
+      buf.WriteString(fmt.Sprintf("No.%d %s\t%s stars total\t%s\n", i+1, repo, starsTotal, starsWeek))
     })
+    if buf.Len() == 0 {
+      return errors.New("failed to parse trending")
+    }
+    fmt.Println("GitHub Trending:")
+    fmt.Println(buf.String())
     return nil
   })
+
+  if err != nil {
+    log.Fatal(err)
+  }
 }
 ```
 
-* 利用 Client 中间件，统一处理异常，将非正常响应(状态码不在 200~299 之间)均认为是错误，将dump原始内容记录到error中，抛给上层调用方。
+* `EnableDumpEachRequest` 是便捷的语法糖，内部实际是利用 Request 中间件，为每个请求单独开启 dump，暂存 dump 内容到内存，在需要用的时候调用 `Response.Dump()` 来获取。
+* 使用 `OnAfterResponse` 添加 Response 中间件，统一处理异常，将非正常响应(状态码不在 200~299 之间)均认为是错误，将dump原始内容记录到error中，抛给上层调用方。
 * 虽然默认会自动读取 Body，但 `resp.Body` 会自动还原，可以直接传给 goquery 进行解析。
 * 如果 goquery 解析 html 报错，通常是 github 自身故障，或代理异常，此时将 dump 下来的原始内容打印出来以便排查问题。
+* 当没有解析出 trending 数据时，可能是 github 页面布局有改动，将 dump 内容记录到 error 中以便排查问题。
 * 该示例只爬了一个页面，由于利用中间件对所有请求进行了统一的异常处理，所以可以很容易扩展其它页面的爬取，只需专注业务逻辑。
 
 ## 运行结果
@@ -133,4 +131,48 @@ No.22 coder/coder       1,723 stars total       266 stars this week
 No.23 MiCode/Xiaomi_Kernel_OpenSource   6,706 stars total       36 stars this week
 No.24 utmapp/UTM        14,608 stars total      406 stars this week
 No.25 bitwarden/server  10,260 stars total      53 stars this week
+```
+
+## 测试异常情况
+
+尝试修改下 URL 来触发内容解析异常，比如改成 `https://www.baidu.com`，然后再运行看下效果:
+
+```bash
+$ go run .
+2022/08/16 20:55:16 failed to parse trending, raw content:
+GET / HTTP/1.1
+Host: www.baidu.com
+User-Agent: req/v3 (https://github.com/imroc/req)
+Accept-Encoding: gzip
+
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 227
+Content-Type: text/html
+Date: Tue, 16 Aug 2022 12:55:16 GMT
+P3p: CP=" OTI DSP COR IVA OUR IND COM "
+P3p: CP=" OTI DSP COR IVA OUR IND COM "
+Pragma: no-cache
+Server: BWS/1.1
+Set-Cookie: BD_NOT_HTTPS=1; path=/; Max-Age=300
+Set-Cookie: BIDUPSID=0021315124C1DCBD6D6542551E4524D3; expires=Thu, 31-Dec-37 23:55:55 GMT; max-age=2147483647; path=/; domain=.baidu.com
+Set-Cookie: PSTM=1660654516; expires=Thu, 31-Dec-37 23:55:55 GMT; max-age=2147483647; path=/; domain=.baidu.com
+Set-Cookie: BAIDUID=0021315124C1DCBD79E08683C3E42600:FG=1; max-age=31536000; expires=Wed, 16-Aug-23 12:55:16 GMT; domain=.baidu.com; path=/; version=1; comment=bd
+Strict-Transport-Security: max-age=0
+Traceid: 1660654516037233921014200821962745403164
+X-Frame-Options: sameorigin
+X-Ua-Compatible: IE=Edge,chrome=1
+
+<html>
+<head>
+        <script>
+                location.replace(location.href.replace("https://","http://"));
+        </script>
+</head>
+<body>
+        <noscript><meta http-equiv="refresh" content="0;url=http://www.baidu.com/"></noscript>
+</body>
+</html>
 ```

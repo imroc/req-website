@@ -21,6 +21,7 @@ toc: true
 package main
 
 import (
+  "bytes"
   "errors"
   "fmt"
   "github.com/PuerkitoBio/goquery"
@@ -32,53 +33,39 @@ import (
 var globalClient *req.Client
 
 func init() {
-  globalClient = req.C().WrapRoundTripFunc(func(rt req.RoundTripper) req.RoundTripFunc {
-    return func(req *req.Request) (resp *req.Response, err error) {
-      // EnableDump at the request level in request middleware which dump content into
-      // memory (not print to stdout), we can record dump content only when unexpected
-      // exception occurs, it is helpful to troubleshoot problems in production.
-      if req.RetryAttempt == 0 { // Ignore on retry, no need to repeat EnableDump.
-        req.EnableDump()
-      }
-
-      resp, err = rt.RoundTrip(req)
-      if err != nil {
-        return
-      }
-
+  globalClient = req.C().EnableDumpEachRequest().
+    OnAfterResponse(func(client *req.Client, resp *req.Response) error {
       // Treat non-successful responses as errors, record raw dump content in error message.
       if !resp.IsSuccess() { // Status code is not between 200 and 299.
-        err = fmt.Errorf("bad response, raw content:\n%s", resp.Dump())
+        resp.Err = fmt.Errorf("bad response, raw content:\n%s", resp.Dump())
       }
-      return
-    }
-  })
-
+      return nil
+    })
 }
 
 func crawl(url string, callback func(doc *goquery.Document) error) error {
   // Send request.
   resp, err := globalClient.R().Get(url)
   if err != nil {
-    log.Fatal(err)
+    return err
   }
 
   // Pass resp.Body to goquery.
   doc, err := goquery.NewDocumentFromReader(resp.Body)
   if err != nil { // Append raw dump content to error message if goquery parse failed to help troubleshoot.
-    msg := fmt.Sprintf("failed to parse html: %s", err.Error())
-    if dump := resp.Dump(); dump != "" {
-      msg += fmt.Sprintf(", raw content:\n%s", dump)
-    }
-    return errors.New(msg)
+    return fmt.Errorf("failed to parse html: %s, raw content:\n%s", err.Error(), resp.Dump())
   }
-  return callback(doc)
+  err = callback(doc)
+  if err != nil {
+    err = fmt.Errorf("%s, raw content:\n%s", err.Error(), resp.Dump())
+  }
+  return err
 }
 
 func main() {
   // Crawl the weekly github trending page and print it out.
-  crawl("https://github.com/trending?since=weekly", func(doc *goquery.Document) error {
-    fmt.Println("GitHub Trending:")
+  err := crawl("https://github.com/trending?since=weekly", func(doc *goquery.Document) error {
+    buf := new(bytes.Buffer)
     doc.Find(".Box .Box-row").Each(func(i int, s *goquery.Selection) {
       href, ok := s.Find("h1 a").First().Attr("href")
       if !ok || href == "" {
@@ -91,16 +78,26 @@ func main() {
       starsTotal = strings.TrimSpace(starsTotal)
       starsWeek = strings.TrimSpace(starsWeek)
 
-      fmt.Printf("No.%d %s\t%s stars total\t%s\n", i+1, repo, starsTotal, starsWeek)
+      buf.WriteString(fmt.Sprintf("No.%d %s\t%s stars total\t%s\n", i+1, repo, starsTotal, starsWeek))
     })
+    if buf.Len() == 0 {
+      return errors.New("failed to parse trending")
+    }
+    fmt.Println("GitHub Trending:")
+    fmt.Println(buf.String())
     return nil
   })
-}
+
+  if err != nil {
+    log.Fatal(err)
+  }
 ```
 
-* Use the Client middleware to handle exceptions uniformly, consider abnormal responses (status codes not between 200 and 299) as errors, record the raw dump content into error, and throw it to the upper caller.
+* `EnableDumpEachRequest` is a convenient syntax sugar. It actually uses the Request middleware internally to enable dump separately for each request, temporarily store the dump content in memory, and call `Response.Dump()` to get it when needed.
+* Use `OnAfterResponse` to add Response middleware, handle exceptions uniformly, consider abnormal responses (status codes not between 200 and 299) as errors, record the raw dump content into error, and throw it to the upper caller.
 * Although the Body will be automatically read by default, `resp.Body` will be automatically restored and can be directly passed to goquery for parsing.
 * If goquery reports an error in parsing html, it is usually due to github's own failure, or an exception to the proxy. At this time, the raw dump content will be printed out for troubleshooting.
+* When the trending data is not parsed, it may be that the layout of the github UI has changed, and the raw dump content is recorded in the error for troubleshooting.
 * This example only crawls one page. Since the middleware is used for unified exception handling for all requests, it is easy to extend the crawling of other pages, and only need to focus on business logic.
 
 ## Run and Result
@@ -133,4 +130,48 @@ No.22 coder/coder       1,723 stars total       266 stars this week
 No.23 MiCode/Xiaomi_Kernel_OpenSource   6,706 stars total       36 stars this week
 No.24 utmapp/UTM        14,608 stars total      406 stars this week
 No.25 bitwarden/server  10,260 stars total      53 stars this week
+```
+
+## Test for Exceptions
+
+Try to modify the URL to trigger the content parsing exception, such as `https://www.baidu.com`, and then run it again to see the effect:
+
+```bash
+$ go run .
+2022/08/16 20:55:16 failed to parse trending, raw content:
+GET / HTTP/1.1
+Host: www.baidu.com
+User-Agent: req/v3 (https://github.com/imroc/req)
+Accept-Encoding: gzip
+
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 227
+Content-Type: text/html
+Date: Tue, 16 Aug 2022 12:55:16 GMT
+P3p: CP=" OTI DSP COR IVA OUR IND COM "
+P3p: CP=" OTI DSP COR IVA OUR IND COM "
+Pragma: no-cache
+Server: BWS/1.1
+Set-Cookie: BD_NOT_HTTPS=1; path=/; Max-Age=300
+Set-Cookie: BIDUPSID=0021315124C1DCBD6D6542551E4524D3; expires=Thu, 31-Dec-37 23:55:55 GMT; max-age=2147483647; path=/; domain=.baidu.com
+Set-Cookie: PSTM=1660654516; expires=Thu, 31-Dec-37 23:55:55 GMT; max-age=2147483647; path=/; domain=.baidu.com
+Set-Cookie: BAIDUID=0021315124C1DCBD79E08683C3E42600:FG=1; max-age=31536000; expires=Wed, 16-Aug-23 12:55:16 GMT; domain=.baidu.com; path=/; version=1; comment=bd
+Strict-Transport-Security: max-age=0
+Traceid: 1660654516037233921014200821962745403164
+X-Frame-Options: sameorigin
+X-Ua-Compatible: IE=Edge,chrome=1
+
+<html>
+<head>
+        <script>
+                location.replace(location.href.replace("https://","http://"));
+        </script>
+</head>
+<body>
+        <noscript><meta http-equiv="refresh" content="0;url=http://www.baidu.com/"></noscript>
+</body>
+</html>
 ```
