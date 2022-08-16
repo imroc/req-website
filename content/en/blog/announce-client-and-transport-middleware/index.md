@@ -67,3 +67,4 @@ When to use Transport middleware? It is generally used when integrating with oth
 
 - [Introduction and usage of Client and Transport middleware](../../docs/tutorial/middleware-for-client-and-transport/)
 - [Integrate with OpenTelemetry and Jaeger using Client middleware](../../docs/examples/integrate-opentelemetry-and-jaeger/)
+- [Integrate with goquery using Client middleware](../../docs/examples/integrate-with-goquery/)

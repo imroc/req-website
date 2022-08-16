@@ -69,3 +69,5 @@ If necessary, you can also implement the interface yourself and use `WrapRoundTr
 ## Examples
 
 * [Integrate with OpenTelemetry and Jaeger](../../examples/integrate-opentelemetry-and-jaeger/)
+* [Integrate with goquery](../../examples/integrate-with-goquery/)
+

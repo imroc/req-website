@@ -67,3 +67,4 @@ transport.WrapRoundTripFunc(func(rt http.RoundTripper) req.HttpRoundTripFunc {
 ## 示例
 
 * [与 OpenTelemetry 和 Jaeger 集成](../../examples/integrate-opentelemetry-and-jaeger/)
+* [与 goquery 集成](../../examples/integrate-with-goquery/)
