@@ -66,4 +66,4 @@ Client 与 Transport 中间件的区别是，在 Client 中间件中可以访问
 ## 下一步阅读
 
 - [Client 与 Transport 中间件介绍与用法](../../docs/tutorial/middleware-for-client-and-transport/)
-- [利用 Client 中间件与 OpenTelemetry 和 Jaeger 集成](../../docs/tutorial/middleware-for-client-and-transport/)
+- [利用 Client 中间件与 OpenTelemetry 和 Jaeger 集成](../../docs/examples/integrate-opentelemetry-and-jaeger/)
