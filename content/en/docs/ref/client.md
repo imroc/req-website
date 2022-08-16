@@ -36,6 +36,8 @@ Basically, you can know the meaning of most settings directly from the method na
 * [EnableDebugLog()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDebugLog) - Enable debug level log (disabled by default).
 * [DisableDebugLog()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableDebugLog)
 * [SetLogger(log Logger)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetLogger) - Set the customized logger.
+* [EnableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableTraceAll) - Enable trace for all requests (disabled by default).
+* [DisableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableTraceAll)
 * [EnableDumpAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpAll) - Enable dump for all requests.
 * [DisableDumpAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableDumpAll)
 * [SetCommonDumpOptions(opt *DumpOptions)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonDumpOptions)
@@ -48,8 +50,13 @@ Basically, you can know the meaning of most settings directly from the method na
 * [EnableDumpAllWithoutRequestBody()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpAllWithoutRequestBody)
 * [EnableDumpAllWithoutResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpAllWithoutResponse)
 * [EnableDumpAllWithoutResponseBody()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpAllWithoutResponseBody)
-* [EnableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableTraceAll) - Enable trace for all requests (disabled by default).
-* [DisableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableTraceAll)
+* [EnableDumpEeachRequest()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequest) - syntax sugar, use request middleware to enable dump separately for each request (without printing), and get dump content when needed.
+* [EnableDumpEeachRequestWithoutBody()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutBody)
+* [EnableDumpEeachRequestWithoutHeader()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutHeader)
+* [EnableDumpEeachRequestWithoutResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutResponse)
+* [EnableDumpEeachRequestWithoutRequest()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutRequest)
+* [EnableDumpEeachRequestWithoutRequestBody()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutRequestBody)
+* [EnableDumpEeachRequestWithoutResponseBody()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutResponseBody)
 
 ### Common Settings for constructing HTTP Requests
 

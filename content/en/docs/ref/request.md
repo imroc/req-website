@@ -87,6 +87,7 @@ Basically, you can know the meaning of most settings directly from the method na
 ### Multipart & Form & Upload
 
 * [SetFormData(data map[string]string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetFormData)
+* [SetFormDataAnyType(data map[string]interface{})](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetFormDataAnyType) - syntax sugar for SetFormData
 * [SetFormDataFromValues(data url.Values)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetFormDataFromValues)
 * [SetFile(paramName, filePath string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetFile)
 * [SetFiles(files map[string]string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetFiles)

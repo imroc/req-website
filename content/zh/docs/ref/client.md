@@ -34,7 +34,9 @@ toc: true
 * [EnableDebugLog()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDebugLog) - 启用 Debug 级别日志 (默认是关闭)
 * [DisableDebugLog()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableDebugLog)
 * [SetLogger(log Logger)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetLogger) - 自定义 Logger
-* [EnableDumpAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpAll) - 为所有请求开启 dump (默认是关闭)
+* [EnableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableTraceAll) - 为所有请求开启 Trace (默认是关闭)
+* [DisableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableTraceAll)
+* [EnableDumpAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpAll) - dump 所有请求 (默认是关闭)
 * [DisableDumpAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableDumpAll)
 * [SetCommonDumpOptions(opt *DumpOptions)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonDumpOptions)
 * [EnableDumpAllAsync()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpAllAsync)
@@ -46,8 +48,13 @@ toc: true
 * [EnableDumpAllWithoutRequestBody()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpAllWithoutRequestBody)
 * [EnableDumpAllWithoutResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpAllWithoutResponse)
 * [EnableDumpAllWithoutResponseBody()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpAllWithoutResponseBody)
-* [EnableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableTraceAll) - 为所有请求开启 Trace (默认是关闭)
-* [DisableTraceAll()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableTraceAll)
+* [EnableDumpEeachRequest()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequest) - 语法糖，利用 Request 中间件为每个请求单独开启 dump(不打印)，在需要的时候获取 dump 内容 (默认是关闭)
+* [EnableDumpEeachRequestWithoutBody()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutBody)
+* [EnableDumpEeachRequestWithoutHeader()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutHeader)
+* [EnableDumpEeachRequestWithoutResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutResponse)
+* [EnableDumpEeachRequestWithoutRequest()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutRequest)
+* [EnableDumpEeachRequestWithoutRequestBody()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutRequestBody)
+* [EnableDumpEeachRequestWithoutResponseBody()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableDumpEeachRequestWithoutResponseBody)
 
 ### 构造请求的共同设置
 
