@@ -37,7 +37,7 @@ CardDesc8:
 CardTitle9:
   other: 'Extensible'
 CardDesc9:
-  other: 'Support Middleware for Request and Response'
+  other: 'Support Middleware for Request, Response, Client and Transport'
 Debugging:
   other: 'Debugging'
 QuickHTTPTest:

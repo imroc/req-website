@@ -37,7 +37,7 @@ CardDesc8:
 CardTitle9:
   other: '可扩展'
 CardDesc9:
-  other: '支持请求和响应的中间件'
+  other: '支持 Request、Response、Client 和 Transport 的中间件'
 Debugging:
   other: '调试'
 QuickHTTPTest:
