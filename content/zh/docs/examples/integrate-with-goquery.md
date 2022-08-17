@@ -33,7 +33,12 @@ import (
 var globalClient *req.Client
 
 func init() {
-  globalClient = req.C().EnableDumpEachRequest().
+  globalClient = req.C().
+    // Enable dump at the request-level for each request, and only
+    // temporarily stores the dump content in memory, so we can call
+    // resp.Dump() to get the dump content when needed in response
+    // middleware.
+    EnableDumpEachRequest().
     OnAfterResponse(func(client *req.Client, resp *req.Response) error {
       if resp.Err != nil { // Ignore when there is an underlying error, e.g. network error.
         return nil
