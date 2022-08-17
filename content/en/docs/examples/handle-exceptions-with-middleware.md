@@ -41,16 +41,13 @@ type Client struct {
 func NewClient() *Client {
     c := req.C().
     SetBaseURL("https://api.github.com").
-    // EnableDump at the request level in request middleware which dump content into
-    // memory (not print to stdout), we can record dump content only when unexpected
-    // exception occurs, it is helpful to troubleshoot problems in production.
-    OnBeforeRequest(func(client *req.Client, r *req.Request) error {
-        if r.RetryAttempt > 0 { // Ignore on retry, no need to repeat EnableDump.
-            return nil
-        }
-        r.EnableDump()
-        return nil
-    }).
+    // Enable dump at the request-level for each request, and only
+    // temporarily stores the dump content in memory, so we can call
+    // resp.Dump() to get the dump content when needed in response
+    // middleware.
+    // This is actually a syntax sugar, implemented internally using
+    // request middleware
+    EnableDumpEachRequest().
     // Set the common error struct which will be unmarshalled into if server returns
     // an error response.
     SetCommonError(&APIError{}).
