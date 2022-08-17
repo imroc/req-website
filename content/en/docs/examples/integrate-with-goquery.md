@@ -35,6 +35,9 @@ var globalClient *req.Client
 func init() {
   globalClient = req.C().EnableDumpEachRequest().
     OnAfterResponse(func(client *req.Client, resp *req.Response) error {
+      if resp.Err != nil { // Ignore when there is an underlying error, e.g. network error.
+        return nil
+      }
       // Treat non-successful responses as errors, record raw dump content in error message.
       if !resp.IsSuccess() { // Status code is not between 200 and 299.
         resp.Err = fmt.Errorf("bad response, raw content:\n%s", resp.Dump())
