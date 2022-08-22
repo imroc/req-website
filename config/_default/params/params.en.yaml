@@ -4,3 +4,5 @@ alert: true
 alertDismissable: true
 # alertText: "Introducing the Doks child theme, several DX + UX updates, and more! <a class=\"alert-link stretched-link\" href=\"https://getdoks.org/blog/doks-v0.2/\" target=\"_blank\" rel=\"noopener\">Check out Doks v0.2</a>"
 alertText: <a class="alert-link stretched-link" href="/blog/client-and-transport-middleware-are-supported-unlocking-more-practical-usage/">Client and Transport Middleware are Supported, Unlocking More Practical Usage</a>
+videoIframe: <iframe width="560" height="315" src="https://www.youtube.com/embed/Dy8iph8JWw0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+

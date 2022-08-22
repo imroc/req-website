@@ -2,3 +2,4 @@ alert: true
 alertDismissable: true
 # alertText: "Introducing the Doks child theme, several DX + UX updates, and more! <a class=\"alert-link stretched-link\" href=\"https://getdoks.org/blog/doks-v0.2/\" target=\"_blank\" rel=\"noopener\">Check out Doks v0.2</a>"
 alertText: <a class="alert-link stretched-link" href="/zh/blog/client-%E4%B8%8E-transport-%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%B7%B2%E6%94%AF%E6%8C%81%E8%A7%A3%E9%94%81%E6%9B%B4%E5%A4%9A%E5%AE%9E%E7%94%A8%E7%8E%A9%E6%B3%95/">Client 与 Transport 中间件已支持，解锁更多实用玩法</a>
+videoIframe: <iframe src="https://player.bilibili.com/player.html?aid=984631235&bvid=BV14t4y1J7cm&cid=810201266&page=1&high_quality=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"  width="560" height="360"> </iframe>
