@@ -317,9 +317,23 @@ My IP is 182.138.155.113
 
 ## Videos
 
-* [Get Started With Req](https://www.youtube.com/watch?v=k47i0CKBVrA) (English, Youtube)
-* [快速上手 req](https://www.bilibili.com/video/BV1Xq4y1b7UR) (Chinese, BiliBili)
+The following is a series of video tutorials for req:
+
+* [Youtube Play List](https://www.youtube.com/watch?v=Dy8iph8JWw0&list=PLnW6i9cc0XqlhUgOJJp5Yf1FHXlANYMhF&index=2)
+* [BiliBili Play List](https://www.bilibili.com/video/BV14t4y1J7cm) (Chinese)
 
 ## Learn More
 
-Similarly, you can use `req` to easily send `GET`, `POST`, `PATCH`, `PUT`, `HEAD`, `DELETE` and `OPTIONS` requests, please refer to **Tutorial* * in the series of articles to learn more usage.
+Similarly, you can use `req` to easily send `GET`, `POST`, `PATCH`, `PUT`, `HEAD`, `DELETE` and `OPTIONS` requests, please refer to **Tutorial** in the series of articles to learn more usage.
+
+## Contributing
+
+If you have a bug report or feature request, you can [open an issue](https://github.com/imroc/req/issues/new), and [pull requests](https://github.com/imroc/req/pulls) are also welcome.
+
+## Contact
+
+If you have questions, feel free to reach out to us in the following ways:
+
+* [Github Discussion](https://github.com/imroc/req/discussions)
+* [Slack](https://imroc-req.slack.com/archives/C03UFPGSNC8) | [Join](https://slack.req.cool/)
+* QQ Group (Chinese): 621411351 - <a href="https://qm.qq.com/cgi-bin/qm/qr?k=P8vOMuNytG-hhtPlgijwW6orJV765OAO&jump_from=webapi"><img src="https://pub.idqqimg.com/wpa/images/group.png"></a>

@@ -317,9 +317,23 @@ My IP is 182.138.155.113
 
 ## 视频
 
-* [Get Started With Req](https://www.youtube.com/watch?v=k47i0CKBVrA) (English, Youtube)
-* [快速上手 req](https://www.bilibili.com/video/BV1Xq4y1b7UR) (Chinese, BiliBili)
+以下是 req 的系列视频教程:
+
+* [BiliBili 播放列表](https://www.bilibili.com/video/BV14t4y1J7cm)
+* [Youtube 播放列表](https://www.youtube.com/watch?v=Dy8iph8JWw0&list=PLnW6i9cc0XqlhUgOJJp5Yf1FHXlANYMhF&index=2)
 
 ## 学习更多用法
 
 类似的，你可以使用 `req` 轻松发起各种 `GET`, `POST`, `PATCH`, `PUT`, `HEAD`, `DELETE` 与 `OPTIONS` 等请求，请参阅 **使用教程** 中的系列文章来学习更多用法。
+
+## 贡献
+
+如果你想反馈 bug 或提出新特性，你可以 [创建 Issue](https://github.com/imroc/req/issues/new), 另外也欢迎 [提交 PR](https://github.com/imroc/req/pulls)。
+
+## 联系方式
+
+如果你有问题，欢迎通过以下方式联系我们：
+
+* [Github Discussion](https://github.com/imroc/req/discussions)
+* [Slack](https://imroc-req.slack.com/archives/C03UFPGSNC8) | [加入](https://slack.req.cool/)
+* QQ 群: 621411351 - <a href="https://qm.qq.com/cgi-bin/qm/qr?k=P8vOMuNytG-hhtPlgijwW6orJV765OAO&jump_from=webapi"><img src="https://pub.idqqimg.com/wpa/images/group.png"></a>
