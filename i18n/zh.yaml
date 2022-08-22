@@ -60,3 +60,7 @@ See:
   other: '参考'
 And:
   other: '和'
+Videos:
+  other: '视频教程'
+VideoLink:
+  other: 'https://www.bilibili.com/video/BV14t4y1J7cm'

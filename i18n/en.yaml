@@ -60,3 +60,7 @@ See:
   other: 'See'
 And:
   other: 'and'
+Videos:
+  other: 'Videos'
+VideoLink:
+  other: 'https://www.youtube.com/watch?v=Dy8iph8JWw0&list=PLnW6i9cc0XqlhUgOJJp5Yf1FHXlANYMhF&index=2'
