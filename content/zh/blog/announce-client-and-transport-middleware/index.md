@@ -68,3 +68,4 @@ Client 与 Transport 中间件的区别是，在 Client 中间件中可以访问
 - [Client 与 Transport 中间件介绍与用法](../../docs/tutorial/middleware-for-client-and-transport/)
 - [利用 Client 中间件与 OpenTelemetry 和 Jaeger 集成](../../docs/examples/integrate-opentelemetry-and-jaeger/)
 - [利用 Client 中间件与 goquery 集成](../../docs/examples/integrate-with-goquery/)
+- [利用 Transport 中间件让 kubernetes client-go 集成 OpenTelemetry 以支持链路追踪](../../docs/examples/integrate-with-client-go/#client-go-%E9%9B%86%E6%88%90-opentelemetry-%E6%94%AF%E6%8C%81%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA%E7%9A%84%E7%A4%BA%E4%BE%8B)
