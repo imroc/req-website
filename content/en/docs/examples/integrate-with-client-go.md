@@ -11,11 +11,9 @@ menu:
 toc: true
 ---
 
-## Overview
+## Example of client-go Dynamic Debugging
 
 The dump capability of `Req` comes from its implementation of `Transport`, and the kubernetes sdk [client-go](https://github.com/kubernetes/client-go) provides the ability to customize `Transport`, so we can integrate the `Transport` of `Req` into `client-go`, You can use the switch to dynamically turn on the dump capability on demand and see all the details of the request, so that we can debug the K8S API.
-
-## Example
 
 ```go
 package main
@@ -34,7 +32,7 @@ import (
 
 var reqClient = req.C()
 
-func main() {
+func init() {
 	go func() {
 		r := gin.Default()
 		r.GET("/debug", func(c *gin.Context) {
@@ -52,32 +50,10 @@ func main() {
 		})
 		r.Run("0.0.0.0:80")
 	}()
+}
 
-	// Creates the in-cluster config
-	config, err := rest.InClusterConfig()
-	if err != nil {
-		panic(err.Error())
-	}
-
-	// Extract tls.Config from rest.Config
-	tlsConfig, err := rest.TLSConfigFor(config)
-	if err != nil {
-		panic(err.Error())
-	}
-	// Set TLSClientConfig to req's Transport.
-	t := reqClient.GetTransport()
-	t.TLSClientConfig = tlsConfig
-	// Override with req's Transport.
-	config.Transport = t
-	// rest.Config.TLSClientConfig should be empty if
-	// custom Transport been set.
-	config.TLSClientConfig = rest.TLSClientConfig{}
-
-	// Create kubernetes client with config.
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		panic(err.Error())
-	}
+func main() {
+	clientset := newClientset()
 	for {
 		// Run list services in kube-system for testing.
 		services, err := clientset.CoreV1().Services("kube-system").List(context.TODO(), metav1.ListOptions{})
@@ -85,9 +61,42 @@ func main() {
 			panic(err.Error())
 		}
 		fmt.Printf("There are %d services in the kube-system cluster\n", len(services.Items))
-
 		time.Sleep(10 * time.Second)
 	}
+}
+
+// create kubernetes clientset
+func newClientset() *kubernetes.Clientset {
+	// Creates the in-cluster config
+	config, err := rest.InClusterConfig()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	replaceTransport(config, reqClient.GetTransport())
+
+	// Create kubernetes client with config.
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		panic(err.Error())
+	}
+	return clientset
+}
+
+// replace client-go's Transport with *req.Transport
+func replaceTransport(config *rest.Config, t *req.Transport) {
+	// Extract tls.Config from rest.Config
+	tlsConfig, err := rest.TLSConfigFor(config)
+	if err != nil {
+		panic(err.Error())
+	}
+	// Set TLSClientConfig to req's Transport.
+	t.TLSClientConfig = tlsConfig
+	// Override with req's Transport.
+	config.Transport = t
+	// rest.Config.TLSClientConfig should be empty if
+	// custom Transport been set.
+	config.TLSClientConfig = rest.TLSClientConfig{}
 }
 ```
 
@@ -120,3 +129,116 @@ There are 8 services in the kube-system cluster
 ```
 
 Similarly, after debugging, you can use `curl 127.0.0.1:80/debug?enable=false` to turn off dump.
+
+## An Example of client-go Integrating OpenTelemetry to Support Tracing
+
+```go
+import (
+  "bytes"
+  "github.com/imroc/req/v3"
+  "go.opentelemetry.io/otel"
+  "go.opentelemetry.io/otel/attribute"
+  "go.opentelemetry.io/otel/codes"
+  "io"
+  metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+  "k8s.io/client-go/kubernetes"
+  "k8s.io/client-go/rest"
+  "net/http"
+)
+
+var clientset *kubernetes.Clientset
+
+const tracerName = "controller"
+
+// converts http header to a string.
+func convertHeaderToString(h http.Header) string {
+  if h == nil {
+    return ""
+  }
+  buf := new(bytes.Buffer)
+  h.Write(buf)
+  return buf.String()
+}
+
+func init() {
+  // Create a *req.Transport with middleware
+  t := req.C().GetTransport().WrapRoundTripFunc(func(rt http.RoundTripper) req.HttpRoundTripFunc {
+    return func(req *http.Request) (resp *http.Response, err error) {
+      _, span := otel.Tracer(tracerName).Start(req.Context(), req.URL.Path)
+      defer span.End()
+      span.SetAttributes(
+        attribute.String("http.url", req.URL.String()),
+        attribute.String("http.method", req.Method),
+        attribute.String("http.req.header", convertHeaderToString(req.Header)),
+      )
+      resp, err = rt.RoundTrip(req)
+      if err != nil {
+        span.RecordError(err)
+        span.SetStatus(codes.Error, err.Error())
+        return
+      } else if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
+        span.SetStatus(codes.Error, fmt.Sprintf("bad status: %s", resp.Status))
+      }
+      span.SetAttributes(
+        attribute.Int("http.status_code", resp.StatusCode),
+        attribute.String("http.resp.header", convertHeaderToString(resp.Header)),
+      )
+      if resp.Body != nil {
+        body := resp.Body
+        defer body.Close()
+        bodyContent, err := io.ReadAll(body)
+        if err != nil {
+          span.RecordError(err)
+          span.SetStatus(codes.Error, err.Error())
+          return nil, err
+        }
+        // rewind body
+        resp.Body = io.NopCloser(bytes.NewReader(bodyContent))
+        // record response body
+        span.SetAttributes(
+          attribute.String("http.resp.body", string(bodyContent)),
+        )
+      }
+      return
+    }
+  })
+
+  clientset = newClientset(t)
+}
+
+// create kubernetes clientset
+func newClientset(t *req.Transport) *kubernetes.Clientset {
+  // Creates the in-cluster config
+  config, err := rest.InClusterConfig()
+  if err != nil {
+    panic(err.Error())
+  }
+
+  replaceTransport(config, t)
+
+  // Create kubernetes client with config.
+  clientset, err := kubernetes.NewForConfig(config)
+  if err != nil {
+    panic(err.Error())
+  }
+  return clientset
+}
+
+// replace client-go's Transport with *req.Transport
+func replaceTransport(config *rest.Config, t *req.Transport) {
+  // Extract tls.Config from rest.Config
+  tlsConfig, err := rest.TLSConfigFor(config)
+  if err != nil {
+    panic(err.Error())
+  }
+  // Set TLSClientConfig to req's Transport.
+  t.TLSClientConfig = tlsConfig
+  // Override with req's Transport.
+  config.Transport = t
+  // rest.Config.TLSClientConfig should be empty if
+  // custom Transport been set.
+  config.TLSClientConfig = rest.TLSClientConfig{}
+}
+```
+
+<img src="/images/support-jaeger-using-transport-middleware-in-client-go.png">
