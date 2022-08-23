@@ -144,7 +144,7 @@ Basically, you can know the meaning of most settings directly from the method na
 * [SetScheme(scheme string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetScheme)
 * [SetBaseURL(u string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetBaseURL)
 
-## Keepalive, Cookie, Compression and Redirect Policy
+### Keepalive, Cookie, Compression and Redirect Policy
 
 * [EnableKeepAlives()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableKeepAlives) - Enabled by default.
 * [DisableKeepAlives()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableKeepAlives)
@@ -154,7 +154,7 @@ Basically, you can know the meaning of most settings directly from the method na
 * [DisableCompression()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableCompression)
 * [SetRedirectPolicy(policies ...RedirectPolicy)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetRedirectPolicy)
 
-## Download, Auto-Read Response and Allow Get Method Payload
+### Download, Auto-Read Response and Allow Get Method Payload
 
 * [SetOutputDirectory(dir string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetOutputDirectory)
 * [EnableAutoReadResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAutoReadResponse) - Enabled by default
@@ -162,6 +162,7 @@ Basically, you can know the meaning of most settings directly from the method na
 * [EnableAllowGetMethodPayload()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAllowGetMethodPayload) - Enabled by default
 * [DisableAllowGetMethodPayload()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableAllowGetMethodPayload)
 
-## Clone
+## Other Methods
 
+* [GetTransport()](https://pkg.go.dev/github.com/imroc/req/v3#Client.GetTransport)
 * [Clone()](https://pkg.go.dev/github.com/imroc/req/v3#Client.Clone)

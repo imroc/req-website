@@ -142,7 +142,7 @@ toc: true
 * [SetScheme(scheme string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetScheme)
 * [SetBaseURL(u string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetBaseURL)
 
-## Keepalive、 Cookie、 压缩和重定向策略
+### Keepalive、 Cookie、 压缩和重定向策略
 
 * [EnableKeepAlives()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableKeepAlives) - 默认就是启用
 * [DisableKeepAlives()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableKeepAlives)
@@ -152,7 +152,7 @@ toc: true
 * [EnableCompression()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableCompression) - 默认就是启用
 * [DisableCompression()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableCompression)
 
-## 下载、自动读 Response 和允许 GET 请求带 Body
+### 下载、自动读 Response 和允许 GET 请求带 Body
 
 * [SetOutputDirectory(dir string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetOutputDirectory)
 * [EnableAutoReadResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAutoReadResponse) - 默认就是启用
@@ -160,6 +160,7 @@ toc: true
 * [EnableAllowGetMethodPayload()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAllowGetMethodPayload) - 默认就是启用
 * [DisableAllowGetMethodPayload()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableAllowGetMethodPayload)
 
-## Clone
+## 其它方法
 
+* [GetTransport()](https://pkg.go.dev/github.com/imroc/req/v3#Client.GetTransport)
 * [Clone()](https://pkg.go.dev/github.com/imroc/req/v3#Client.Clone)
