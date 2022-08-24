@@ -41,7 +41,7 @@ Access-Control-Allow-Credentials: true
 And also you can force using `HTTP/2` if you want, will return error if server does not support:
 
 ```go
-client := req.C().EnableForceHTTP2()
+client.EnableForceHTTP2()
 client.R().MustGet("https://baidu.com")
 ```
 
@@ -52,6 +52,58 @@ panic: Get "https://baidu.com": server does not support http2, you can use http/
 Similarly, you can also force using `HTTP/3` if you want:
 
 ```go
-client := req.C().EnableForceHTTP3()
+client.EnableForceHTTP3()
 client.R().MustGet("https://www.cloudflare.com")
+```
+
+## HTTP2 and H2C
+
+If `EnableForceHTTP2`, h2c (HTTP2 over TCP) can be enabled when the http2 server does not use TLS:
+
+```go
+client := req.C().DevMode().EnableForceHTTP2().EnableH2C()
+client.R().MustGet("http://localhost:9000")
+```
+
+```txt
+2022/08/24 21:38:04.630003 DEBUG [req] HTTP/2 GET http://localhost:9000/
+:authority: localhost:8972
+:method: GET
+:path: /
+:scheme: http
+accept-encoding: gzip
+user-agent: req/v3 (https://github.com/imroc/req)
+
+:status: 200
+content-type: text/plain; charset=utf-8
+content-length: 11
+date: Wed, 24 Aug 2022 13:38:04 GMT
+
+Hello World
+```
+
+Example code for h2c server:
+
+```go
+package main
+
+import (
+	"fmt"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
+	"log"
+	"net/http"
+)
+
+func main() {
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "Hello World")
+	})
+	h2s := &http2.Server{}
+	h1s := &http.Server{
+		Addr:    ":9000",
+		Handler: h2c.NewHandler(handler, h2s),
+	}
+	log.Fatal(h1s.ListenAndServe())
+}
 ```

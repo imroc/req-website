@@ -142,6 +142,11 @@ toc: true
 * [SetScheme(scheme string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetScheme)
 * [SetBaseURL(u string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetBaseURL)
 
+### H2C
+
+* [EnableH2C()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableH2C) - 默认不开启
+* [DisableH2C()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableH2C)
+
 ### Keepalive、 Cookie、 压缩和重定向策略
 
 * [EnableKeepAlives()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableKeepAlives) - 默认就是启用

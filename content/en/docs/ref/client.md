@@ -144,6 +144,11 @@ Basically, you can know the meaning of most settings directly from the method na
 * [SetScheme(scheme string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetScheme)
 * [SetBaseURL(u string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetBaseURL)
 
+### H2C
+
+* [EnableH2C()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableH2C) - Disabled by default.
+* [DisableH2C()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableH2C)
+
 ### Keepalive, Cookie, Compression and Redirect Policy
 
 * [EnableKeepAlives()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableKeepAlives) - Enabled by default.
