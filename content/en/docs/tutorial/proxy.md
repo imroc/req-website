@@ -22,6 +22,9 @@ You can set proxy explicitly if you need:
 // Set proxy from proxy url
 client.SetProxyURL("http://myproxy:8080")
 
+// Set socks5 proxy from proxy url
+client.SetProxyURL("socks5://myproxy:1080")
+
 // Custmize the proxy function with your own implementation
 client.SetProxy(func(request *http.Request) (*url.URL, error) {
     // ...

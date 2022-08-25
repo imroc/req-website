@@ -19,8 +19,11 @@ toc: true
 你也可以这样显式的设置代理:
 
 ```go
-// Set proxy from proxy url
+// Set http proxy from proxy url
 client.SetProxyURL("http://myproxy:8080")
+
+// Set socks5 proxy from proxy url
+client.SetProxyURL("socks5://myproxy:1080")
 
 // Custmize the proxy function with your own implementation
 client.SetProxy(func(request *http.Request) (*url.URL, error) {
