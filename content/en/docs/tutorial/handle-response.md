@@ -3,7 +3,7 @@ title: "Handle Response"
 description: "This article will introduce how to handle response."
 draft: false
 images: []
-weight: 280
+weight: 145
 menu:
   docs:
     parent: "tutorial"

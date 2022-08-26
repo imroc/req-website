@@ -3,7 +3,7 @@ title: "处理 Response"
 description: "介绍如何处理 Response"
 draft: false
 images: []
-weight: 151
+weight: 145
 menu:
   docs:
     parent: "tutorial"
