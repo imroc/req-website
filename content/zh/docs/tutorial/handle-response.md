@@ -50,6 +50,8 @@ if resp.IsError() {
 
 其它情况一般是不常见的未知异常。
 
+通常建议使用中间件来统一对所有请求处理异常，避免重复代码，参考 [使用中间件统一处理异常](../../examples/handle-exceptions-with-middleware/)。
+
 ## req.Response 与 http.Response
 
 请求发起后返回的是 `req.Response`，代表 HTTP 响应的结构体，里面嵌入了底层返回的原始的 `*http.Response`，所以我们可以直接在 `req.Response` 中访问 `http.Response` 中的字段，比如判断状态码时，可以将 `resp.Response.StatusCode` 简写为 `resp.StatusCode`:

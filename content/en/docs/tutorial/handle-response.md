@@ -50,6 +50,8 @@ if resp.IsError() {
 
 Other conditions are generally unusual and unknown exceptions.
 
+It is generally recommended to use middleware to uniformly handle exceptions for all requests to avoid duplication of code, refer to [Handle Exceptions with Middleware](../../examples/handle-exceptions-with-middleware/).
+
 ## req.Response and http.Response
 
 After the request is sent, a `req.Response` is returned, which represents the HTTP response, and the original `*http.Response` returned by the underlying [Transport](https://pkg.go.dev/github.com/imroc/req/v3#Transport) is embedded in it, so we can directly access `http.Response`'s fields in `req.Response`, for example, when checking the status code, you can abbreviate `resp.Response.StatusCode` as `resp.StatusCode`:
