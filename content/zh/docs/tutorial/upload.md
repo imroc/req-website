@@ -71,6 +71,8 @@ client.R().
 "test.xlsx" uploaded 100.00%
 ```
 
+> 当设置了上传回调，默认会强制使用 chunked encoding 方式上传，等同于调用了 `EnableForceChunkedEncoding`。
+
 `UploadCallback` 默认至少 200ms 执行一次, 你也可以使用 `SetUploadCallbackWithInterval` 来自定义最少执行间隔时长:
 
 ```go

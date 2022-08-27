@@ -71,6 +71,8 @@ client.R().
 "test.xlsx" uploaded 100.00%
 ```
 
+> When the upload callback is set, will force using chunked encoding, which is equivalent to calling `EnableForceChunkedEncoding`.
+
 `UploadCallback` will be invoked at least every 200ms by default, you can customize the minimal invoke interval using `SetUploadCallbackWithInterval`:
 
 ```go
