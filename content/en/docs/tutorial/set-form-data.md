@@ -58,6 +58,39 @@ user-agent: req/v2 (https://github.com/imroc/req)
 multi=a&multi=b&multi=c
 ```
 
+If you want to force the form to be submitted using multipart, you can use `EnableForceMultipart`:
+
+```go
+client.R().
+	EnableForceMultipart().
+	SetFormData(map[string]string{
+		"username": "imroc",
+		"blog":     "https://imroc.cc",
+	}).
+	Post("https://httpbin.org/post")
+```
+
+```txt
+:authority: httpbin.org
+:method: POST
+:path: /post
+:scheme: https
+content-type: multipart/form-data; boundary=1da8c513b38b0f8b0948bc37bb0de0d7afffd6ef1a5fd18daf62714c79e7
+content-length: 317
+accept-encoding: gzip
+user-agent: req/v3 (https://github.com/imroc/req)
+
+--1da8c513b38b0f8b0948bc37bb0de0d7afffd6ef1a5fd18daf62714c79e7
+Content-Disposition: form-data; name="username"
+
+imroc
+--1da8c513b38b0f8b0948bc37bb0de0d7afffd6ef1a5fd18daf62714c79e7
+Content-Disposition: form-data; name="blog"
+
+https://imroc.cc
+--1da8c513b38b0f8b0948bc37bb0de0d7afffd6ef1a5fd18daf62714c79e7--
+```
+
 ## Client Level
 
 Similarly, You can also use `SetCommonFormData` or `SetCommonFormDataFromValues` to set form data at the client level:
