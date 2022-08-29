@@ -30,7 +30,7 @@ toc: true
 * [MustPatch(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustPatch)
 * [MustOptions(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustOptions)
 * [MustPut(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustPut)
-* [Send(method, url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Put) - 使用指定的 Method 和 URL 发送请求。
+* [Send(method, url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Send) - 使用指定的 Method 和 URL 发送请求。
 * [Do(ctx ...context.Context)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Do) - 传入可选的 context 并发送请求。
 
 ## Request 设置

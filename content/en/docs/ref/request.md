@@ -28,7 +28,7 @@ These methods of `Request` will fire the http request and return the response, `
 * [MustPatch(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustPatch)
 * [MustOptions(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustOptions)
 * [MustPut(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.MustPut)
-* [Send(method, url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Put) - Send request with given method name and url.
+* [Send(method, url string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Send) - Send request with given method name and url.
 * [Do(ctx ...context.Context)](https://pkg.go.dev/github.com/imroc/req/v3#Request.Do) - Send request with an optional context.
 
 ## Request Settings
