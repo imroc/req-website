@@ -1,5 +1,5 @@
 ---
-title : "Tutorial"
+title : "Usage Tutorial"
 lead: ""
 draft: false
 images: []
