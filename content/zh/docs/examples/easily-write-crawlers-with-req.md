@@ -16,7 +16,7 @@ toc: true
 ```go
 var crawlerClient = NewAutoChangeProxyClient()
 var proxies = []string{
-	"http://proxy.example.com:8080",
+  "http://proxy.example.com:8080",
   "https://proxy.example.com:9443",
   "socks5://proxy.example.com:1080",
 }
