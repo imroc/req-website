@@ -53,6 +53,8 @@ client.R().
     SetRetryCondition(conditionFunc1)
 ```
 
+> If the retry condition is not set, `err != nil` is used by default. If set, it will override the default.
+
 ## Client Level
 
 Similarly, you can set retry at the client level, which could be overridden at the request level:

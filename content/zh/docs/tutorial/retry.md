@@ -53,6 +53,8 @@ client.R().
     SetRetryCondition(conditionFunc1)
 ```
 
+> 如果没有设置 retry condition，默认是 `err != nil`，如果设置了就会覆盖默认的。
+
 ## 在客户端级别设置
 
 类似的，你也可以在客户端级别设置(可以被请求级别设置覆盖):
