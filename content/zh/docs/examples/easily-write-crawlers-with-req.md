@@ -1,5 +1,5 @@
 ---
-title: "用 req 轻松写爬虫"
+title: "使用 req 轻松写爬虫"
 description: "介绍如何使用 req 轻松写出爬虫程序"
 lead: ""
 draft: false
