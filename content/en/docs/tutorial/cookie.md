@@ -123,13 +123,3 @@ resp1, err := client.R().Get(url1)
 ...
 resp2, err := client.R().Get(url2)
 ```
-
-You can also use `SetCookieJar` to customize the CookieJar at client level:
-
-```go
-// Set your own http.CookieJar implementation
-client.SetCookieJar(jar)
-
-// Set to nil to disable CookieJar
-client.SetCookieJar(nil)
-```
