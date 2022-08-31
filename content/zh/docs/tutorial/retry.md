@@ -70,3 +70,7 @@ client.
     AddCommonRetryCondition(conditionFunc2).
     SetCommonRetryCondition(conditionFunc1)
 ```
+
+## 示例
+
+* [爬虫使用重试自动更换代理来切换 IP](../../examples/easily-write-crawlers-with-req/#%E8%AF%B7%E6%B1%82%E5%A4%B1%E8%B4%A5%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%8D%A2-ip-%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86)
