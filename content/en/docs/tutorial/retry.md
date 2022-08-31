@@ -32,8 +32,8 @@ client.R().
                 if err == nil {
                     return time.Duration(after) * time.Second
                 }
-                }
             }
+        }
         return 2 * time.Second // Otherwise, sleep 2 seconds
     }).
     // Add a retry hook that will be called if a retry occurs
