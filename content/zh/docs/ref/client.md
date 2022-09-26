@@ -159,13 +159,17 @@ toc: true
 
 ### 下载、自动读 Response 和允许 GET 请求带 Body
 
-* [SetOutputDirectory(dir string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetOutputDirectory)
+* [SetOutputDirectory(dir string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetOutputDirectory) - 下载目录
+* [NewParallelDownload(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.NewParallelDownload) - 并发下载
 * [EnableAutoReadResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAutoReadResponse) - 默认就是启用
 * [DisableAutoReadResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableAutoReadResponse)
 * [EnableAllowGetMethodPayload()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAllowGetMethodPayload) - 默认就是启用
 * [DisableAllowGetMethodPayload()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableAllowGetMethodPayload)
 
-## 其它方法
+## Transport
 
 * [GetTransport()](https://pkg.go.dev/github.com/imroc/req/v3#Client.GetTransport)
+
+## Clone
+
 * [Clone()](https://pkg.go.dev/github.com/imroc/req/v3#Client.Clone)

@@ -155,19 +155,23 @@ Basically, you can know the meaning of most settings directly from the method na
 * [DisableKeepAlives()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableKeepAlives)
 * [SetCookieJar(jar http.CookieJar)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCookieJar)
 * [ClearCookies()](https://pkg.go.dev/github.com/imroc/req/v3#Client.ClearCookies)
-* [EnableCompression()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableCompression) - Enabled by default
+* [EnableCompression()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableCompression) - Enabled by default.
 * [DisableCompression()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableCompression)
 * [SetRedirectPolicy(policies ...RedirectPolicy)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetRedirectPolicy)
 
 ### Download, Auto-Read Response and Allow Get Method Payload
 
-* [SetOutputDirectory(dir string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetOutputDirectory)
+* [SetOutputDirectory(dir string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetOutputDirectory) - Download directory.
+* [NewParallelDownload(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.NewParallelDownload) - Parallel download.
 * [EnableAutoReadResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAutoReadResponse) - Enabled by default
 * [DisableAutoReadResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableAutoReadResponse)
 * [EnableAllowGetMethodPayload()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAllowGetMethodPayload) - Enabled by default
 * [DisableAllowGetMethodPayload()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableAllowGetMethodPayload)
 
-## Other Methods
+## Transport
 
 * [GetTransport()](https://pkg.go.dev/github.com/imroc/req/v3#Client.GetTransport)
+
+## Clone
+
 * [Clone()](https://pkg.go.dev/github.com/imroc/req/v3#Client.Clone)
