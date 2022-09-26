@@ -24,6 +24,10 @@ These methods of `Client` will create a new `Request`:
 * [Patch(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Patch)
 * [Options(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Options)
 
+## Create Parallel Download
+
+* [NewParallelDownload(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.NewParallelDownload) - Parallel download.
+
 ## Client Settings
 
 The following are the chainable settings of Client, all of which have corresponding global wrappers (Just treat the package name `req` as a Client to test, set up the Client without create any Client explicitly).
@@ -162,7 +166,6 @@ Basically, you can know the meaning of most settings directly from the method na
 ### Download, Auto-Read Response and Allow Get Method Payload
 
 * [SetOutputDirectory(dir string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetOutputDirectory) - Download directory.
-* [NewParallelDownload(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.NewParallelDownload) - Parallel download.
 * [EnableAutoReadResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAutoReadResponse) - Enabled by default
 * [DisableAutoReadResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableAutoReadResponse)
 * [EnableAllowGetMethodPayload()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAllowGetMethodPayload) - Enabled by default

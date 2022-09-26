@@ -24,6 +24,10 @@ toc: true
 * [Patch(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Patch)
 * [Options(url ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.Options)
 
+## 创建并发下载
+
+* [NewParallelDownload(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.NewParallelDownload)
+
 ## Client 设置
 
 以下是 `Client` 设置相关的方法，它们都有对应的全局包装方法(测试时不需要显式创建 `Client`，直接调用全局同名方法)，基本上可以从方法命名就能直接看出设置的含义。
@@ -160,7 +164,6 @@ toc: true
 ### 下载、自动读 Response 和允许 GET 请求带 Body
 
 * [SetOutputDirectory(dir string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetOutputDirectory) - 下载目录
-* [NewParallelDownload(url string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.NewParallelDownload) - 并发下载
 * [EnableAutoReadResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAutoReadResponse) - 默认就是启用
 * [DisableAutoReadResponse()](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableAutoReadResponse)
 * [EnableAllowGetMethodPayload()](https://pkg.go.dev/github.com/imroc/req/v3#Client.EnableAllowGetMethodPayload) - 默认就是启用
