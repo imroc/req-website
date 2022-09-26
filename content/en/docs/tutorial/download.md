@@ -87,7 +87,7 @@ downloaded 100.00%
 
 ## Parallel Download
 
-Req supports multiple goroutines to download different segments of the same file concurrently, and finally merges different segments into one file to speed up the download.
+Req supports multiple goroutines to download different segments of the same file concurrently, and finally merges different segments into one single file to speed up the download.
 
 > **Attention:** The factors affecting the download speed are very complex. Concurrent downloads may not necessarily speed up the download, or even slow down. In some cases, adjusting the concurrency and segment size can increase the speed, depending on the situation.
 
