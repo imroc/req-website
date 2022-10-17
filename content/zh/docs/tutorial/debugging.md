@@ -107,6 +107,33 @@ resp, err = client.R().
 	Post("https://httpbin.org/post")
 ```
 
+有些场景，比如网页扫描器，需要分别获取原始的请求和响应内容，就需要分别 dump，此时可以用 `SetDumpOptions` 设置更细粒度的 dump 选项，将不同部分的内容 dump 到不同的 `io.Writer` 里:
+
+```go
+var reqBuf, respBuf bytes.Buffer
+resp, err := client.R().
+  EnableDump().
+  SetDumpOptions(&req.DumpOptions{
+    RequestOutput:  &reqBuf,
+    ResponseOutput: &respBuf,
+    RequestHeader:  true,
+    RequestBody:    true,
+    ResponseHeader: true,
+    ResponseBody:   true,
+  }).
+  SetBody("test body").
+  Post("https://httpbin.org/post")
+if err != nil {
+	...
+}
+
+fmt.Println("request content:")
+fmt.Println(reqBuf.String())
+fmt.Println("\n======\n")
+fmt.Println("response content:")
+fmt.Println(respBuf.String())
+```
+
 ## 启用 DebugLog 来分析请求过程
 
 日志默认是启用的，但不包括 Debug 级别日志，仅 Warning 和 Error 类型日志。

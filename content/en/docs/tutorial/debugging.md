@@ -107,6 +107,33 @@ resp, err = client.R().
 	Post("https://httpbin.org/post")
 ```
 
+In some scenarios, such as web scanners, if you need to obtain the original request and response content separately, you need to dump them separately. In this case, you can use `SetDumpOptions` to set more fine-grained dump options to dump different parts of the content to different `io. In Writer`:
+
+```go
+var reqBuf, respBuf bytes.Buffer
+resp, err := client.R().
+  EnableDump().
+  SetDumpOptions(&req.DumpOptions{
+    RequestOutput:  &reqBuf,
+    ResponseOutput: &respBuf,
+    RequestHeader:  true,
+    RequestBody:    true,
+    ResponseHeader: true,
+    ResponseBody:   true,
+  }).
+  SetBody("test body").
+  Post("https://httpbin.org/post")
+if err != nil {
+	...
+}
+
+fmt.Println("request content:")
+fmt.Println(reqBuf.String())
+fmt.Println("\n======\n")
+fmt.Println("response content:")
+fmt.Println(respBuf.String())
+```
+
 ## Enable DebugLog for Deeper Insights
 
 Logging is enabled by default, but only output the warning and error message.
