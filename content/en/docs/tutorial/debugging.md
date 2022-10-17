@@ -107,7 +107,7 @@ resp, err = client.R().
 	Post("https://httpbin.org/post")
 ```
 
-In some scenarios, such as web scanners, if you need to obtain the original request and response content separately, you need to dump them separately. In this case, you can use `SetDumpOptions` to set more fine-grained dump options to dump different parts of the content to different `io. In Writer`:
+In some scenarios, such as web scanners, if you need to obtain the original request and response content separately, you need to dump them separately. In this case, you can use `SetDumpOptions` to set more fine-grained dump options to dump different parts of the content to different `io.Writer`:
 
 ```go
 var reqBuf, respBuf bytes.Buffer
