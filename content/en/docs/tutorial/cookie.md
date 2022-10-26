@@ -37,7 +37,9 @@ func main() {
 	jar, err := cookiejar.New(&cookiejar.Options{
 		Filename: "cookies.json",
 	})
-	log.Fatalf("failed to create persistent cookiejar: %s\n", err.Error())
+	if err != nil {
+		log.Fatalf("failed to create persistent cookiejar: %s\n", err.Error())
+	}
 	defer jar.Save()
 	client = req.C().SetCookieJar(jar)
 	// ...
