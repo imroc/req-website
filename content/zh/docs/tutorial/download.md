@@ -50,7 +50,9 @@ client := req.C()
 size := 100 * 1024 // 100 KB
 url := fmt.Sprintf("https://httpbin.org/bytes/%d", size)
 callback := func(info req.DownloadInfo) {
-    fmt.Printf("downloaded %.2f%%\n", float64(info.DownloadedSize)/float64(info.Response.ContentLength)*100.0)
+    if info.Response.Response != nil {
+        fmt.Printf("downloaded %.2f%%\n", float64(info.DownloadedSize)/float64(info.Response.ContentLength)*100.0)
+    }
 }
 
 client.R().
