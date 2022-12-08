@@ -26,21 +26,25 @@ If necessary, you can also customize the cookie storage, for example, if you wan
 package main
 
 import (
-	"github.com/imroc/req/v3"
-	cookiejar "github.com/juju/persistent-cookiejar"
-	"log"
+  "github.com/imroc/req/v3"
+  cookiejar "github.com/juju/persistent-cookiejar"
+  "log"
 )
 
 var client *req.Client
 
 func main() {
-	jar, err := cookiejar.New(&cookiejar.Options{
-		Filename: "cookies.json",
-	})
-	log.Fatalf("failed to create persistent cookiejar: %s\n", err.Error())
-	defer jar.Save()
-	client = req.C().SetCookieJar(jar)
-	// ...
+  jar, err := cookiejar.New(&cookiejar.Options{
+    Filename: "cookies.json",
+  })
+  if err != nil {
+    log.Fatalf("failed to create persistent cookiejar: %s\n", err.Error())
+  }
+  defer jar.Save()
+  client = req.C().SetCookieJar(jar).DevMode()
+  // ...
+  client.R().MustGet("https://baidu.com")
+  client.R().MustGet("https://github.com")
 }
 ```
 
