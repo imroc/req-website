@@ -42,7 +42,6 @@ func main() {
   }
   defer jar.Save()
   client = req.C().SetCookieJar(jar).DevMode()
-  // ...
   client.R().MustGet("https://baidu.com")
   client.R().MustGet("https://github.com")
 }
