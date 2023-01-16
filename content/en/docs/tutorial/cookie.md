@@ -82,8 +82,6 @@ cookie2 := &http.Cookie{
 client.R().
     SetCookies(cookie1, cookie2).
     Get("https://httpbin.org/get")
-
-
 ```
 
 ```txt
