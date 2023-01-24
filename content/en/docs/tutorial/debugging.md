@@ -87,7 +87,7 @@ resp, err := client.R().EnableDump().SetBody("test body").Post("https://httpbin.
     }
     return
 }
-if !resp.IsSuccess() { // Status code not between 200 and 299
+if !resp.IsSuccessState() { // Status code not between 200 and 299
     fmt.Println("bad status:", resp.Status)
     fmt.Println("raw content:")
     fmt.Println(resp.Dump()) // Record raw content when status code is abnormal.

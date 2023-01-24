@@ -35,7 +35,7 @@ if resp.Err != nil {
 If no error occurs, and then determine whether the status code is abnormal, the general status code between 200~299 means it is a successful response, you can judge it like this:
 
 ```go
-if resp.IsSuccess() {
+if resp.IsSuccessState() {
 	...
 }
 ```
@@ -43,7 +43,7 @@ if resp.IsSuccess() {
 If the status code is greater than or equal to 400, it means that the server has responded to an error message, you can judge it like this:
 
 ```go
-if resp.IsError() {
+if resp.IsErrorState() {
   ...
 }
 ```
@@ -93,17 +93,17 @@ fmt.Println("body:", body)
 
 ## Unmarshal Response Body
 
-You can use `SetResult` and `SetError` to unmarshal response body into struct or map:
+You can use `SetSuccessResult` and `SetErrorResult` to unmarshal response body into struct or map:
 
 ```go
 resp, err := client.R().
-    SetResult(&result).
-    SetError(&errMsg).
+    SetSuccessResult(&result).
+    SetErrorResult(&errMsg).
     Get(url)
 ```
 
-* If `resp.IsSuccess()` returns true, it means that the response body must have been unmarshalled into `&result`, which condition is status code between 200 and 299.
-* If `resp.IsError()` returns true, it means that the response body must have been unmarshalled into `&errMsg`, which condition is status code >= 400.
+* If `resp.IsSuccessState()` returns true, it means that the response body must have been unmarshalled into `&result`, which condition is status code between 200 and 299.
+* If `resp.IsErrorState()` returns true, it means that the response body must have been unmarshalled into `&errMsg`, which condition is status code >= 400.
 
 We can handle response like this:
 
@@ -113,13 +113,13 @@ if err != nil { // Could be network error or unmarshal error
     // ...
     return
 }
-if resp.IsSuccess() {
+if resp.IsSuccessState() {
     name := result.Name
     // ...
-}else if resp.IsError() {
+}else if resp.IsErrorState() {
     msg := errMsg.Message
     // ...
-}else { // Bad status
+} else { // Bad status
     status := resp.Status
     // ...
 }
@@ -128,7 +128,7 @@ if resp.IsSuccess() {
 You can also use `resp.Unmarshal` or `resp.Into` to unmarshal explicitly if you want:
 
 ```go
-if resp.IsSuccess() {
+if resp.IsSuccessState() {
     err = resp.Into(&user)
     if err != nil {
         log.Fatal(err)
@@ -139,14 +139,26 @@ if resp.IsSuccess() {
 }
 ```
 
-`SetResult`, `Request.SetError`, `Response.Unmarshal` and `Response.Into`, all accepts the pointer to nil pointer, so that when the function needs to return a pointer of the struct according to the response body, it can directly pass in the address of the pointer variable defined by the function's return list (no need to create struct explicitly, which is automatically created internally using reflection), it is especially useful when building the SDK:
+`Request.SetSuccessResult`, `Request.SetErrorResult`, `Response.Unmarshal` and `Response.Into`, all accepts the pointer to nil pointer, so that when the function needs to return a pointer of the struct according to the response body, it can directly pass in the address of the pointer variable defined by the function's return list (no need to create struct explicitly, which is automatically created internally using reflection), it is especially useful when building the SDK:
 
 ```go
 func (c *GithubClient) GetMyProfile() (user *UserProfile, err error) {
-	_, err = c.R().SetResult(&user).Get("/user")
+	_, err = c.R().
+		SetSuccessResult(&user).
+		Get("/user")
 	return
 }
 ```
+
+```go
+func (c *GithubClient) GetMyProfile() (user *UserProfile, err error) {
+	err = c.Get("/user").
+		Do().
+		Into(&user)
+	return
+}
+```
+
 
 ## Auto-Read Response Body
 

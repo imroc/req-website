@@ -35,7 +35,7 @@ if resp.Err != nil {
 如果没有发生 error，再判断状态码是否异常，一般状态码在 200~299 之间表示是成功响应，可以直接这样判断:
 
 ```go
-if resp.IsSuccess() {
+if resp.IsSuccessState() {
 	...
 }
 ```
@@ -43,7 +43,7 @@ if resp.IsSuccess() {
 状态码大于等于 400 时表示服务端响应了错误，可以直接这样判断:
 
 ```go
-if resp.IsError() {
+if resp.IsErrorState() {
   ...
 }
 ```
@@ -93,17 +93,17 @@ fmt.Println("body:", body)
 
 ## Unmarshal 响应体
 
-你可以调用 `Request` 的 `SetResult` 和 `SetError` 来让响应体自动 Unmarshal 到 struct 或 map 中去:
+你可以调用 `Request` 的 `SetSuccessResult` 和 `SetErrorResult` 来让响应体自动 Unmarshal 到 struct 或 map 中去:
 
 ```go
 resp, err := client.R().
-    SetResult(&result).
-    SetError(&errMsg).
+    SetSuccessResult(&result).
+    SetErrorResult(&errMsg).
     Get(url)
 ```
 
-* 如果 `resp.IsSuccess()` 返回 true, 意味着响应状态码在 200~299 ，如果 err 是 nil，也表示响应体一定成功被 Unmarshal 到 `&result` 里了。
-* 如果 `resp.IsError()` 返回 true，意味着响应状态码大于或等于 400，如果 err 是 nil，也表示响应体一定成功被 Unmarshal 到 `&errMsg` 里了。
+* 如果 `resp.IsSuccessState()` 返回 true, 默认意味着响应状态码在 200~299 ，如果 err 是 nil，也表示响应体一定成功被 Unmarshal 到 `&result` 里了。
+* 如果 `resp.IsErrorState()` 返回 true，默认意味着响应状态码大于或等于 400，如果 err 是 nil，也表示响应体一定成功被 Unmarshal 到 `&errMsg` 里了。
 
 通常我们可以这样处理响应:
 
@@ -113,10 +113,10 @@ if err != nil { // Could be network error or unmarshal error
     // ...
     return
 }
-if resp.IsSuccess() {
+if resp.IsSuccessState() {
     name := result.Name
     // ...
-}else if resp.IsError() {
+}else if resp.IsErrorState() {
     msg := errMsg.Message
     // ...
 }else { // Bad status
@@ -139,12 +139,23 @@ if resp.IsSuccess() {
 }
 ```
 
-不管是 `Request.SetResult`，`Request.SetError` 还是 `Response.Into`，都允许传入空指针的指针，当函数需要根据响应体来返回对应 struct 的指针时，可以直接将函数定义的返回值列表中的指针变量的地址传入(无需创建 struct，内部会自动使用反射来创建)，在封装 SDK 时尤为实用:
+不管是 `Request.SetSuccessResult`，`Request.SetErrorResult` 还是 `Response.Into`，都允许传入空指针的指针，当函数需要根据响应体来返回对应 struct 的指针时，可以直接将函数定义的返回值列表中的指针变量的地址传入(无需创建 struct，内部会自动使用反射来创建)，在封装 SDK 时尤为实用:
 
 ```go
 func (c *GithubClient) GetMyProfile() (user *UserProfile, err error) {
-	_, err = c.R().SetResult(&user).Get("/user")
+	_, err = c.R().
+		SetResult(&user).
+		Get("/user")
 	return
+}
+```
+
+```go
+func (c *GithubClient) GetMyProfile() (user *UserProfile, err error) {
+err = c.Get("/user").
+	Do().
+	Into(&user)
+return
 }
 ```
 
