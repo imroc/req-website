@@ -44,14 +44,14 @@ var uuidCmd = cobra.Command{
 		}
 
 		resp, err := globalClient.R().
-			SetResult(&result). // Read uuid response into struct.
+			SetSuccessResult(&result). // Read uuid response into struct.
 			Get("https://httpbin.org/uuid")
 
 		if err != nil {
 			return err
 		}
 
-		if resp.IsSuccess() { // Print uuid returned by the API.
+		if resp.IsSuccessState() { // Print uuid returned by the API.
 			fmt.Println(result.Uuid)
 		} else {
 			fmt.Println("bad response")
@@ -178,14 +178,14 @@ func main() {
 	}
 
 	resp, err := globalClient.R().
-		SetResult(&result). // Read uuid response into struct.
+		SetSuccessResult(&result). // Read uuid response into struct.
 		Get("https://httpbin.org/uuid")
 
 	if err != nil {
 		panic(err)
 	}
 
-	if resp.IsSuccess() { // Print uuid returned by the API.
+	if resp.IsSuccessState() { // Print uuid returned by the API.
 		fmt.Println(result.Uuid)
 	} else {
 		fmt.Println("bad response")
