@@ -47,27 +47,25 @@ func NewGithubClient() *GithubClient {
 		SetCommonHeader("Accept", "application/vnd.github.v3+json").
 		// All GitHub API requests use the same base URL.
 		SetBaseURL("https://api.github.com").
-		// EnableDump at the request level in request middleware which dump content into
+		// Enable dump at the request level for each request, which dump content into
 		// memory (not print to stdout), we can record dump content only when unexpected
 		// exception occurs, it is helpful to troubleshoot problems in production.
-		OnBeforeRequest(func(c *req.Client, r *req.Request) error {
-			if r.RetryAttempt > 0 { // Ignore on retry.
-				return nil
-			}
-			r.EnableDump()
-			return nil
-		}).
+		EnableDumpEachRequest().
 		// Unmarshal all GitHub error response into struct.
-		SetCommonError(&APIError{}).
+		SetCommonErrorResult(&APIError{}).
 		// Handle common exceptions in response middleware.
 		OnAfterResponse(func(client *req.Client, resp *req.Response) error {
-			if err, ok := resp.Error().(*APIError); ok {
-				// Server returns an error message, convert it to human-readable go error.
-				return err
+			if resp.Err != nil { // There is an underlying error, e.g. network error or unmarshal error.
+				return nil
 			}
-			// Corner case: neither an error response nor a success response,
+			if apiErr, ok := resp.ErrorResult().(*APIError); ok {
+				// Server returns an error message, convert it to human-readable go error.
+				resp.Err = apiErr
+				return nil
+			}
+			// Corner case: neither an error state response nor a success state response,
 			// dump content to help troubleshoot.
-			if !resp.IsSuccess() {
+			if !resp.IsSuccessState() {
 				return fmt.Errorf("bad response, raw dump:\n%s", resp.Dump())
 			}
 			return nil
@@ -135,24 +133,28 @@ func (c *GithubClient) SetDebug(enable bool) *GithubClient {
 Encapsulate APIs for user profile, `user_profile.go`:
 
 ```go
-import "time"
+import (
+	"context"
+	"time"
+)
 
 // GetMyProfile return the user profile of current authenticated user.
 // Github API doc: https://docs.github.com/en/rest/users/users#get-the-authenticated-user
-func (c *GithubClient) GetMyProfile() (*UserProfile, error) {
-	user := &UserProfile{}
-	_, err := c.R().SetResult(user).Get("/user")
-	return user, err
+func (c *GithubClient) GetMyProfile(ctx context.Context) (user *UserProfile, err error) {
+	err = c.Get("/user").
+		Do(ctx).
+		Into(&user)
+	return
 }
 
 // GetUserProfile return the user profile of specified username.
 // Github API doc: https://docs.github.com/en/rest/users/users#get-a-user
-func (c *GithubClient) GetUserProfile(username string) (*UserProfile, error) {
-	user := &UserProfile{}
-	_, err := c.R().SetResult(user).
+func (c *GithubClient) GetUserProfile(ctx context.Context, username string) (user *UserProfile, err error) {
+	c.Get("/users/{username}").
 		SetPathParam("username", username).
-		Get("/users/{username}")
-	return user, err
+		Do(ctx).
+		Into(&user)
+	return
 }
 
 type UserProfile struct {
@@ -210,10 +212,10 @@ var github = NewGithubClient()
 
 func init() {
 	if os.Getenv("DEBUG") == "on" {
-    github.SetDebug(true)
+		github.SetDebug(true)
 	}
 	if token := os.Getenv("TOKEN"); token != "" {
-    github.LoginWithToken(token)
+		github.LoginWithToken(token)
 		return
 	}
 }
@@ -221,7 +223,7 @@ func init() {
 func main() {
 	if len(os.Args) > 1 {
 		username := os.Args[1]
-		user, err := github.GetUserProfile(username)
+		user, err := github.GetUserProfile(nil, username)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -231,7 +233,7 @@ func main() {
 		return
 	}
 	if github.IsLogged() {
-		user, err := github.GetMyProfile()
+		user, err := github.GetMyProfile(nil)
 		if err != nil {
 			fmt.Println(err)
 			return
