@@ -39,8 +39,8 @@ import (
 )
 
 func main() {
-    req.DevMode()
-    req.MustGet("https://httpbin.org/uuid")
+    req.DevMode() // 将包名视为 Client 直接调用，启用开发模式
+    req.MustGet("https://httpbin.org/uuid") // 将包名视为 Request 直接调用，发起 GET 请求
 
     req.EnableForceHTTP1() // 强制 HTTP/1.1 看看效果
     req.MustGet("https://httpbin.org/uuid")
@@ -152,8 +152,8 @@ func main() {
   resp, err := client.R().
     SetHeader("Accept", "application/vnd.github.v3+json"). // Chainable request settings
     SetPathParam("username", "imroc").
-    SetResult(&userInfo). // Unmarshal response body into userInfo automatically if status code is between 200 and 299.
-    SetError(&errMsg). // Unmarshal response body into errMsg automatically if status code >= 400.
+    SetSuccessResult(&userInfo). // Unmarshal response body into userInfo automatically if status code is between 200 and 299.
+    SetErrorResult(&errMsg). // Unmarshal response body into errMsg automatically if status code >= 400.
     EnableDump(). // Enable dump at request level, only print dump content if there is an error or some unknown situation occurs to help troubleshoot.
     Get("https://api.github.com/users/{username}")
 
@@ -164,12 +164,12 @@ func main() {
     return
   }
 
-  if resp.IsError() { // Status code >= 400.
+  if resp.IsErrorState() { // Status code >= 400.
     fmt.Println(errMsg.Message) // Record error message returned.
     return
   }
 
-  if resp.IsSuccess() { // Status code is between 200 and 299.
+  if resp.IsSuccessState() { // Status code is between 200 and 299.
     fmt.Printf("%s (%s)\n", userInfo.Name, userInfo.Blog)
     return
   }
@@ -181,10 +181,76 @@ func main() {
 }
 ```
 
-正常情况下输出:
+正常情况下输出 (SuccessState):
 
 ```txt
 roc (https://imroc.cc)
+```
+
+## 更高级的 GET 请求
+
+可以在 client 上设置错误的统一处理逻辑，每次发请求时只需关注成功的情况，减少重复代码。
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/imroc/req/v3"
+	"log"
+	"time"
+)
+
+type ErrorMessage struct {
+	Message string `json:"message"`
+}
+
+func (msg *ErrorMessage) Error() string {
+	return fmt.Sprintf("API Error: %s", msg.Message)
+}
+
+type UserInfo struct {
+	Name string `json:"name"`
+	Blog string `json:"blog"`
+}
+
+var client = req.C().
+	SetUserAgent("my-custom-client"). // Chainable client settings.
+	SetTimeout(5 * time.Second).
+	EnableDumpEachRequest().
+	SetCommonErrorResult(&ErrorMessage{}).
+	OnAfterResponse(func(client *req.Client, resp *req.Response) error {
+		if resp.Err != nil { // There is an underlying error, e.g. network error or unmarshal error.
+			return nil
+		}
+		if errMsg, ok := resp.ErrorResult().(*ErrorMessage); ok {
+			resp.Err = errMsg // Convert api error into go error
+			return nil
+		}
+		if !resp.IsSuccessState() {
+			// Neither a success response nor a error response, record details to help troubleshooting
+			resp.Err = fmt.Errorf("bad status: %s\nraw content:\n%s", resp.Status, resp.Dump())
+		}
+		return nil
+	})
+
+func main() {
+	var userInfo UserInfo
+	resp, err := client.R().
+		SetHeader("Accept", "application/vnd.github.v3+json"). // Chainable request settings
+		SetPathParam("username", "imroc").
+		SetSuccessResult(&userInfo). // Unmarshal response body into userInfo automatically if status code is between 200 and 299.
+		Get("https://api.github.com/users/{username}")
+
+	if err != nil { // Error handling.
+		log.Println("error:", err)
+		return
+	}
+
+	if resp.IsSuccessState() { // Status code is between 200 and 299.
+		fmt.Printf("%s (%s)\n", userInfo.Name, userInfo.Blog)
+	}
+}
 ```
 
 ## 基础 POST 请求
@@ -213,20 +279,20 @@ func main() {
 
   resp, err := client.R().
     SetBody(&Repo{Name: "req", Url: "https://github.com/imroc/req"}).
-    SetResult(&result).
+    SetSuccessResult(&result).
     Post("https://httpbin.org/post")
   if err != nil {
     log.Fatal(err)
   }
 
-  if !resp.IsSuccess() {
+  if !resp.IsSuccessState() {
     fmt.Println("bad response status:", resp.Status)
     return
   }
   fmt.Println("++++++++++++++++++++++++++++++++++++++++++++++++")
   fmt.Println("data:", result.Data)
   fmt.Println("++++++++++++++++++++++++++++++++++++++++++++++++")
-}}
+}
 ```
 
 ```txt
@@ -284,26 +350,28 @@ data: {"name":"req","url":"https://github.com/imroc/req"}
 package main
 
 import (
-	"fmt"
-	"github.com/imroc/req/v3"
+  "context"
+  "fmt"
+  "github.com/imroc/req/v3"
+  "time"
 )
 
 type APIResponse struct {
-	Origin string `json:"origin"`
-	Url    string `json:"url"`
+  Origin string `json:"origin"`
+  Url    string `json:"url"`
 }
 
 func main() {
-	var resp APIResponse
-	c := req.C().SetBaseURL("https://httpbin.org/post")
-	err := c.Post().
-		SetBody("hello").
-		Do().
-		Into(&resp)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("My IP is", resp.Origin)
+  var resp APIResponse
+  c := req.C().SetBaseURL("https://httpbin.org")
+  err := c.Post("/post").
+    SetBody("hello").
+    Do().
+    Into(&resp)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Println("My IP is", resp.Origin)
 }
 ```
 
@@ -314,6 +382,80 @@ My IP is 182.138.155.113
 * 链式调用的顺序更直观：先调用 Client 创建一个指定 Method 的请求，然后对请求使用链式调用进行设置，再使用 `Do()` 发起请求，返回 Response，最后再调用 `Response.Into` 进行 Unmarshal。
 * 如果在请求期间发生 error 或 Unmarshal 时发生 error，最终 `Response.Into` 都会返回 error。
 * 有些 API 的 url 是固定的，通过传不同 body 来实现不同类型的请求，这种场景可实现使用 `Client.SetBaseURL` 设置统一的 url，在发起请求时就无需为每个请求都设置 url，当然，如果你需要也可以调用 `Request.SetURL` 来设置。
+
+## 使用 req 封装 SDK
+
+以下是通过 req 封装 GitHub 的 SDK 示例，分别使用两种风格对接 API (`GetUserProfile_Style1`, `GetUserProfile_Style2`)。
+
+```go
+import (
+	"context"
+	"fmt"
+	"github.com/imroc/req/v3"
+)
+
+type ErrorMessage struct {
+	Message string `json:"message"`
+}
+
+// Error implements go error interface.
+func (msg *ErrorMessage) Error() string {
+	return fmt.Sprintf("API Error: %s", msg.Message)
+}
+
+type GithubClient struct {
+	*req.Client
+}
+
+func NewGithubClient() *GithubClient {
+	return &GithubClient{
+		Client: req.C().
+			SetBaseURL("https://api.github.com").
+			SetCommonErrorResult(&ErrorMessage{}).
+			EnableDumpEachRequest().
+			OnAfterResponse(func(client *req.Client, resp *req.Response) error {
+				if resp.Err != nil { // There is an underlying error, e.g. network error or unmarshal error.
+					return nil
+				}
+				if errMsg, ok := resp.ErrorResult().(*ErrorMessage); ok {
+					resp.Err = errMsg // Convert api error into go error
+					return nil
+				}
+				if !resp.IsSuccessState() {
+					// Neither a success response nor a error response, record details to help troubleshooting
+					resp.Err = fmt.Errorf("bad status: %s\nraw content:\n%s", resp.Status, resp.Dump())
+				}
+				return nil
+			}),
+	}
+}
+
+type UserProfile struct {
+	Name string `json:"name"`
+	Blog string `json:"blog"`
+}
+
+// GetUserProfile_Style1 returns the user profile for the specified user.
+// Github API doc: https://docs.github.com/en/rest/users/users#get-a-user
+func (c *GithubClient) GetUserProfile_Style1(ctx context.Context, username string) (user *UserProfile, err error) {
+	_, err = c.R().
+		SetContext(ctx).
+		SetPathParam("username", username).
+		SetSuccessResult(&user).
+		Get("/users/{username}")
+	return
+}
+
+// GetUserProfile_Style2 returns the user profile for the specified user.
+// Github API doc: https://docs.github.com/en/rest/users/users#get-a-user
+func (c *GithubClient) GetUserProfile_Style2(ctx context.Context, username string) (user *UserProfile, err error) {
+	err = c.Get("/users/{username}").
+		SetPathParam("username", username).
+		Do(ctx).
+		Into(&user)
+	return
+}
+```
 
 ## 视频
 
