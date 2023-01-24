@@ -50,7 +50,7 @@ func NewClient() *Client {
     EnableDumpEachRequest().
     // Set the common error struct which will be unmarshalled into if server returns
     // an error response.
-    SetCommonError(&APIError{}).
+    SetCommonErrorResult(&APIError{}).
     // Handle common exceptions in response middleware.
     OnAfterResponse(func(client *req.Client, resp *req.Response) error {
         if resp.Err != nil { // resp.Err represents the underlying error, e.g. network error, or unmarshal error (SetResult or SetError was invoked before).
@@ -60,13 +60,13 @@ func NewClient() *Client {
             return nil // Skip the following logic if there is an underlying error.
         }
         // Return a human-readable error if server api returned an error message.
-        if err, ok := resp.Error().(*APIError); ok {
+        if err, ok := resp.ErrorResult().(*APIError); ok {
             resp.Err = err
             return nil
         }
         // Corner case: neither an error response nor a success response (e.g. status code < 200),
         // dump content to help troubleshoot.
-        if !resp.IsSuccess() {
+        if !resp.IsSuccessState() {
             resp.Err = fmt.Errorf("bad response, raw content:\n%s", resp.Dump())
             return nil
         }
@@ -81,8 +81,7 @@ func NewClient() *Client {
 ```
 
 * The `APIError` struct represents the format of the server-side API error response, implements the go error interface, and converts the API error message in json format into a human-readable error string.
-* Pass the `APIError` struct into `SetCommonError`, indicating that if it is an error response (status code >= 400), the response body will be automatically unmarshal to the struct.
-* Add `RequestMiddleware` to `OnBeforeRequest` to enable request-level dump for all requests (stored in memory, not printed out, get dump content when needed).
+* Pass the `APIError` struct into `SetCommonErrorResult`, indicating that if it is an error response (status code >= 400), the response body will be automatically unmarshal to the struct.
 * Add `ResponseMiddleware` to `OnAfterResponse` to handle exceptions uniformly. If a underlying error occurs (such as a network error, or the response body format error causes unmarshal to fail), the subsequent logic is ignored; If it is an error response, the `APIError` struct will be thrown to the caller as a go error; If it is neither an error response nor a successful response (usually the status code is less than 200), it means that the behavior of the server is abnormal, and the dump content is written to the error and thrown to the caller.
 
 Next, add `GetUserProfile` to Client:
@@ -96,8 +95,8 @@ type UserProfile struct {
 func (c *Client) GetUserProfile(username string) (user *UserProfile, err error) {
 	err = c.Get("/users/{username}").
 		SetPathParam("username", username).
-		SetResult(&user).
-		Do().Err
+		Do().
+		Into(&user)
 	return
 }
 

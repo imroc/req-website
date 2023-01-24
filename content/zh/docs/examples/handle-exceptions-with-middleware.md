@@ -50,7 +50,7 @@ func NewClient() *Client {
     EnableDumpEachRequest().
     // Set the common error struct which will be unmarshalled into if server returns
     // an error response.
-    SetCommonError(&APIError{}).
+    SetCommonErrorResult(&APIError{}).
     // Handle common exceptions in response middleware.
     OnAfterResponse(func(client *req.Client, resp *req.Response) error {
         if resp.Err != nil { // resp.Err represents the underlying error, e.g. network error, or unmarshal error (SetResult or SetError was invoked before).
@@ -60,13 +60,13 @@ func NewClient() *Client {
             return nil // Skip the following logic if there is an underlying error.
         }
         // Return a human-readable error if server api returned an error message.
-        if err, ok := resp.Error().(*APIError); ok {
+        if err, ok := resp.ErrorResult().(*APIError); ok {
             resp.Err = err
             return nil
         }
         // Corner case: neither an error response nor a success response (e.g. status code < 200),
         // dump content to help troubleshoot.
-        if !resp.IsSuccess() {
+        if !resp.IsSuccessState() {
             resp.Err = fmt.Errorf("bad response, raw content:\n%s", resp.Dump())
             return nil
         }
@@ -81,8 +81,7 @@ func NewClient() *Client {
 ```
 
 * `APIError` 结构体代表服务端 API 错误响应的格式，实现 go 的 error 接口，将 json 格式的 API 错误信息转换成可读的字符串错误提示。
-* `SetCommonError` 传入 `APIError` 结构体，表示如果是错误响应(状态码大于 400)，自动将响应体 Unmarshal 到结构体。
-* `OnBeforeRequest` 中添加 `RequestMiddleware`，为所有请求开启请求级别的 dump (存到内存，不打印出来，需要的时候取出来)。
+* `SetCommonErrorResult` 传入 `APIError` 结构体，表示如果是错误响应(状态码大于 400)，自动将响应体 Unmarshal 到结构体。
 * `OnAfterResponse` 中添加 `ResponseMiddleware`，统一处理异常。如果发生了底层错误(如网络错误，或者响应体格式错误导致Unmarshal失败)，忽略后续逻辑；如果是错误响应，将自动Unmarshal的结构体当成 go error 抛给调用方；如果既不是错误响应，又不是成功响应(状态码小于200)，说明服务端有问题，将dump内容写到error抛给调用方。
 
 接下来对接一个获取用户信息的 API:
@@ -96,11 +95,10 @@ type UserProfile struct {
 func (c *Client) GetUserProfile(username string) (user *UserProfile, err error) {
 	err = c.Get("/users/{username}").
 		SetPathParam("username", username).
-		SetResult(&user).
-		Do().Err
+		Do().
+		Into(&user).
 	return
 }
-
 ```
 
 * 对接 API 的函数简单到极致，甚至都不需要初始化代表响应数据的 `UserProfile` 结构体，直接传入返回参数列表中的 user 空指针的地址，内部会自动根据指针指向结构体类型自动创建相应的对象并修改指针指向。
