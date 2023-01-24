@@ -57,7 +57,7 @@ func main() {
 		}
 
 		resp, err := globalClient.R().
-			SetResult(&result). // Read uuid response into struct.
+			SetSuccessResult(&result). // Read uuid response into struct.
 			Get("https://httpbin.org/uuid")
 
 		if err != nil {
@@ -65,7 +65,7 @@ func main() {
 			continue
 		}
 
-		if resp.IsSuccess() { // Print uuid returned by the API.
+		if resp.IsSuccessState() { // Print uuid returned by the API.
 			fmt.Println(result.Uuid)
 		} else {
 			fmt.Println("bad status", resp.Status)
@@ -164,7 +164,7 @@ func main() {
 		}
 
 		resp, err := globalClient.R().
-			SetResult(&result). // Read uuid response into struct.
+			SetSuccessResult(&result). // Read uuid response into struct.
 			Get("https://httpbin.org/uuid")
 
 		if err != nil {
@@ -172,7 +172,7 @@ func main() {
 			continue
 		}
 
-		if resp.IsSuccess() { // Print uuid returned by the API.
+		if resp.IsSuccessState() { // Print uuid returned by the API.
 			fmt.Println(result.Uuid)
 		} else {
 			fmt.Println("bad status", resp.Status)
@@ -242,11 +242,8 @@ import (
 
 var debugKeyword string
 
-var globalClient = req.OnBeforeRequest(func(c *req.Client, r *req.Request) error {
-	r.EnableDump() // Enable dump at the request level for all requests.
-	return nil
-}).OnAfterResponse(func(c *req.Client, resp *req.Response) error {
-	if !resp.IsSuccess() { // Dump and record unexpected response as error.
+var globalClient = req.EnableDumpEachRequest().OnAfterResponse(func(c *req.Client, resp *req.Response) error {
+	if !resp.IsSuccessState() { // Dump and record unexpected response as error.
 		return fmt.Errorf("bad response from %s %s, dump content:\n%s", resp.Request.Method, resp.Request.RawURL, resp.Dump())
 	}
 
