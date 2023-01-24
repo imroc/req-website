@@ -44,7 +44,7 @@ func init() {
         return nil
       }
       // Treat non-successful responses as errors, record raw dump content in error message.
-      if !resp.IsSuccess() { // Status code is not between 200 and 299.
+      if !resp.IsSuccessState() { // Status code is not between 200 and 299.
         resp.Err = fmt.Errorf("bad response, raw content:\n%s", resp.Dump())
       }
       return nil
