@@ -100,23 +100,23 @@ func NewClient() *Client {
     // request middleware
     EnableDumpEachRequest().
     // Unmarshal response body into an APIError struct when status >= 400.
-    SetCommonError(&APIError{}).
+    SetCommonErrorResult(&APIError{}).
     // Handle common exceptions in response middleware.
     OnAfterResponse(func(client *req.Client, resp *req.Response) error {
-      if resp.Err != nil { // There is an underlying error, e.g. network error or unmarshal error(SetResult or SetError was invoked before).
+      if resp.Err != nil { // There is an underlying error, e.g. network error or unmarshal error(SetSuccessResult or SetError was invoked before).
         if dump := resp.Dump(); dump != "" { // Append dump content to original underlying error to help troubleshoot.
           resp.Err = fmt.Errorf("%s\nraw content:\n%s", resp.Err.Error(), resp.Dump())
         }
         return nil // Skip the following logic if there is an underlying error.
       }
-      if err, ok := resp.Error().(*APIError); ok { // Server returns an error message.
+      if err, ok := resp.ErrorResult().(*APIError); ok { // Server returns an error message.
         // Convert it to human-readable go error.
         resp.Err = err
         return nil
       }
       // Corner case: neither an error response nor a success response,
       // dump content to help troubleshoot.
-      if !resp.IsSuccess() {
+      if !resp.IsSuccessState() {
         resp.Err = fmt.Errorf("bad response, raw content:\n%s", resp.Dump())
       }
       return nil
@@ -130,10 +130,10 @@ func NewClient() *Client {
 
 * Use the `Client` struct as the GitHub client, which is also the core struct of the SDK, with a built-in `*req.Client`.
 * Use `SetCommonHeader` and `SetBaseURL` respectively to set a unified `Accept` request header and URL prefix for all GitHub API requests.
-* The error format of the GitHub API response is unified. Use `SetCommonError` to tell req that if the response is an error (status code >= 400), the response body will be unmarshalled automatically to the object of the `APIError` struct.
+* The error format of the GitHub API response is unified. Use `SetCommonErrorResult` to tell req that if the response is an error (status code >= 400), the response body will be unmarshalled automatically to the object of the `APIError` struct.
 * The `APIError` struct implements the go error interface, and converts the json API error message into a readable string.
 * Set `ResponseMiddleware` in `OnAfterResponse`, when detecting an API response error, write it to `resp.Err`, and automatically throw it to the upper-layer caller as a go error.
-* Set `RequestMiddleware` in `OnBeforeRequest` to enable request-level dump (temporarily stored in memory, not printed) for all requests, if you encounter underlying errors (such as timeout, dns failure, unmarshal failure), or receive an unknown status code (less than 200), in `ResponseMiddleware`, record the information (dump content) that is helpful for troubleshooting as much as possible to error, and write `resp.Err` to throw it to the upper caller.
+* Use `EnableDumpEachRequest` enable request-level dump (temporarily stored in memory, not printed) for all requests, if you encounter underlying errors (such as timeout, dns failure, unmarshal failure), or receive an unknown status code (less than 200), in `ResponseMiddleware`, record the information (dump content) that is helpful for troubleshooting as much as possible to error, and write `resp.Err` to throw it to the upper caller.
 
 Let's add tracing capabilities to `Client`:
 
@@ -210,15 +210,15 @@ type UserProfile struct {
 func (c *Client) GetUserProfile(ctx context.Context, username string) (user *UserProfile, err error) {
 	err = c.Get("/users/{username}").
 		SetPathParam("username", username).
-		SetResult(&user).
-		Do(withAPIName(ctx, "GetUserProfile")).Err
+		Do(withAPIName(ctx, "GetUserProfile")).
+		Into(&user)
 	return
 }
 ```
 
 * Tracing spans are passed through context, and the first parameter of each method uses context.
 * Use chained methods to construct Request, `Get` means to create a `GET` request, and pass in the API path (previously `Client.SetCommonBaseURL` has set the URL prefix of all requests, here you can omit the prefix and write the path only), in the path There is also the `username` path parameter (REST style API), which is populated using the `SetPathParam` incoming variable.
-* The format of the response body is the `UserProfile` struct, just pass the address of the nil pointer variable user in the return parameter into `SetResult`, indicating that if the request is success, an object of the `UserProfile` will be automatically created, and modify the pointer to point to that object , so that you don't even need to initialize the struct in advance, making the code more concise.
+* The format of the response body is the `UserProfile` struct, just pass the address of the nil pointer variable user in the return parameter into `SetSuccessResult`, indicating that if the request is success, an object of the `UserProfile` will be automatically created, and modify the pointer to point to that object , so that you don't even need to initialize the struct in advance, making the code more concise.
 * Use the function `withAPIName` to put the API name into the context, and then call `Do` to send the request, pass the context in, so that the client middleware can get the API name and automatically use it as the span name.
 * `Do` will return `*req.Response`, which is not nil in any case. If an error is returned during the request, it will be recorded in its `Err` field, we assign it to the `err` of the return parameter to throw error to the upper caller.
 
@@ -242,8 +242,9 @@ func (c *Client) ListUserRepo(ctx context.Context, username string, page int) (r
             "sort":      "updated",
             "direction": "desc",
         }).
-        SetResult(&repos).
-        Do(withAPIName(ctx, "ListUserRepo")).Err
+        SetSuccessResult(&repos).
+        Do(withAPIName(ctx, "ListUserRepo")).
+        Into(&repos)
     return
 }
 

@@ -100,23 +100,23 @@ func NewClient() *Client {
     // request middleware
     EnableDumpEachRequest().
     // Unmarshal response body into an APIError struct when status >= 400.
-    SetCommonError(&APIError{}).
+    SetCommonErrorResult(&APIError{}).
     // Handle common exceptions in response middleware.
     OnAfterResponse(func(client *req.Client, resp *req.Response) error {
-      if resp.Err != nil { // There is an underlying error, e.g. network error or unmarshal error(SetResult or SetError was invoked before).
+      if resp.Err != nil { // There is an underlying error, e.g. network error or unmarshal error(SetSuccessResult or SetError was invoked before).
         if dump := resp.Dump(); dump != "" { // Append dump content to original underlying error to help troubleshoot.
           resp.Err = fmt.Errorf("%s\nraw content:\n%s", resp.Err.Error(), resp.Dump())
         }
         return nil // Skip the following logic if there is an underlying error.
       }
-      if err, ok := resp.Error().(*APIError); ok { // Server returns an error message.
+      if err, ok := resp.ErrorResult().(*APIError); ok { // Server returns an error message.
         // Convert it to human-readable go error.
         resp.Err = err
         return nil
       }
       // Corner case: neither an error response nor a success response,
       // dump content to help troubleshoot.
-      if !resp.IsSuccess() {
+      if !resp.IsSuccessState() {
         resp.Err = fmt.Errorf("bad response, raw content:\n%s", resp.Dump())
       }
       return nil
@@ -130,7 +130,7 @@ func NewClient() *Client {
 
 * 使用 `Client` 结构体作为 GitHub 的客户端，也是 SDK 的核心结构体，内置了一个 `*req.Client`。
 * 分别使用 `SetCommonHeader` 与 `SetBaseURL` 为 GitHub 所有 API 请求设置统一的 `Accept` 请求头与 URL 前缀。
-* GitHub API 响应的错误格式是统一的，使用 `SetCommonError` 告知 req 如果响应了错误(状态码大于等于400），则自动将响应体 Unmarshal 到 `APIError` 结构体的对象中。
+* GitHub API 响应的错误格式是统一的，使用 `SetCommonErrorResult` 告知 req 如果响应了错误(状态码大于等于400），则自动将响应体 Unmarshal 到 `APIError` 结构体的对象中。
 * `APIError` 结构体实现了 go 的 error 接口，将 API 层面的错误信息转换成可读的字符串。
 * 在 `OnAfterResponse` 中设置 `ResponseMiddleware`，检测到 API 响应错误时，将其写入到 `resp.Err`，自动会将其作为 go error 抛给上层的调用方。
 * 在 `OnBeforeRequest` 中设置 `RequestMiddleware`，为所有请求开启请求级别的 dump (暂存到内存，不打印出来)，若遇到底层错误(如超时、dns 解析失败、Unmarshal 失败)，或者收到未知的状态码(小于200)，在 `ResponseMiddleware` 中尽可能将有助于定位问题的信息(dump 内容)记录到 error，写入 `resp.Err` 以便抛给上层的调用方。
@@ -208,15 +208,16 @@ type UserProfile struct {
 func (c *Client) GetUserProfile(ctx context.Context, username string) (user *UserProfile, err error) {
 	err = c.Get("/users/{username}").
 		SetPathParam("username", username).
-		SetResult(&user).
-		Do(withAPIName(ctx, "GetUserProfile")).Err
+		SetSuccessResult(&user).
+		Do(withAPIName(ctx, "GetUserProfile")).
+		Into(&user)
 	return
 }
 ```
 
 * 链路追踪的 span 都是通过 context 传递，每个方法的第一个参数都用 context。
 * 利用链式调用构造 Request，`Get` 表示创建一个 `GET` 请求，并传入 API 路径(之前 `Client.SetCommonBaseURL` 已设置所有请求的 URL 前缀，这里就可以省略前缀只写路径)， 路径中还有 `username` 路径参数 (REST 风格 API)，使用 `SetPathParam` 传入。
-* 响应体格式是 `UserProfile` 结构体，直接将返回参数中的空指针变量的地址传入 `SetResult`，表示如果没有异常，自动创建一个该结构体类型的对象，并让指针变量指向该结构体，这样都不需要自己事先初始化结构体，减少代码量。
+* 响应体格式是 `UserProfile` 结构体，直接将返回参数中的空指针变量的地址传入 `SetSuccessResult`，表示如果没有异常，自动创建一个该结构体类型的对象，并让指针变量指向该结构体，这样都不需要自己事先初始化结构体，减少代码量。
 * 利用公共函数 `withAPIName` 将 API 名称放入 context，然后调用 `Do` 发起请求时，将 context 传进去，以便让 Client 中间件能够获取到 API 名称并自动将其作为 span 名称。
 * `Do` 会返回 `*req.Response`，任何情况它都不为 nil，如果请求过程中返回了 error，会记录到其 `Err` 字段，将其赋值给返回参数的 `err` 以便 error 能够层层传递上去。
 
@@ -241,8 +242,8 @@ func (c *Client) ListUserRepo(ctx context.Context, username string, page int) (r
             "sort":      "updated",
             "direction": "desc",
         }).
-        SetResult(&repos).
-        Do(withAPIName(ctx, "ListUserRepo")).Err
+        Do(withAPIName(ctx, "ListUserRepo")).
+        Into(&repos)
     return
 }
 
