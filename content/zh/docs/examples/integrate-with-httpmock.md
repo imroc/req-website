@@ -38,14 +38,14 @@ func GetUserName(client *req.Client, loginName string) (name string, err error) 
 		Name string `json:"name"`
 	}
 	resp, err := client.R().
-		SetResult(&user).
+		SetSuccessResult(&user).
 		SetPathParam("loginName", loginName).
 		Get("https://api.github.com/users/{loginName}")
 	if err != nil {
 		return
 	}
 
-	if !resp.IsSuccess() {
+	if !resp.IsSuccessState() {
 		err = fmt.Errorf("bad status code %q, body:%s", resp.StatusCode, resp.String())
 		return
 	}
