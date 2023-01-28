@@ -253,7 +253,7 @@ func main() {
 }
 ```
 
-## Sample POST
+## Simple POST
 
 ```go
 package main
