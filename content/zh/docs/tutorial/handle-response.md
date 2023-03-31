@@ -102,8 +102,8 @@ resp, err := client.R().
     Get(url)
 ```
 
-- 如果 `resp.IsSuccessState()` 返回 true, 默认意味着响应状态码在 200~299 ，如果 err 是 nil，也表示响应体一定成功被 Unmarshal 到 `&result` 里了。
-- 如果 `resp.IsErrorState()` 返回 true，默认意味着响应状态码大于或等于 400，如果 err 是 nil，也表示响应体一定成功被 Unmarshal 到 `&errMsg` 里了。
+* 如果 `resp.IsSuccessState()` 返回 true, 默认意味着响应状态码在 200~299 ，如果 err 是 nil，也表示响应体一定成功被 Unmarshal 到 `&result` 里了。
+* 如果 `resp.IsErrorState()` 返回 true，默认意味着响应状态码大于或等于 400，如果 err 是 nil，也表示响应体一定成功被 Unmarshal 到 `&errMsg` 里了。
 
 通常我们可以这样处理响应:
 

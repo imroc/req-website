@@ -102,8 +102,8 @@ resp, err := client.R().
     Get(url)
 ```
 
-- If `resp.IsSuccessState()` returns true, it means that the response body must have been unmarshalled into `&result`, which condition is status code between 200 and 299.
-- If `resp.IsErrorState()` returns true, it means that the response body must have been unmarshalled into `&errMsg`, which condition is status code >= 400.
+* If `resp.IsSuccessState()` returns true, it means that the response body must have been unmarshalled into `&result`, which condition is status code between 200 and 299.
+* If `resp.IsErrorState()` returns true, it means that the response body must have been unmarshalled into `&errMsg`, which condition is status code >= 400.
 
 We can handle response like this:
 
@@ -158,6 +158,7 @@ func (c *GithubClient) GetMyProfile() (user *UserProfile, err error) {
 	return
 }
 ```
+
 
 ## Auto-Read Response Body
 
