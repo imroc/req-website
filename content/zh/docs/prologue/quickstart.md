@@ -12,7 +12,7 @@ toc: true
 
 ## 安装
 
-1. 首先你需要安装 Go (版本要求在 1.16 及其以上), 然后用以下命令安装 req:
+1. 首先你需要安装 Go (版本要求在 1.19 及其以上), 然后用以下命令安装 req:
 
 ```bash
 go get -u github.com/imroc/req/v3
