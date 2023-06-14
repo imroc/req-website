@@ -15,7 +15,7 @@ Some websites prohibit access to some programs by identifying TLS handshake fing
 ```go
 client := req.C().
 	SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36").
-	SetTLSFingerprintChrome() // 模拟 Chrome 浏览器的 TLS 握手指纹，让网站相信这是 Chrome 浏览器在访问，予以通行。
+	SetTLSFingerprintChrome() // Simulate the TLS handshake fingerprint of the Chrome browser, so that the website believes that it is the Chrome browser that is accessing.
 
 client.R().Get(url)
 ```
