@@ -10,7 +10,7 @@ menu:
 toc: true
 ---
 
-Some websites prohibit access to some programs by identifying TLS handshake fingerprints. The fingerprint of the golang tls standard library is easy to identify, and `req` integrates [utls](https://github.com/refraction-networking/utls), which can simulate other TLS fingerprints to bypass this restriction, such as emulating Chrome browser's fingerprint:
+Some websites prohibit access to some crawler programs by identifying TLS handshake fingerprints. The fingerprint of the golang tls standard library is easy to identify, and `req` integrates [utls](https://github.com/refraction-networking/utls), which can simulate other TLS fingerprints to bypass this restriction, such as emulating Chrome browser's fingerprint:
 
 ```go
 client := req.C().

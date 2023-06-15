@@ -10,7 +10,7 @@ menu:
 toc: true
 ---
 
-有些网站会通过识别 TLS 握手指纹来禁止部分程序访问，golang tls 标准库的指纹很容易被识别，而 `req` 集成了 [utls](https://github.com/refraction-networking/utls)，可以模拟其它 TLS 指纹来绕过该限制，比如模拟 Chrome 浏览器的指纹：
+有些网站会通过识别 TLS 握手指纹来禁止爬虫程序访问，golang tls 标准库的指纹很容易被识别，而 `req` 集成了 [utls](https://github.com/refraction-networking/utls)，可以模拟其它 TLS 指纹来绕过该限制，比如模拟 Chrome 浏览器的指纹：
 
 ```go
 client := req.C().
