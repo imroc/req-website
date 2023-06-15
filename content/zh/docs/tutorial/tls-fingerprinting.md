@@ -30,9 +30,8 @@ client.R().Get(url)
 * `SetTLSFingerprint360`: 模拟 360 浏览器指纹。
 * `SetTLSFingerprintIOS`: 模拟 IOS 指纹。
 * `SetTLSFingerprintAndroid`: 模拟 Android 指纹。
+* `SetTLSFingerprintRandomized`: 随机模拟指纹。
 
 如果 server 对指纹的校验比较严格，你也可以尝试直接调用 `SetTLSFingerprint` 并传入 `utls` 的 `ClientHelloID` 来指定具体指纹版本。
 
-如果还需更灵活的指纹自定义，你也可以尝试自己利用 `utls` 来构造握手函数并调用 `Client` 的 `SetDialTLS` 来自定义。
-
-**主意:** 目前当设置了 tls 指纹，代理将不生效（如有设置）
+如果还需更灵活的指纹自定义，你也可以尝试自己利用 `utls` 来构造握手函数并调用 `Client` 的 `SetTLSHandshake` 来自定义。

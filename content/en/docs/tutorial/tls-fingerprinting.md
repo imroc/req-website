@@ -30,9 +30,8 @@ Similarly, there are other methods of Client that can be called to simulate othe
 * `SetTLSFingerprint360`: Simulate 360 browser fingerprinting.
 * `SetTLSFingerprintIOS`: Simulate IOS fingerprinting.
 * `SetTLSFingerprintAndroid`: Simulate Android fingerprinting.
+* `SetTLSFingerprintRandomized`: Simulate randomized fingerprinting.
 
 If the server checks the fingerprint more strictly, you can also try calling `SetTLSFingerprint` directly and passing in the `ClientHelloID` of `utls` to specify the specific fingerprint version.
 
-If you need more flexible fingerprint customization, you can also try to use `utls` to construct the handshake function and call `SetDialTLS` of `Client` to customize it.
-
-**Note:** Currently when the tls fingerprint is set, the proxy will not take effect (if set).
+If you need more flexible fingerprint customization, you can also try to use `utls` to construct the handshake function and call `SetTLSHandshake` of `Client` to customize it.
