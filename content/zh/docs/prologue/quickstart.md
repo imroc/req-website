@@ -344,16 +344,14 @@ data: {"name":"req","url":"https://github.com/imroc/req"}
 
 ## Do API 风格
 
-如果你喜欢，你也可以使用类似下面的 Do API 风格来发起请求:
+如果你喜欢，你也可以使用类似下面可读性更高的 Do API 风格来发起请求:
 
 ```go
 package main
 
 import (
-  "context"
   "fmt"
   "github.com/imroc/req/v3"
-  "time"
 )
 
 type APIResponse struct {
@@ -363,11 +361,11 @@ type APIResponse struct {
 
 func main() {
   var resp APIResponse
-  c := req.C().SetBaseURL("https://httpbin.org")
-  err := c.Post("/post").
-    SetBody("hello").
-    Do().
-    Into(&resp)
+  c := req.C()
+  err := c.Post("https://httpbin.org/post"). // method + url
+    SetBody("hello"). // set request body
+    Do(). // send request
+    Into(&resp) // unmarshal response body
   if err != nil {
     panic(err)
   }
@@ -441,7 +439,7 @@ func (c *GithubClient) GetUserProfile_Style1(ctx context.Context, username strin
 	_, err = c.R().
 		SetContext(ctx).
 		SetPathParam("username", username).
-		SetSuccessResult(&user).
+		SetSuccessResult(&user). // pointer's pointer, will create and unmarshalled into a UserProfile struct automatically.
 		Get("/users/{username}")
 	return
 }
@@ -452,7 +450,7 @@ func (c *GithubClient) GetUserProfile_Style2(ctx context.Context, username strin
 	err = c.Get("/users/{username}").
 		SetPathParam("username", username).
 		Do(ctx).
-		Into(&user)
+		Into(&user) // pointer's pointer, will create and unmarshalled into a UserProfile struct automatically.
 	return
 }
 ```
