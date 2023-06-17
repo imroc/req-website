@@ -57,7 +57,7 @@ client.R().
 
 ## Client Level
 
-Similarly, you can set retry at the client level, which could be overridden at the request level:
+Similarly, you can set retry at the client level, which could be overridden at the client level:
 
 ```go
 client.

@@ -32,7 +32,7 @@ Accept-Encoding: gzip
 
 ## 在客户端级别设置
 
-使用 `SetCommonBearerAuthToken` 可以在请求级别设置 Bearer Auth Token:
+使用 `SetCommonBearerAuthToken` 可以在客户端别设置 Bearer Auth Token:
 
 ```go
 client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
