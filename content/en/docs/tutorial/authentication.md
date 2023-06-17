@@ -1,6 +1,6 @@
 ---
-title: "Set Digest Auth"
-description: "This article will introduce how to set digest auth."
+title: "Authentication"
+description: "This article will introduce how to set authentication."
 draft: false
 images: []
 weight: 270
@@ -10,13 +10,88 @@ menu:
 toc: true
 ---
 
-## Introduction to HTTP Digest Authentication
+## Set Bearer Auth Token
+
+Use `SetBearerAuthToken` at the request level:
+
+```go
+client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
+
+client.R().
+    SetBearerAuthToken("NGU1ZWYwZDJhNmZhZmJhODhmMjQ3ZDc4").
+    Get("https://httpbin.org/get")
+```
+
+```txt
+GET /get HTTP/1.1
+Host: httpbin.org
+User-Agent: req/v3 (https://github.com/imroc/req)
+Authorization: Bearer NGU1ZWYwZDJhNmZhZmJhODhmMjQ3ZDc4
+Accept-Encoding: gzip
+```
+
+Use `SetCommonBearerAuthToken` at the client level:
+
+```go
+client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
+
+client.SetCommonBearerAuthToken("NGU1ZWYwZDJhNmZhZmJhODhmMjQ3ZDc4")
+client.R().Get("https://httpbin.org/get")
+```
+
+```txt
+GET /get HTTP/1.1
+Host: httpbin.org
+User-Agent: req/v3 (https://github.com/imroc/req)
+Authorization: Bearer NGU1ZWYwZDJhNmZhZmJhODhmMjQ3ZDc4
+Accept-Encoding: gzip
+```
+
+## Set Basic Auth
+
+Use `SetBasicAuth` at the request level:
+
+```go
+client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
+
+client.R().
+    SetBasicAuth("imroc", "123456").
+    Get("https://httpbin.org/get")
+```
+
+```txt
+GET /get HTTP/1.1
+Host: httpbin.org
+User-Agent: req/v3 (https://github.com/imroc/req)
+Authorization: Basic aW1yb2M6MTIzNDU2
+Accept-Encoding: gzip
+```
+
+Use `SetCommonBasicAuth` at the client level:
+
+```go
+client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
+
+// Set basic auth for all request
+client.SetCommonBasicAuth("imroc", "123456")
+
+client.R().Get("https://httpbin.org/get")
+```
+
+```txt
+GET /get HTTP/1.1
+Host: httpbin.org
+User-Agent: req/v3 (https://github.com/imroc/req)
+Authorization: Basic aW1yb2M6MTIzNDU2
+Accept-Encoding: gzip
+```
+
+
+## Set Digest Auth
 
 HTTP Digest Authentication is a more secure authentication method than HTTP Basic Authentication. If the requested url needs to be authenticated, the server will respond with a 401 status code and send a Digest challenge to the client through the response header `WWW-Authentication`. The client need to generates an appropriate `Authorization` request header based on the received challenge combined with the username and password, and then resends the request to pass the authentication.
 
 More information on HTTP Digest Authentication can be found in [RFC 7616](https://datatracker.ietf.org/doc/html/rfc7616).
-
-## Request Level
 
 HTTP Digest Authentication can be set at the request level using `SetDigestAuth`:
 
@@ -67,8 +142,6 @@ set-cookie: fake=fake_value; Path=/
 access-control-allow-origin: *
 access-control-allow-credentials: true
 ```
-
-## Client Level
 
 HTTP Digest Authentication can be set at the client level using `SetCommonDigestAuth`:
 

@@ -1,6 +1,6 @@
 ---
-title: "设置 Digest Auth"
-description: "介绍如何设置 Digest Auth"
+title: "认证"
+description: "介绍如何设置认证"
 draft: false
 images: []
 weight: 270
@@ -10,13 +10,87 @@ menu:
 toc: true
 ---
 
-## HTTP Digest Authentication 简介
+## 设置 Bearer Auth Token
+
+使用 `SetBearerAuthToken` 可以在请求级别设置 Bearer Auth Token:
+
+```go
+client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
+
+client.R().
+    SetBearerAuthToken("NGU1ZWYwZDJhNmZhZmJhODhmMjQ3ZDc4").
+    Get("https://httpbin.org/get")
+```
+
+```txt
+GET /get HTTP/1.1
+Host: httpbin.org
+User-Agent: req/v3 (https://github.com/imroc/req)
+Authorization: Bearer NGU1ZWYwZDJhNmZhZmJhODhmMjQ3ZDc4
+Accept-Encoding: gzip
+```
+
+使用 `SetCommonBearerAuthToken` 可以在客户端别设置 Bearer Auth Token:
+
+```go
+client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
+
+client.SetCommonBearerAuthToken("NGU1ZWYwZDJhNmZhZmJhODhmMjQ3ZDc4")
+client.R().Get("https://httpbin.org/get")
+```
+
+```txt
+GET /get HTTP/1.1
+Host: httpbin.org
+User-Agent: req/v3 (https://github.com/imroc/req)
+Authorization: Bearer NGU1ZWYwZDJhNmZhZmJhODhmMjQ3ZDc4
+Accept-Encoding: gzip
+```
+
+## 设置 Basic Auth
+
+使用 `SetBasicAuth` 在请求级别设置 Basic Auth:
+
+```go
+client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
+
+client.R().
+    SetBasicAuth("imroc", "123456").
+    Get("https://httpbin.org/get")
+```
+
+```txt
+GET /get HTTP/1.1
+Host: httpbin.org
+User-Agent: req/v3 (https://github.com/imroc/req)
+Authorization: Basic aW1yb2M6MTIzNDU2
+Accept-Encoding: gzip
+```
+
+使用 `SetCommonBasicAuth` 在客户端级别设置 Basic Auth:
+
+```go
+client := req.C().EnableForceHTTP1().EnableDumpAllWithoutResponse()
+
+// Set basic auth for all request
+client.SetCommonBasicAuth("imroc", "123456")
+
+client.R().Get("https://httpbin.org/get")
+```
+
+```txt
+GET /get HTTP/1.1
+Host: httpbin.org
+User-Agent: req/v3 (https://github.com/imroc/req)
+Authorization: Basic aW1yb2M6MTIzNDU2
+Accept-Encoding: gzip
+```
+
+## 设置 Digest Auth
 
 HTTP 摘要认证是一种相比 Basic 认证更安全的认证方式，如果访问的 url 需要进行认证，服务端会响应 401 状态码，并通过 `WWW-Authentication` 这个响应头发送 Digest challenge 给客户端，客户端根据收到的 challenge 再结合用户名与密码生成合适的 `Authorization` 请求头，然后重新发送请求来通过认证。
 
 更多关于 HTTP 摘要认证的内容可以查看 [RFC 7616](https://datatracker.ietf.org/doc/html/rfc7616)。
-
-## 在请求级别设置
 
 使用 `SetDigestAuth` 可以在请求级别设置 HTTP 摘要认证 (HTTP Digest Authentication):
 
@@ -68,9 +142,7 @@ access-control-allow-origin: *
 access-control-allow-credentials: true
 ```
 
-## 在客户端级别设置
-
-使用 `SetCommonDigestAuth` 可以在客户端级别设置 HTTP 摘要认证 (HTTP Digest Authentication):
+使用 `SetCommonDigestAuth` 可以在客户端级别设置：
 
 ```go
 client := req.C().SetCommonDigestAuth("roc", "123456")
