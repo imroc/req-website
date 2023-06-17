@@ -100,7 +100,7 @@ client := req.C().DevMode()
 
 client.R().
     SetDigestAuth("roc", "123456").
-    Get("https://httpbin.org/digest-auth/auth/imroc/123456")
+    Get("https://httpbin.org/digest-auth/auth/roc/123456")
 ```
 
 ```txt
@@ -148,5 +148,5 @@ HTTP Digest Authentication can be set at the client level using `SetCommonDigest
 ```go
 client := req.C().SetCommonDigestAuth("roc", "123456")
 
-client.R().Get("https://httpbin.org/digest-auth/auth/imroc/123456")
+client.R().Get("https://httpbin.org/digest-auth/auth/roc/123456")
 ```

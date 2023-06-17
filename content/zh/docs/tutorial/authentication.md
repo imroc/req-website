@@ -99,7 +99,7 @@ client := req.C().DevMode()
 
 client.R().
     SetDigestAuth("roc", "123456").
-    Get("https://httpbin.org/digest-auth/auth/imroc/123456")
+    Get("https://httpbin.org/digest-auth/auth/roc/123456")
 ```
 
 ```txt
@@ -147,5 +147,5 @@ access-control-allow-credentials: true
 ```go
 client := req.C().SetCommonDigestAuth("roc", "123456")
 
-client.R().Get("https://httpbin.org/digest-auth/auth/imroc/123456")
+client.R().Get("https://httpbin.org/digest-auth/auth/roc/123456")
 ```
