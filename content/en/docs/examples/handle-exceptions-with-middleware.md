@@ -84,7 +84,7 @@ func NewClient() *Client {
 * Pass the `APIError` struct into `SetCommonErrorResult`, indicating that if it is an error response (status code >= 400), the response body will be automatically unmarshal to the struct.
 * Add `ResponseMiddleware` to `OnAfterResponse` to handle exceptions uniformly. If a underlying error occurs (such as a network error, or the response body format error causes unmarshal to fail), the subsequent logic is ignored; If it is an error response, the `APIError` struct will be thrown to the caller as a go error; If it is neither an error response nor a successful response (usually the status code is less than 200), it means that the behavior of the server is abnormal, and the dump content is written to the error and thrown to the caller.
 
-Next, add `GetUserProfile` to Client:
+Next, add `GetUserProfile` to Client, which uses minimal code:
 
 ```go
 type UserProfile struct {
@@ -96,7 +96,7 @@ func (c *Client) GetUserProfile(username string) (user *UserProfile, err error) 
 	err = c.Get("/users/{username}").
 		SetPathParam("username", username).
 		Do().
-		Into(&user)
+		Into(&user) // you can pass pointer's pointer directly, no need to create object explicitly.
 	return
 }
 

@@ -84,7 +84,7 @@ func NewClient() *Client {
 * `SetCommonErrorResult` 传入 `APIError` 结构体，表示如果是错误响应(状态码大于 400)，自动将响应体 Unmarshal 到结构体。
 * `OnAfterResponse` 中添加 `ResponseMiddleware`，统一处理异常。如果发生了底层错误(如网络错误，或者响应体格式错误导致Unmarshal失败)，忽略后续逻辑；如果是错误响应，将自动Unmarshal的结构体当成 go error 抛给调用方；如果既不是错误响应，又不是成功响应(状态码小于200)，说明服务端有问题，将dump内容写到error抛给调用方。
 
-接下来对接一个获取用户信息的 API:
+接下来对接一个获取用户信息的 API，可以使用极简的代码进行对接:
 
 ```go
 type UserProfile struct {
@@ -96,7 +96,7 @@ func (c *Client) GetUserProfile(username string) (user *UserProfile, err error) 
 	err = c.Get("/users/{username}").
 		SetPathParam("username", username).
 		Do().
-		Into(&user).
+		Into(&user). // you can pass pointer's pointer directly, no need to create object explicitly.
 	return
 }
 ```
