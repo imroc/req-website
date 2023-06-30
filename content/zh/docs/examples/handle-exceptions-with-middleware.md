@@ -45,8 +45,8 @@ func NewClient() *Client {
     // temporarily stores the dump content in memory, so we can call
     // resp.Dump() to get the dump content when needed in response
     // middleware.
-	  // This is actually a syntax sugar, implemented internally using
-	  // request middleware
+    // This is actually a syntax sugar, implemented internally using
+    // request middleware
     EnableDumpEachRequest().
     // Set the common error struct which will be unmarshalled into if server returns
     // an error response.
