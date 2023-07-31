@@ -63,6 +63,25 @@ my-custom-header: test
 Accept-Encoding: gzip
 ```
 
+如果你想控制 Header 的顺序来构造 HTTP 指纹，可以使用 `SetHeaderOrder` 和 `SetPseudoHeaderOrder` 来控制：
+
+```go
+client.R().SetHeaderOrder(
+    "custom-header",
+    "cookie",
+    "user-agent",
+    "accept-encoding",
+)
+
+// pseudo-header is only used in http2 and http3
+client.R().SetPseudoHeaderOrder(
+    ":scheme",
+    ":authority",
+    ":path",
+    ":method",
+)
+```
+
 ## 在客户端级别设置
 
 类似的，你可以在客户端级别为每个请求设置公共 Header:
@@ -86,4 +105,23 @@ resp1, err := client.R().Get(url1)
 ...
 resp2, err := client.R().Get(url2)
 ...
+```
+
+控制 header 顺序：
+
+```go
+client.SetCommonHeaderOrder(
+    "custom-header",
+    "cookie",
+    "user-agent",
+    "accept-encoding",
+)
+
+// pseudo-header is only used in http2 and http3
+client.SetCommonPseudoHeaderOrder(
+    ":scheme",
+    ":authority",
+    ":path",
+    ":method",
+)
 ```

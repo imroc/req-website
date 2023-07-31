@@ -70,6 +70,8 @@ toc: true
 * [SetCommonFormDataFromValues(data url.Values)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonFormDataFromValues)
 * [SetCommonHeader(key, value string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonHeader)
 * [SetCommonHeaders(hdrs map[string]string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonHeaders)
+* [SetCommonHeaderOrder(keys ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonHeaderOrder)
+* [SetCommonPseudoHeaderOder(keys ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonPseudoHeaderOder)
 * [SetCommonPathParam(key, value string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonPathParam)
 * [SetCommonPathParams(pathParams map[string]string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonPathParams)
 * [SetCommonQueryParam(key, value string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonQueryParam)

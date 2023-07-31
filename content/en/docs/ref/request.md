@@ -51,6 +51,8 @@ Basically, you can know the meaning of most settings directly from the method na
 
 * [SetHeader(key, value string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetHeader)
 * [SetHeaders(hdrs map[string]string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetHeaders)
+* [SetHeaderOrder(keys ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetHeaderOrder)
+* [SetPseudoHeaderOrder(keys ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetPseudoHeaderOrder)
 * [SetBasicAuth(username, password string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetBasicAuth)
 * [SetBearerAuthToken(token string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetBearerAuthToken)
 * [SetContentType(contentType string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetContentType)
