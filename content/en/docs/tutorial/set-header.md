@@ -63,6 +63,25 @@ my-custom-header: test
 Accept-Encoding: gzip
 ```
 
+If you want to control the order of headers to construct HTTP fingerprints, you can use `SetHeaderOrder` and `SetPseudoHeaderOrder`:
+
+```go
+client.R().SetHeaderOrder(
+    "custom-header",
+    "cookie",
+    "user-agent",
+    "accept-encoding",
+)
+
+// pseudo-header is only used in http2 and http3
+client.R().SetPseudoHeaderOrder(
+    ":scheme",
+    ":authority",
+    ":path",
+    ":method",
+)
+```
+
 ## Client Level
 
 Similarly, you can also set the common headers for every request at the client level.
@@ -86,4 +105,23 @@ resp1, err := client.R().Get(url1)
 ...
 resp2, err := client.R().Get(url2)
 ...
+```
+
+Control the header order：
+
+```go
+client.SetCommonHeaderOrder(
+    "custom-header",
+    "cookie",
+    "user-agent",
+    "accept-encoding",
+)
+
+// pseudo-header is only used in http2 and http3
+client.SetCommonPseudoHeaderOrder(
+    ":scheme",
+    ":authority",
+    ":path",
+    ":method",
+)
 ```
