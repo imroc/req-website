@@ -64,6 +64,7 @@ toc: true
 
 * [SetCommonBasicAuth(username, password string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonBasicAuth)
 * [SetCommonBearerAuthToken(token string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonBearerAuthToken)
+* [SetCommonDigestAuth(username, password string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonDigestAuth)
 * [SetCommonContentType(ct string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonContentType)
 * [SetCommonCookies(cookies ...*http.Cookie)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonCookies)
 * [SetCommonFormData(data map[string]string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonFormData)
@@ -79,6 +80,7 @@ toc: true
 * [SetCommonQueryString(query string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonQueryString)
 * [AddCommonQueryParam(key, value string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.AddCommonQueryParam)
 * [SetUserAgent(userAgent string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetUserAgent)
+* [SetCommonErrorResult(err interface{})](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetCommonErrorResult)
 
 ### 自动解码
 
@@ -98,6 +100,15 @@ toc: true
 * [DisableInsecureSkipVerify](https://pkg.go.dev/github.com/imroc/req/v3#Client.DisableInsecureSkipVerify) - 默认就是关闭
 * [SetTLSHandshakeTimeout(timeout time.Duration)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSHandshakeTimeout)
 * [SetTLSClientConfig(conf *tls.Config)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSClientConfig)
+* [SetTLSFingerprintChrome()](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSFingerprintChrome)
+* [SetTLSFingerprintFirefox()](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSFingerprintFirefox)
+* [SetTLSFingerprintEdge()](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSFingerprintEdge)
+* [SetTLSFingerprintQQ()](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSFingerprintQQ)
+* [SetTLSFingerprintSafari()](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSFingerprintSafari)
+* [SetTLSFingerprint360()](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSFingerprint360)
+* [SetTLSFingerprintIOS()](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSFingerprintIOS)
+* [SetTLSFingerprintAndroid()](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSFingerprintAndroid)
+* [SetTLSFingerprintRandomized()](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTLSFingerprintRandomized)
 
 ### Marshal 和 Unmarshal
 

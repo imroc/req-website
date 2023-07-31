@@ -55,6 +55,7 @@ Basically, you can know the meaning of most settings directly from the method na
 * [SetPseudoHeaderOrder(keys ...string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetPseudoHeaderOrder)
 * [SetBasicAuth(username, password string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetBasicAuth)
 * [SetBearerAuthToken(token string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetBearerAuthToken)
+* [SetDigestAuth(username, password string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetDigestAuth)
 * [SetContentType(contentType string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetContentType)
 * [SetCookies(cookies ...*http.Cookie)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetCookies)
 
@@ -69,8 +70,8 @@ Basically, you can know the meaning of most settings directly from the method na
 * [SetBodyXmlBytes(body []byte)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetBodyXmlBytes)
 * [SetBodyXmlMarshal(v interface{})](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetBodyXmlMarshal)
 * [SetBodyXmlString(body string)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetBodyXmlString)
-* [SetResult(result interface{})](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetResult)
-* [SetError(error interface{})](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetError)
+* [SetSuccessResult(result interface{})](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetSuccessResult)
+* [SetErrorResult(error interface{})](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetErrorResult)
 
 ### Request Level Debug
 
@@ -117,6 +118,10 @@ Basically, you can know the meaning of most settings directly from the method na
 * [AddRetryHook(hook RetryHookFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Request.AddRetryHook)
 * [SetRetryCondition(condition RetryConditionFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Request.SetRetryCondition)
 * [AddRetryCondition(condition RetryConditionFunc)](https://pkg.go.dev/github.com/imroc/req/v3#Request.AddRetryCondition)
+
+### Middleware
+
+* [OnAfterResponse(m ResponseMiddleware)](https://pkg.go.dev/github.com/imroc/req/v3#Request.OnAfterResponse)
 
 ### Context
 
