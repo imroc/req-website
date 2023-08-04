@@ -57,7 +57,7 @@ client. ImpersonateFirefox()
 
 ## How to Verify HTTP Fingerprint?
 
-Some websites offer free capabilities to verify HTTP fingerprints, such as: https://tls.peet.ws/api/all
+Some websites offer free capabilities to verify HTTP fingerprints, such as: [https://tls.peet.ws/api/all](https://tls.peet.ws/api/all)
 
 Here is an example of using req to view the fingerprint information for the current request:
 

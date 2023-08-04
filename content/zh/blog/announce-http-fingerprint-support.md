@@ -57,7 +57,7 @@ client.ImpersonateFirefox()
 
 ## 如何验证 HTTP 指纹？
 
-一些网站免费提供了验证 HTTP 指纹的能力，如：https://tls.peet.ws/api/all
+一些网站免费提供了验证 HTTP 指纹的能力，如：[https://tls.peet.ws/api/all](https://tls.peet.ws/api/all)
 
 使用 req 查看当前请求的指纹特征信息的示例：
 
