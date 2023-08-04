@@ -1,5 +1,5 @@
 ---
-title: "TLS Fingerprinting"
+title: "TLS Fingerprint"
 description: "Describes how to customize the TLS handshake fingerprint"
 draft: false
 images: []
@@ -22,15 +22,15 @@ client.R().Get(url)
 
 Similarly, there are other methods of Client that can be called to simulate other fingerprints, the method list:
 
-* `SetTLSFingerprintChrome`: Simulate Chrome browser fingerprinting.
-* `SetTLSFingerprintFirefox`: Simulate Firefox browser fingerprinting.
-* `SetTLSFingerprintEdge`: Simulate Edge browser fingerprinting.
-* `SetTLSFingerprintQQ`: Simulate QQ browser fingerprinting.
-* `SetTLSFingerprintSafari`: Simulate Safari browser fingerprinting.
-* `SetTLSFingerprint360`: Simulate 360 browser fingerprinting.
-* `SetTLSFingerprintIOS`: Simulate IOS fingerprinting.
-* `SetTLSFingerprintAndroid`: Simulate Android fingerprinting.
-* `SetTLSFingerprintRandomized`: Simulate randomized fingerprinting.
+* `SetTLSFingerprintChrome`: Simulate Chrome browser fingerprint.
+* `SetTLSFingerprintFirefox`: Simulate Firefox browser fingerprint.
+* `SetTLSFingerprintEdge`: Simulate Edge browser fingerprint.
+* `SetTLSFingerprintQQ`: Simulate QQ browser fingerprint.
+* `SetTLSFingerprintSafari`: Simulate Safari browser fingerprint.
+* `SetTLSFingerprint360`: Simulate 360 browser fingerprint.
+* `SetTLSFingerprintIOS`: Simulate IOS fingerprint.
+* `SetTLSFingerprintAndroid`: Simulate Android fingerprint.
+* `SetTLSFingerprintRandomized`: Simulate randomized fingerprint.
 
 If the server checks the fingerprint more strictly, you can also try calling `SetTLSFingerprint` directly and passing in the `ClientHelloID` of `utls` to specify the specific fingerprint version.
 
