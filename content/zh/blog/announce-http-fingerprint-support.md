@@ -39,6 +39,8 @@ HTTP 指纹是由一系列特征构成的，服务端检查的特征越详细(�
 4. 伪头（Pseudo-Header) 的顺序。
 5. 请求头及其排列顺序，以及 header 帧中 flag 与 priority 选项的值。
 
+以上所有特征，在 `req` 中都可以轻松模拟，实现伪装成任何想要的浏览器客户端。
+
 ## 使用 req 伪装 HTTP 指纹
 
 大多数特征使用标准库 `net/http` 都无法模拟，而使用 `req` 请求库则很容易模拟，假如你想伪装成 Chrome 浏览器发起请求，直接调用 `Client` 的 `ImpersonateChrome()` 方法即可：

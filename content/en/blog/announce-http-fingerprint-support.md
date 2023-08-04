@@ -39,6 +39,8 @@ For HTTP2, there are additional features that can be checked:
 4. The order of Pseudo-Headers.
 5. Request headers and their arrangement order, as well as the values of flags and priority options in the header frame.
 
+All the above features can be easily simulated in `req`, allowing you to disguise as any desired browser client.
+
 ## Impersonate HTTP fingerprints with req
 
 Most of the features cannot be impersonated using the standard `net/http` library, but it can be achieved effortlessly using the `req` library. For example, if you want to impersonate Chrome browser for making a request, you can directly call the `ImpersonateChrome()` method of the Client:
