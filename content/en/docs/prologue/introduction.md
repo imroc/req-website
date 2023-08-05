@@ -24,7 +24,7 @@ toc: true
 * Easy set header, cookie, path parameter, query parameter, form data, basic auth, bearer token for both client and request level.
 * Easy set timeout, proxy, certs, redirect policy, cookie jar, compression, keepalive etc for client.
 * Support middleware before request sent and after got response (see [Request and Response Middleware](../../tutorial/middleware/)).
-* Support tls fingerprinting resistance, so that we can access websites that prohibit crawler programs by identifying TLS handshake fingerprints (See [TLS Fingerprinting](../../tutorial/tls-fingerprinting/)).
+* Support http fingerprint impersonation, so that we can access websites that prohibit crawler programs by identifying http fingerprints (See [HTTP Fingerprint](../../tutorial/http-fingerprint/)).
 * You can use HTTP Basic Auth, Bearer Auth Token and Digest Auth out of box (see [Authentication](../../tutorial/authentication/)).
 
 

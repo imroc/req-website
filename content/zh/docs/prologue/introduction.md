@@ -24,7 +24,7 @@ toc: true
 * 轻松在请求级别或客户端级别设置请求头, cookie, URL 路径参数, 查询参数, 表单数据, Basic Auth, Bearer Token 等设置。
 * 轻松设置客户端的超时时间，代理，证书，重定向策略，Cookie 存储，压缩，keepalive 等。
 * 支持设置请求和响应的中间件，分别会在请求发出前和响应返回前执行 (参考 [请求和响应中间件](../../tutorial/middleware/)).
-* 支持 tls 指纹伪装，这样我们就可以绕过通过识别 TLS 握手指纹来禁止爬虫程序访问的网站（参考 [TLS 指纹](../../tutorial/tls-fingerprinting/)）。
+* 支持 HTTP 指纹伪装，这样我们就可以绕过通过识别 HTTP 指纹来禁止爬虫程序访问的网站（参考 [HTTP 指纹](../../tutorial/http-fingerprint/)）。
 * 多种开箱即用的认证方式：HTTP Basic Auth、Bearer Auth Token 和 Digest Auth（参考 [认证](../../tutorial/authentication/)）。
 
 ## 许可证
