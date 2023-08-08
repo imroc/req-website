@@ -35,7 +35,7 @@ func main() {
   // client.EnableDumpAll() // uncomment this to see all dump content.
 
   for i := 0; i < 4; i++ {
-    client.MustGet("https://www.cloudflare.com")
+    client.R().MustGet("https://www.cloudflare.com")
   }
 }
 ```
@@ -66,7 +66,7 @@ func main() {
   // client.EnableDumpAll() // uncomment this to see all dump content.
 
   for i := 0; i < 4; i++ {
-    client.MustGet("https://www.cloudflare.com")
+    client.R().MustGet("https://www.cloudflare.com")
   }
 }
 ```
