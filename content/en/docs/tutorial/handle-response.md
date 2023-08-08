@@ -66,7 +66,7 @@ if resp.StatusCode != http.StatusOK {
 }
 ```
 
-When no error occurs, `resp.Response` is nil. If you still want to access `resp.StatusCode` or `resp.Header`, it will cause panic, in this case, you can use safer methods like `resp.GetStatusCode()` and `resp.GetHeader(key)`.
+When error occurs, `resp.Response` is nil. If you still want to access `resp.StatusCode` or `resp.Header`, it will cause panic, in this case, you can use safer methods like `resp.GetStatusCode()` and `resp.GetHeader(key)`.
 
 ## Get Response Body as string or []byte
 

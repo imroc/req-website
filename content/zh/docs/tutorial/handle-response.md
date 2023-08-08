@@ -66,7 +66,7 @@ if resp.StatusCode != http.StatusOK {
 }
 ```
 
-当没发生 error 的时候，`resp.Response` 为 nil，这时如果仍要访问 `resp.StatusCode` 或 `resp.Header` 就会导致 panic，在没判断 error 时就想直接判断状态码或 Header，可以用 `resp.GetStatusCode()` 和 `resp.GetHeader(key)` 这种更安全的方法。
+当发生 error 的时候，`resp.Response` 为 nil，这时如果仍要访问 `resp.StatusCode` 或 `resp.Header` 就会导致 panic，在没判断 error 时就想直接判断状态码或 Header，可以用 `resp.GetStatusCode()` 和 `resp.GetHeader(key)` 这种更安全的方法。
 
 ## 读取响应体内容为 string 或 []byte
 
