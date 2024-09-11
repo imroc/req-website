@@ -12,7 +12,7 @@ toc: true
 
 ## Installation
 
-1. You first need Go installed (version 1.21+ is required), then you can use the below Go command to install req.
+1. You first need Go installed (version 1.22+ is required), then you can use the below Go command to install req.
 
 ```bash
 go get -u github.com/imroc/req/v3
