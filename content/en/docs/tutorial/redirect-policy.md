@@ -31,8 +31,11 @@ client.SetRedirectPolicy(
     req.SameHostRedirectPolicy(),
 )
 
-// All redirect is not allowd
+// All redirect is not allowed
 client.SetRedirectPolicy(req.NoRedirectPolicy())
+
+// Use default redirect policy (only allow up to 10 redirects)
+client.SetRedirectPolicy(req.DefaultRedirectPolicy())
 
 // Or customize the redirect with your own implementation
 client.SetRedirectPolicy(func(req *http.Request, via []*http.Request) error {
