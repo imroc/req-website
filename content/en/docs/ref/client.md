@@ -155,6 +155,8 @@ Basically, you can know the meaning of most settings directly from the method na
 * [SetTimeout(d time.Duration)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetTimeout)
 * [SetDialTLS(fn func(ctx context.Context, network, addr string) (net.Conn, error))](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetDialTLS)
 * [SetDial(fn func(ctx context.Context, network, addr string) (net.Conn, error))](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetDial)
+* [SetResolver(r *net.Resolver)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetResolver)
+* [SetHosts(hosts map[string]string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetHosts)
 * [SetProxyURL(proxyUrl string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetProxyURL)
 * [SetProxy(proxy func(*http.Request) (*urlpkg.URL, error))](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetProxy)
 * [SetUnixSocket(file string)](https://pkg.go.dev/github.com/imroc/req/v3#Client.SetUnixSocket)
